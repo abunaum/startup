@@ -5,9 +5,19 @@
                 <div class="form-header"></div>
                 <div class="header-button">
                     <div class="noti-wrap">
-                        <div class="noti__item js-item-menu">
-                            <i class="zmdi zmdi-email"></i>
-                            <span class="quantity">1</span>
+                        <div class="noti__item">
+                            <a href="<?= base_url('admin/toko/pengajuan') ?>" class="nav-link">
+                                <i class="zmdi zmdi-store"></i>
+                                <?php
+                                $db = \Config\Database::connect();
+                                $builder = $db->table('users');
+                                $builder->where('status_toko', 2);
+                                $toko = $builder->countAllResults();
+                                ?>
+                                <?php if ($toko >= 1) : ?>
+                                    <span class="quantity"><?= $toko ?></span>
+                                <?php endif; ?>
+                            </a>
                         </div>
                         <div class="noti__item">
                             <a href="<?= base_url('admin/notifikasi') ?>" class="nav-link">

@@ -88,6 +88,7 @@ $routes->group('toko', ['filter' => 'login'], function ($routes) {
 });
 $routes->group('user', ['filter' => 'login'], function ($routes) {
     $routes->get('notifikasi', 'User\notifikasi::index');
+    $routes->get('profile', 'User\profile::index');
     $routes->get('notifikasi/kirimwhatsappulang', 'User\notifikasi::waulang');
     $routes->post('notifikasi/ubahwa', 'User\notifikasi::ubahwa');
     $routes->post('notifikasi/verifwa', 'User\notifikasi::verifwa');

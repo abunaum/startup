@@ -39,6 +39,27 @@
         <div id="content" class="site-content">
             <?= $this->renderSection('content'); ?>
             <!-- .col-full -->
+            <div class="modal fade" id="namaModal" tabindex="-1" aria-labelledby="namaModalLabel" aria-hidden="true" style="z-index: 99999999999;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <center>
+                                <div class="card w-75">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Ooops !</h5>
+                                        <p class="card-text">Akun anda belum mempunyai nama</p>
+                                        <hr>
+                                        <p>Demi kenyamanan transaksi silahkan ubah nama anda dulu di pengaturan profile.</p>
+                                        <a href="<?= base_url('/user/profile') ?>">
+                                            <button class="btn btn-success">Ubah Nama</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- #content -->
         <?= $this->include('layout/footer') ?>
@@ -63,7 +84,21 @@
     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
     <script src="<?= base_url(); ?>/assets/js/swal2/sweetalert2.min.js"></script>
     <script src="<?= base_url(); ?>/assets/js/swal2/swall.js"></script>
-
+    <?php if (logged_in('true')) : ?>
+        <?php if ($_SERVER['REQUEST_URI'] != '/user/profile') : ?>
+            <?php
+            $db = \Config\Database::connect();
+            $builder = $db->table('users');
+            $builder->where('id', user()->id);
+            $useryanglogin = $builder->get()->getFirstRow();
+            ?>
+            <?php if ($useryanglogin->fullname == 'Unknown User') : ?>
+                <script>
+                    $('#namaModal').modal('show');
+                </script>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
 </body>
 
 </html>

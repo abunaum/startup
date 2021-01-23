@@ -45,6 +45,7 @@
                         </tbody>
                     </table>
                 </div>
+                <br>
                 <?= $pager->links(); ?>
             </center>
         </div>

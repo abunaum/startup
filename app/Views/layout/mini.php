@@ -17,7 +17,7 @@
                                 <img src="<?= base_url() ?>/img/profile/<?= user()->user_image; ?>" width="24" height="24" class="rounded-circle">
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="<?= base_url('logout'); ?>">
+                                <a class="dropdown-item" href="<?= base_url('user/profile'); ?>">
                                     Profile
                                 </a>
                                 <a class="dropdown-item" href="<?= base_url('logout'); ?>">

@@ -1,11 +1,10 @@
-<?= $this->extend('mypanel/template'); ?>
+<?= $this->extend('layout/template'); ?>
 <?= $this->section('content'); ?>
-<!-- Begin Page Content -->
-<div class="main-content">
-    <div class="section__content section__content--p30">
+<section class="stretch-full-width">
+    <div class="col-full">
+        <div class="swall" data-swall="<?= session()->getFlashdata('pesan'); ?>"></div>
+        <div class="error" data-error="<?= session()->getFlashdata('error'); ?>"></div>
         <div class="container-fluid">
-            <div class="swall" data-swall="<?= session()->getFlashdata('pesan'); ?>"></div>
-            <div class="error" data-error="<?= session()->getFlashdata('error'); ?>"></div>
             <!-- Page Heading -->
             <center>
                 <div class="card" style="width: 18rem;">
@@ -13,22 +12,24 @@
                     <div class="card-body">
                         <h3 class="card-title"><b><?= user()->fullname; ?></b></h3>
                         <h5 class="card-title"><i>@<?= user()->username; ?></i></h5>
-                        <button type="button" class="btn btn-success mb-1" data-toggle="modal" data-target="#passwordModal">Ubah Nama
+                        <button type="button" class="btn btn-success mb-1" data-toggle="modal" data-target="dataModal">Ubah Nama
                         </button>
                         <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#passwordModal">Ubah Password
                         </button>
                     </div>
                 </div>
             </center>
+            <!-- Modal -->
         </div>
     </div>
+    <!-- .col-full -->
+</section>
 </div>
-<div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true" style="z-index: 99999999;">
+<div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="passwordModalLabel">Ubah Password</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <center>
@@ -63,5 +64,4 @@
         </div>
     </div>
 </div>
-<!-- /.container-fluid -->
 <?= $this->endSection(); ?>
