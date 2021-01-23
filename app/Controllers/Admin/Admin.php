@@ -1,0 +1,333 @@
+<?php
+
+namespace App\Controllers\Admin;
+
+use App\Controllers\BaseController;
+use phpDocumentor\Reflection\Types\This;
+
+class Admin extends BaseController
+{
+    public function index()
+    {
+        $data = [
+            'namaweb' => $this->namaweb,
+            'judul' => "Admin | $this->namaweb"
+        ];
+        return view('admin/index', $data);
+    }
+
+    public function item()
+    {
+        $item = $this->item;
+        $data = [
+            'namaweb' => $this->namaweb,
+            'judul' => "Admin Item | $this->namaweb",
+            'item' => $item->findAll(),
+            'validation' => \Config\Services::validation()
+        ];
+        return view('admin/item', $data);
+    }
+
+    public function item_tambah_prosess()
+    {
+        if (!$this->validate([
+            'nama' => 'required'
+        ])) {
+            $validation = $this->validation;
+            session()->setFlashdata('error', 'Item gagal di tambah , Coba lagi');
+            return redirect()->to(base_url('admin/item'))->withInput();
+        }
+        $item = $this->item;
+        $item->save([
+            'nama' => $this->request->getVar('nama'),
+            'status' => $this->request->getVar('status'),
+            'sub' => $this->request->getVar('sub')
+        ]);
+        session()->setFlashdata('pesan', 'Item Berhasil di tambah');
+        return redirect()->to(base_url('admin/item'));
+    }
+
+    public function item_hapus($id)
+    {
+        $this->item->delete($id);
+        session()->setFlashdata('pesan', 'Item Berhasil di hapus');
+        return redirect()->to(base_url('admin/item'));
+    }
+
+    public function item_nonaktifkan($id)
+    {
+        $item = $this->item;
+        $item->save([
+            'id' => $id,
+            'status' => 0
+        ]);
+        session()->setFlashdata('pesan', 'Item Berhasil di ubah');
+        return redirect()->to(base_url('admin/item'));
+    }
+
+    public function item_aktifkan($id)
+    {
+        $item = $this->item;
+        $item->save([
+            'id' => $id,
+            'status' => 1
+        ]);
+        session()->setFlashdata('pesan', 'Item Berhasil di ubah');
+        return redirect()->to(base_url('admin/item'));
+    }
+
+    public function item_subitem_nonaktifkan($id)
+    {
+        $item = $this->item;
+        $item->save([
+            'id' => $id,
+            'sub' => 0
+        ]);
+        session()->setFlashdata('pesan', 'Sub Item Berhasil di ubah');
+        return redirect()->to(base_url('admin/item'));
+    }
+
+    public function item_subitem_aktifkan($id)
+    {
+        $item = $this->item;
+        $item->save([
+            'id' => $id,
+            'sub' => 1
+        ]);
+        session()->setFlashdata('pesan', 'Sub Item Berhasil di ubah');
+        return redirect()->to(base_url('admin/item'));
+    }
+
+    public function subitem()
+    {
+        $subitem = $this->subitem->orderBy('nama', 'asc');
+        $item = $this->item->orderBy('nama', 'asc');
+        $item = $item->where('status', 1);
+        $item = $item->where('sub', 1);
+        $data = [
+            'namaweb' => $this->namaweb,
+            'judul' => "Admin SubItem | $this->namaweb",
+            'itemlist' => $item->findAll(),
+            'validation' => \Config\Services::validation(),
+            'subitem' => $subitem->paginate(10),
+            'pager' => $subitem->pager
+        ];
+        // dd($item);
+        return view('admin/subitem', $data);
+    }
+
+    public function subitem_tambah_prosess()
+    {
+        if (!$this->validate([
+            'nama' => 'required'
+        ])) {
+            $validation = $this->validation;
+            session()->setFlashdata('error', 'Sub Item Gagal di ubah, Coba Lagi.');
+            return redirect()->to(base_url('admin/subitem'))->withInput();
+        }
+        $subitem = $this->subitem;
+        $subitem->save([
+            'nama' => $this->request->getVar('nama'),
+            'item' => $this->request->getVar('item'),
+            'status' => $this->request->getVar('sub')
+        ]);
+        session()->setFlashdata('pesan', 'Sub Item Berhasil di tambah');
+        return redirect()->to(base_url('admin/subitem'));
+    }
+
+    public function subitem_nonaktifkan($id)
+    {
+        $subitem = $this->subitem;
+        $subitem->save([
+            'id' => $id,
+            'status' => 0
+        ]);
+        session()->setFlashdata('pesan', 'Sub Item Berhasil di ubah');
+        return redirect()->to(base_url('admin/subitem'));
+    }
+
+    public function subitem_aktifkan($id)
+    {
+        $subitem = $this->subitem;
+        $subitem->save([
+            'id' => $id,
+            'status' => 1
+        ]);
+        session()->setFlashdata('pesan', 'Sub Item Berhasil di ubah');
+        return redirect()->to(base_url('admin/subitem'));
+    }
+
+    public function subitem_hapus($id)
+    {
+        $produk = $this->produk->where('jenis', $id)->findAll();
+        foreach ($produk as $p) {
+            $idproduk = $p['id'];
+            $gambarproduk = $p['gambar'];
+            $prosesproduk = $this->produk;
+            $prosesproduk->delete($idproduk);
+            @unlink('img/produk/' . $gambarproduk);
+        }
+        $this->subitem->delete($id);
+        session()->setFlashdata('pesan', 'Sub Item Berhasil di hapus');
+        return redirect()->to(base_url('admin/subitem'));
+    }
+
+    public function profile()
+    {
+        $data = [
+            'namaweb' => $this->namaweb,
+            'judul' => "Password | $this->namaweb",
+            'validation' => \Config\Services::validation()
+        ];
+        return view('admin/profile', $data);
+    }
+
+    public function ubahpassword()
+    {
+        $rand = substr(md5(openssl_random_pseudo_bytes(20)), -32);
+        $post_data = 'sender=primary&number=' . user()->whatsapp . '&message=kode anda adalah : ' . $rand . ' %0Aatau klik link ini ' . base_url('reset-password') . '?token=' . $rand;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->waapi);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        if (!$result) {
+            session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
+            return redirect()->to(base_url('admin/profile'));
+        } else {
+            $this->users->save([
+                'id' => user()->id,
+                'reset_hash' => $rand
+            ]);
+            session()->setFlashdata('pesan', 'Link reset password berhasil dikirim ke Whatsapp.');
+            return redirect()->to(base_url('admin/profile'));
+        }
+    }
+
+    public function notifikasi()
+    {
+        $user = $this->users->where('id', user()->id)->get()->getFirstRow();
+        $data = [
+            'namaweb' => $this->namaweb,
+            'judul' => "Notifikasi | $this->namaweb",
+            'validation' => \Config\Services::validation()
+        ];
+        if ($user->whatsapp == null) {
+            return view('admin/notifikasi_belum', $data);
+        } else if ($user->wa_hash != 'valid') {
+            $data['wa'] = $user->whatsapp;
+            return view('admin/notifikasi_pending', $data);
+        } else {
+            return view('admin/notifikasi_sudah', $data);
+        }
+    }
+
+    public function tambahwa()
+    {
+        if (!$this->validate([
+            'wa' => 'required|min_length[10]|max_length[13]'
+        ])) {
+            session()->setFlashdata('error', 'Gagal menambah nomor whatsapp, Coba lagi.');
+            return redirect()->to(base_url('admin/notifikasi'))->withInput();
+        }
+
+        $nowa = '0' . $this->request->getVar('wa');
+        $rand = substr(md5(openssl_random_pseudo_bytes(20)), -32);
+        $post_data = 'sender=primary&number=' . $nowa . '&message=kode anda adalah : ' . $rand;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->waapi);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        if (!$result) {
+            session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
+            return redirect()->to(base_url('admin/notifikasi'));
+        } else {
+            $this->users->save([
+                'id' => user()->id,
+                'whatsapp' => $nowa,
+                'wa_hash' => $rand
+            ]);
+            session()->setFlashdata('pesan', 'Kode konfirmasi berhasil dikirim ke Whatsapp.');
+            return redirect()->to(base_url('admin/notifikasi'));
+        }
+    }
+
+    public function ubahwhatsapp()
+    {
+        if (!$this->validate([
+            'wa' => 'required|min_length[10]|max_length[13]'
+        ])) {
+            session()->setFlashdata('error', 'Gagal ubah nomor whatsapp, Coba lagi.');
+            return redirect()->to(base_url('admin/notifikasi'))->withInput();
+        }
+
+        $nowa = '0' . $this->request->getVar('wa');
+        $rand = substr(md5(openssl_random_pseudo_bytes(20)), -32);
+        $post_data = 'sender=primary&number=' . $nowa . '&message=kode anda adalah : ' . $rand;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->waapi);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        if (!$result) {
+            session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
+            return redirect()->to(base_url('admin/notifikasi'));
+        } else {
+            $this->users->save([
+                'id' => user()->id,
+                'whatsapp' => $nowa,
+                'wa_hash' => $rand
+            ]);
+            session()->setFlashdata('pesan', 'Nomor Whatsapp berhasil di ubah dan Kode berhasil di kirim.');
+            return redirect()->to(base_url('admin/notifikasi'));
+        }
+    }
+
+    public function whatsapplagi()
+    {
+        $user = $this->users->where('id', user()->id)->get()->getFirstRow();
+        $post_data = 'sender=primary&number=' . $user->whatsapp . '&message=kode anda adalah : ' . $user->wa_hash;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->waapi);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        if (!$result) {
+            session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
+            return redirect()->to(base_url('admin/notifikasi'));
+        } else {
+            session()->setFlashdata('pesan', 'Kode konfirmasi berhasil dikirim ke Whatsapp.');
+            return redirect()->to(base_url('admin/notifikasi'));
+        }
+    }
+
+    public function verifwa()
+    {
+        $kode = $this->request->getVar('kode');
+        $user = $this->users->where('id', user()->id)->get()->getFirstRow();
+        $kodeuser = $user->wa_hash;
+        if ($kode != $kodeuser) {
+            session()->setFlashdata('error', 'Kode yang anda masukkan tidak sesuai.');
+            return redirect()->to(base_url('admin/notifikasi'));
+        } else {
+            $this->users->save([
+                'id' => user()->id,
+                'wa_hash' => 'valid'
+            ]);
+            session()->setFlashdata('pesan', 'Notifikasi Whatsapp sudah aktif.');
+            return redirect()->to(base_url('admin/notifikasi'));
+        }
+    }
+    //--------------------------------------------------------------------
+
+}
