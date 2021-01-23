@@ -184,27 +184,61 @@ class Admin extends BaseController
 
     public function ubahpassword()
     {
-        $rand = substr(md5(openssl_random_pseudo_bytes(20)), -32);
-        $post_data = 'sender=primary&number=' . user()->whatsapp . '&message=kode anda adalah : ' . $rand . ' %0Aatau klik link ini ' . base_url('reset-password') . '?token=' . $rand;
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->waapi);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        if (!$result) {
-            session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
-            return redirect()->to(base_url('admin/profile'));
-        } else {
-            $this->users->save([
-                'id' => user()->id,
-                'reset_hash' => $rand
-            ]);
-            session()->setFlashdata('pesan', 'Link reset password berhasil dikirim ke Whatsapp.');
-            return redirect()->to(base_url('admin/profile'));
+        if (!$this->validate([
+            'passwordlama' => 'required',
+            'passwordbaru' => 'required|strong_password',
+            'ulangipassword' => 'required|matches[passwordbaru]'
+        ])) {
+            session()->setFlashdata('error', 'Password gagal di ubah , Coba lagi');
+            return redirect()->to(base_url('admin/profile'))->withInput();
         }
+        $user = $this->users->where('id', user()->id)->get()->getFirstRow();
+        $userid = $user->id;
+        $passworduser = $user->password_hash;
+        $passwordlama = $this->request->getVar('passwordlama');
+        $passwordbaru = $this->request->getVar('passwordbaru');
+
+        $result = password_verify(base64_encode(
+            hash('sha384', $passwordlama, true)
+        ), $passworduser);
+        if (!$result) {
+            session()->setFlashdata('error', 'Password gagal di ubah , Password lama salah.');
+            return redirect()->to(base_url('admin/profile'))->withInput();
+        }
+        $userproses = $this->users;
+        $hashOptions = [
+            "hashMemoryCost" => 2084,
+            "hashTimeCost" => 4,
+            "hashThreads" => 4,
+            "hashCost" => 10
+        ];
+        $passwordhash = password_hash(
+            base64_encode(
+                hash('sha384', $passwordbaru, true)
+            ),
+            PASSWORD_DEFAULT,
+            $hashOptions
+        );
+        $userproses->save([
+            'id' => $userid,
+            'password_hash' => $passwordhash
+        ]);
+        if ($user->wa_hash == 'valid') {
+            if (is_resource(@fsockopen($this->ipwa, $this->portwa))) {
+                fclose(@fsockopen($this->ipwa, $this->portwa));
+                $wa = $user->whatsapp;
+                $post_data = 'sender=primary&number=' . $wa . '&message=' . $user->username . ' %0AAnda berhasil mengubah password';
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $this->waapi);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $result = curl_exec($ch);
+            }
+        }
+        session()->setFlashdata('pesan', 'Password berhasil di ubah');
+        return redirect()->to(base_url('admin/profile'));
     }
 
     public function notifikasi()

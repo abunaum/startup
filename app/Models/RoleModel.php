@@ -13,4 +13,8 @@ class RoleModel extends Model
     {
         return $this->table('auth_groups_users')->where('group_id', 1);
     }
+    public function carirole($id)
+    {
+        return $this->table('auth_groups_users')->where('user_id', $id);
+    }
 }

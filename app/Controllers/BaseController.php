@@ -53,6 +53,7 @@ class BaseController extends Controller
 		$this->waapi = 'http://' . $this->ipwa . ':' . $this->portwa . '/send-message';
 		$this->users = new \App\Models\UserModel();
 		$this->role = new \App\Models\RoleModel();
+		$this->keyapi = '030598';
 		helper('auth');
 	}
 }

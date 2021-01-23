@@ -1,4 +1,6 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use CodeIgniter\Model;
 
@@ -99,13 +101,12 @@ class LoginModel extends Model
     {
         $config = config('Auth');
 
-        if (! $config->allowRemembering)
-        {
+        if (!$config->allowRemembering) {
             return;
         }
 
         $this->db->table('auth_tokens')
-                 ->where('expires <=', date('Y-m-d H:i:s'))
-                 ->delete();
+            ->where('expires <=', date('Y-m-d H:i:s'))
+            ->delete();
     }
 }
