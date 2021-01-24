@@ -35,13 +35,20 @@
                 <center>
                     <form class="g-3 needs-validation" action="<?= base_url('user/ubahdata'); ?>" method="post" enctype="multipart/form-data" novalidate>
                         <?= csrf_field(); ?>
-                        <div class="input-group mb-3">
-                            <input class="form-control <?= ($validation->hasError('gambar')) ? 'is-invalid' : '' ?>" type="file" id="gambar" name="gambar">
-                            <div class="invalid-feedback">
-                                <?= $validation->getError('gambar'); ?>
+                        <img class="card-img-top rounded-circle col col-md-6 mb-3 lihat-gambar" src="<?= base_url() ?>/img/profile/<?= user()->user_image; ?>" alt="Card image cap">
+                        <label for="gambar">Gambar tidak wajib di ubah</label>
+                        <div class="row form-group">
+                            <div class="col col-md-3">
+                                <label for="gambar" class=" form-control-label">Gambar</label>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                <input type="file" id="gambar" name="gambar" class="form-control-file <?= ($validation->hasError('gambar')) ? 'is-invalid' : '' ?>" onchange="profilpreview()">
                             </div>
                         </div>
-                        <div class="mt-4">
+                        <div class="invalid-feedback">
+                            <?= $validation->getError('gambar'); ?>
+                        </div>
+                        <div class="mt-4 col col-md-12">
                             <input type="text" class="form-control <?= ($validation->hasError('nama')) ? 'is-invalid' : '' ?>" id="nama" name="nama" placeholder="Nama" value="<?php if (old('nama') != '') : ?><?= old('nama') ?><?php else : ?><?= user()->fullname ?><?php endif; ?>">
                             <div class="invalid-feedback">
                                 <?= $validation->getError('nama'); ?>

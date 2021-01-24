@@ -26,3 +26,16 @@
         }
     }
 </script>
+<script>
+    function profilpreview() {
+        const gambar = document.querySelector('#gambar');
+        const previewimg = document.querySelector('.lihat-gambar');
+
+        const filegambar = new FileReader();
+        filegambar.readAsDataURL(gambar.files[0]);
+
+        filegambar.onload = function(e) {
+            previewimg.src = e.target.result;
+        }
+    }
+</script>

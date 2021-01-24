@@ -27,49 +27,40 @@ class profile extends BaseController
         $file = $this->request->getFiles();
         $nama = $this->request->getVar('nama');
         $gambar = $file['gambar'];
-        if ($gambar->isValid()) {
-            if (!$this->validate([
-                'nama' => 'required|alpha_space|min_length[3]',
-                'gambar' => [
-                    'rules' => 'uploaded[gambar]|max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
-                    'errors' => [
-                        'uploaded' => 'Foto gambar profile masih kosong',
-                        'max_size' => 'Ukuran gambar maksimal 1 Mb',
-                        'is_image' => 'File yang dipilih bukan gambar',
-                        'mime_in' => 'File yang dipilih bukan gambar'
-                    ]
+        if (!$this->validate([
+            'nama' => 'required|alpha_space|min_length[3]',
+            'gambar' => [
+                'rules' => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
+                'errors' => [
+                    'max_size' => 'Ukuran gambar maksimal 1 Mb',
+                    'is_image' => 'File yang dipilih bukan gambar',
+                    'mime_in' => 'File yang dipilih bukan gambar'
                 ]
-            ])) {
-                session()->setFlashdata('error', 'Gagal mengubah data , Coba lagi');
-                return redirect()->to(base_url('user/profile'))->withInput();
-            }
+            ]
+        ])) {
+            session()->setFlashdata('error', 'Gagal mengubah data , Coba lagi');
+            return redirect()->to(base_url('user/profile'))->withInput();
+        }
+        if ($gambar->getError() == 4) {
+            $this->users->save([
+                'id' => user()->id,
+                'fullname' => $nama
+            ]);
+        } else {
             $user = $this->users->where('id', user()->id)->get()->getFirstRow();
             if ($user->user_image != 'default.svg') {
                 @unlink('img/profile/' . $user->user_image);
             }
-            $namagambar = $gambar->getName();
-            $gambar->move('img/profile');
+            $namagambar = $gambar->getRandomName();
+            $gambar->move('img/profile', $namagambar);
             $this->users->save([
                 'id' => user()->id,
                 'fullname' => $nama,
                 'user_image' => $namagambar
             ]);
-            session()->setFlashdata('pesan', 'Mantap , data berhasil di ubah');
-            return redirect()->to(base_url('user/profile'));
-        } else {
-            if (!$this->validate([
-                'nama' => 'required|alpha_space|min_length[3]'
-            ])) {
-                session()->setFlashdata('error', 'Gagal mengubah data , Coba lagi');
-                return redirect()->to(base_url('user/profile'))->withInput();
-            }
-            $this->users->save([
-                'id' => user()->id,
-                'fullname' => $nama
-            ]);
-            session()->setFlashdata('pesan', 'Mantap , data berhasil di ubah');
-            return redirect()->to(base_url('user/profile'));
         }
+        session()->setFlashdata('pesan', 'Mantap , data berhasil di ubah');
+        return redirect()->to(base_url('user/profile'));
     }
     public function ubahpassword()
     {
