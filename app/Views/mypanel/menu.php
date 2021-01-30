@@ -32,3 +32,7 @@
         </li>
     </ul>
 </li>
+<?php
+$date = date('d F Y h:i:s a');
+echo $date;
+?>

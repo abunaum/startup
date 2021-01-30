@@ -7,9 +7,9 @@
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/bootstrap.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/bootstrap-grid.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/bootstrap-reboot.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/font-techmarket.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/font-market.css" media="all" />
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/slick.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/techmarket-font-awesome.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/market-font-awesome.css" media="all" />
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/slick-style.css" media="all" />
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/animate.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/style.css" media="all" />

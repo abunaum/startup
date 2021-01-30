@@ -60,11 +60,10 @@
                 </ul>
                 <ul class="site-header-cart">
                     <li class="animate-dropdown dropdown ">
-                        <a class="cart-contents" href="#" data-toggle="dropdown" title="Saldo Anda">
+                        <a class="cart-contents" title="Saldo Anda" href="<?= base_url('user/saldo') ?>">
                             <span class="amount">
                                 <span class="price-label">Saldo</span>Rp. <?= number_format(user()->balance) ?></span>
                         </a>
-                        <!-- .dropdown-menu-mini-cart -->
                     </li>
                 </ul>
                 <ul class="header-wishlist nav navbar-nav">

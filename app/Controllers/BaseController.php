@@ -44,16 +44,20 @@ class BaseController extends Controller
 		session();
 		$this->validation =  \Config\Services::validation();
 		$this->namaweb = 'Tokolancer';
+		//model
 		$this->produk = new \App\Models\ProdukModel();
 		$this->item = new \App\Models\ItemModel();
 		$this->subitem = new \App\Models\SubitemModel();
 		$this->toko = new \App\Models\TokoModel();
+		$this->transaksi_saldo = new \App\Models\TransaksiSaldoModel();
+		$this->users = new \App\Models\UserModel();
+		$this->role = new \App\Models\RoleModel();
+		$this->apipayment = new \App\Models\ApiPaymentModel();
+		//wa
 		$this->ipwa = '34.237.136.254';
 		$this->portwa = '8000';
 		$this->waapi = 'http://' . $this->ipwa . ':' . $this->portwa . '/send-message';
-		$this->users = new \App\Models\UserModel();
-		$this->role = new \App\Models\RoleModel();
-		$this->keyapi = '030598';
+		//helper
 		helper('auth');
 	}
 }

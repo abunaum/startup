@@ -21,7 +21,7 @@
                 }
                 document.getElementById("sub").innerHTML = html;
             });
-            http.open("POST", "<?= base_url('cariitem') ?>/" + id); // tentukan server tujuan
+            http.open("POST", "<?= base_url('cariitem') ?>/" + id);
             http.send();
         }
     }

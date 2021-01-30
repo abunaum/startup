@@ -95,6 +95,10 @@ $routes->group('user', ['filter' => 'login'], function ($routes) {
     $routes->post('notifikasi/ubahwa', 'User\notifikasi::ubahwa');
     $routes->post('notifikasi/verifwa', 'User\notifikasi::verifwa');
     $routes->post('notifikasi', 'User\notifikasi::pasangwa');
+    $routes->get('saldo', 'User\saldo::index');
+    $routes->post('tambahsaldo', 'User\saldo::tambah');
+    $routes->get('saldo/topup', 'User\saldo::topup');
+    $routes->post('topup/prosess/(:num)', 'User\saldo::topupproses/$1');
     $routes->group('toko', function ($routes) {
         $routes->get('produk', 'User\toko::produk');
         $routes->get('produk/detail/(:num)', 'User\toko::produkdetail/$1');
@@ -107,6 +111,7 @@ $routes->group('produk', function ($routes) {
 });
 $routes->post('cariitem/(:num)', 'User\toko::cariitem/$1');
 $routes->get('/penjual', 'Penjual\Toko::index');
+$routes->post('api/proses/gasspol/mantap/callback', 'Apipayment\Callback::callback');
 
 /**
  * --------------------------------------------------------------------
