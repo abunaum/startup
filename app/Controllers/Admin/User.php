@@ -20,7 +20,7 @@ class User extends BaseController
 
     public function detail($id = 0)
     {
-        $user = new \Myth\Auth\Models\UserModel();
+        $user = new $this->users;
         $user = $user->where('id', $id);
         $user = $user->get()->getFirstRow();
         $data = [

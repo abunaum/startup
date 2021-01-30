@@ -3,10 +3,17 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
+use App\Libraries\WaApiLibrary;
 use CodeIgniter\HTTP\Files\UploadedFile;
 
 class profile extends BaseController
 {
+    public $walib;
+    public function __construct()
+    {
+        $this->walib = new WaApiLibrary;
+    }
+
     public function index()
     {
         $item = $this->item;
@@ -105,17 +112,11 @@ class profile extends BaseController
             'password_hash' => $passwordhash
         ]);
         if ($user->wa_hash == 'valid') {
-            if (is_resource(@fsockopen($this->ipwa, $this->portwa))) {
-                fclose(@fsockopen($this->ipwa, $this->portwa));
+            $koneksiwa = $this->walib->cekkoneksi();
+            if ($koneksiwa != 'error') {
                 $wa = $user->whatsapp;
-                $post_data = 'sender=primary&number=' . $wa . '&message=' . $user->username . ' %0AAnda berhasil mengubah password';
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $this->waapi);
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $result = curl_exec($ch);
+                $pesan = $user->username . ' %0AAnda berhasil mengubah password';
+                $this->walib->sendwasingle($wa, $pesan);
             }
         }
         session()->setFlashdata('pesan', 'Password berhasil di ubah');

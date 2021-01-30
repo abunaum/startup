@@ -3,9 +3,16 @@
 namespace App\Controllers\Toko;
 
 use App\Controllers\BaseController;
+use App\Libraries\WaApiLibrary;
 
 class Fitur extends BaseController
 {
+    public $walib;
+    public function __construct()
+    {
+        $this->walib = new WaApiLibrary;
+    }
+
     public function index()
     {
         $produk = $this->produk;
@@ -120,8 +127,8 @@ class Fitur extends BaseController
             'id' => user()->id,
             'status_toko' => 2
         ]);
-        if (is_resource(@fsockopen($this->ipwa, $this->portwa))) {
-            fclose(@fsockopen($this->ipwa, $this->portwa));
+        $koneksiwa = $this->walib->cekkoneksi();
+        if ($koneksiwa != 'error') {
             $admin = $this->role->admin()->findAll();
             foreach ($admin as $admin) {
                 $id_admin = $admin['user_id'];
@@ -131,14 +138,8 @@ class Fitur extends BaseController
                 $builder->where('wa_hash', 'valid');
                 $adm = $builder->get()->getFirstRow();
                 $wa = $adm->whatsapp;
-                $post_data = 'sender=primary&number=' . $wa . '&message=username : ' . user()->username . '%0A Toko : ' . $tokodb->username . '%0A mengajukan aktivasi toko';
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $this->waapi);
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $result = curl_exec($ch);
+                $pesan = $wa . '&message=username : ' . user()->username . '%0A Toko : ' . $tokodb->username . '%0A mengajukan aktivasi toko';
+                $this->walib->sendwasingle($wa, $pesan);
             }
         }
         session()->setFlashdata('pesan', 'Toko berhasil meminta aktivasi');

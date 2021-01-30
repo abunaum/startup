@@ -3,9 +3,16 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Libraries\WaApiLibrary;
 
 class Toko extends BaseController
 {
+    public $walib;
+    public function __construct()
+    {
+        $this->walib = new WaApiLibrary;
+    }
+
     public function pengajuan()
     {
         $user = new $this->users;
@@ -39,16 +46,13 @@ class Toko extends BaseController
         $toko = $toko->where('id', $id)->get()->getFirstRow();
         $user = new $this->users;
         $user = $user->where('username', $toko->username_user)->get()->getFirstRow();
-        if ($user->whatsapp != null) {
-            $post_data = 'sender=primary&number=' . $user->whatsapp . '&message=Maaf aktivasi toko anda di tolak karena data yang dikirim tidak valid atau kurang jelas. Silahkan aktivasi ulang%0A' . base_url('toko');
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $this->waapi);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
-            if (!$result) {
+        if ($user->wa_hash == 'valid') {
+            $koneksiwa = $this->walib->cekkoneksi();
+            if ($koneksiwa != 'error') {
+                $wa = $user->whatsapp;
+                $pesan = $user->username . ' %0AMaaf aktivasi toko anda di tolak karena data yang dikirim tidak valid atau kurang jelas. Silahkan aktivasi ulang%0A' . base_url('toko');
+                $this->walib->sendwasingle($wa, $pesan);
+            } else {
                 session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
                 return redirect()->to(base_url('admin/toko/detail/' . $toko->id));
             }
@@ -81,16 +85,13 @@ class Toko extends BaseController
         $user = new $this->users;
         $user = $user->where('username', $toko->username_user)->get()->getFirstRow();
 
-        if ($user->whatsapp != null) {
-            $post_data = 'sender=primary&number=' . $user->whatsapp . '&message=Mantap, Toko anda telah di aktivasi, sekarang anda bisa berjualan di ' . base_url();
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $this->waapi);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
-            if (!$result) {
+        if ($user->wa_hash == 'valid') {
+            $koneksiwa = $this->walib->cekkoneksi();
+            if ($koneksiwa != 'error') {
+                $wa = $user->whatsapp;
+                $pesan = $user->whatsapp . ' %0AMantap, Toko anda telah di aktivasi, sekarang anda bisa berjualan di ' . base_url();
+                $this->walib->sendwasingle($wa, $pesan);
+            } else {
                 session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
                 return redirect()->to(base_url('admin/toko/detail/' . $toko->id));
             }

@@ -3,10 +3,17 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
+use App\Libraries\WaApiLibrary;
 use CodeIgniter\API\ResponseTrait;
 
 class toko extends BaseController
 {
+    public $walib;
+    public function __construct()
+    {
+        $this->walib = new WaApiLibrary;
+    }
+
     use ResponseTrait;
     public function produk()
     {
@@ -118,8 +125,8 @@ class toko extends BaseController
             'stok' => $stok
         ]);
 
-        if (is_resource(@fsockopen($this->ipwa, $this->portwa))) {
-            fclose(@fsockopen($this->ipwa, $this->portwa));
+        $koneksiwa = $this->walib->cekkoneksi();
+        if ($koneksiwa != 'error') {
             $admin = $this->role->admin()->findAll();
             foreach ($admin as $admin) {
                 $id_admin = $admin['user_id'];
@@ -129,14 +136,8 @@ class toko extends BaseController
                 $builder->where('wa_hash', 'valid');
                 $adm = $builder->get()->getFirstRow();
                 $wa = $adm->whatsapp;
-                $post_data = 'sender=primary&number=' . $wa . '&message=username : ' . user()->username . ' %0AToko : ' . $toko->username . ' %0Amenambah produk :' . $nama . ' %0Aharga : ' . $harga;
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $this->waapi);
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $result = curl_exec($ch);
+                $pesan = user()->username . ' %0AToko : ' . $toko->username . ' %0Amenambah produk :' . $nama . ' %0Aharga : ' . $harga;
+                $this->walib->sendwasingle($wa, $pesan);
             }
         }
 

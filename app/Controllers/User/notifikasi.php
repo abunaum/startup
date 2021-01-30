@@ -3,9 +3,16 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
+use App\Libraries\WaApiLibrary;
 
 class notifikasi extends BaseController
 {
+    public $walib;
+    public function __construct()
+    {
+        $this->walib = new WaApiLibrary;
+    }
+
     public function index()
     {
         $produk = $this->produk;
@@ -47,46 +54,38 @@ class notifikasi extends BaseController
 
         $nowa = '0' . $this->request->getVar('wa');
         $rand = substr(md5(openssl_random_pseudo_bytes(20)), -32);
-        $post_data = 'sender=primary&number=' . $nowa . '&message=kode anda adalah : ' . $rand;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->waapi);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        if (!$result) {
+        $koneksiwa = $this->walib->cekkoneksi();
+        if ($koneksiwa != 'error') {
+            $wa = $nowa;
+            $pesan = 'kode anda adalah : ' . $rand;
+            $this->walib->sendwasingle($wa, $pesan);
+        } else {
             session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
             return redirect()->to(base_url('user/notifikasi'));
-        } else {
-            $this->users->save([
-                'id' => user()->id,
-                'whatsapp' => $nowa,
-                'wa_hash' => $rand
-            ]);
-            session()->setFlashdata('pesan', 'Kode konfirmasi berhasil dikirim ke Whatsapp.');
-            return redirect()->to(base_url('user/notifikasi'));
         }
+        $this->users->save([
+            'id' => user()->id,
+            'whatsapp' => $nowa,
+            'wa_hash' => $rand
+        ]);
+        session()->setFlashdata('pesan', 'Kode konfirmasi berhasil dikirim ke Whatsapp.');
+        return redirect()->to(base_url('user/notifikasi'));
     }
 
     public function waulang()
     {
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
-        $post_data = 'sender=primary&number=' . $user->whatsapp . '&message=kode anda adalah : ' . $user->wa_hash;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->waapi);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        if (!$result) {
+        $koneksiwa = $this->walib->cekkoneksi();
+        if ($koneksiwa != 'error') {
+            $wa = $user->whatsapp;
+            $pesan = 'kode anda adalah : ' . $user->wa_hash;
+            $this->walib->sendwasingle($wa, $pesan);
+        } else {
             session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
             return redirect()->to(base_url('user/notifikasi'));
-        } else {
-            session()->setFlashdata('pesan', 'Kode konfirmasi berhasil dikirim ke Whatsapp.');
-            return redirect()->to(base_url('user/notifikasi'));
         }
+        session()->setFlashdata('pesan', 'Kode konfirmasi berhasil dikirim ke Whatsapp.');
+        return redirect()->to(base_url('user/notifikasi'));
     }
 
     public function ubahwa()
@@ -100,26 +99,22 @@ class notifikasi extends BaseController
 
         $nowa = '0' . $this->request->getVar('wa');
         $rand = substr(md5(openssl_random_pseudo_bytes(20)), -32);
-        $post_data = 'sender=primary&number=' . $nowa . '&message=kode anda adalah : ' . $rand;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->waapi);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        if (!$result) {
+        $koneksiwa = $this->walib->cekkoneksi();
+        if ($koneksiwa != 'error') {
+            $wa = $nowa;
+            $pesan = 'kode anda adalah : ' . $rand;
+            $this->walib->sendwasingle($wa, $pesan);
+        } else {
             session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
             return redirect()->to(base_url('user/notifikasi'));
-        } else {
-            $this->users->save([
-                'id' => user()->id,
-                'whatsapp' => $nowa,
-                'wa_hash' => $rand
-            ]);
-            session()->setFlashdata('pesan', 'Nomor Whatsapp berhasil di ubah dan Kode berhasil di kirim.');
-            return redirect()->to(base_url('user/notifikasi'));
         }
+        $this->users->save([
+            'id' => user()->id,
+            'whatsapp' => $nowa,
+            'wa_hash' => $rand
+        ]);
+        session()->setFlashdata('pesan', 'Nomor Whatsapp berhasil di ubah dan Kode berhasil di kirim.');
+        return redirect()->to(base_url('user/notifikasi'));
     }
 
     public function verifwa()

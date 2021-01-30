@@ -3,10 +3,17 @@
 namespace App\Controllers\Apipayment;
 
 use App\Controllers\BaseController;
+use App\Libraries\WaApiLibrary;
 use App\Models\TransaksiSaldoModel;
 
 class Callback extends BaseController
 {
+    public $walib;
+    public function __construct()
+    {
+        $this->walib = new WaApiLibrary;
+    }
+
     public function callback()
     {
         $db = \Config\Database::connect();
@@ -49,6 +56,14 @@ class Callback extends BaseController
                     'id' => $user->id,
                     'balance' => $user->balance + $transaksi->nominal
                 ]);
+                if ($user->wa_hash == 'valid') {
+                    $koneksiwa = $this->walib->cekkoneksi();
+                    if ($koneksiwa != 'error') {
+                        $wa = $user->whatsapp;
+                        $pesan = $user->username . ' %0AAnda berhasil isi saldo Rp. ' . number_format($transaksi->nominal) . ' %0ATotal saldo anda sekarang : Rp. ' . number_format($user->balance + $transaksi->nominal);
+                        $this->walib->sendwasingle($wa, $pesan);
+                    }
+                }
             }
         }
 

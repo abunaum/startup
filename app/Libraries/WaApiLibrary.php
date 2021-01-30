@@ -14,28 +14,29 @@ class WaApiLibrary extends BaseController
     }
     public function cekkoneksi()
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        curl_setopt($ch, CURLOPT_URL, $this->ipwa);
-        curl_setopt($ch, CURLOPT_PORT, $this->portwa);
-        $hasil = curl_exec($ch);
-        curl_close($ch);
-        if (!$hasil) {
+        $cekwa = curl_init($this->ipwa);
+        curl_setopt($cekwa, CURLOPT_TIMEOUT, 5);
+        curl_setopt($cekwa, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($cekwa, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($cekwa, CURLOPT_PORT, $this->portwa);
+        curl_exec($cekwa);
+        $httpcode = curl_getinfo($cekwa, CURLINFO_HTTP_CODE);
+        curl_close($cekwa);
+        if ($httpcode >= 200 && $httpcode < 300) {
+            $result = 'ready';
+        } else {
             $date = date('d F Y h:i:s a');
             $bottele = '1681155458:AAEYgeX1RsRyjEpn3LdFXq095OEduGwDO9k';
             $idtele = '799163200';
             $pesan = "Server Api Whatsapp mati pada $date";
             $API = "https://api.telegram.org/bot" . $bottele . "/sendmessage?chat_id=" . $idtele . "&text=$pesan";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-            curl_setopt($ch, CURLOPT_URL, $API);
-            curl_exec($ch);
-            curl_close($ch);
+            $tele = curl_init();
+            curl_setopt($tele, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($tele, CURLOPT_CUSTOMREQUEST, 'GET');
+            curl_setopt($tele, CURLOPT_URL, $API);
+            curl_exec($tele);
+            curl_close($tele);
             $result = 'error';
-        } else {
-            $result = 'ready';
         }
         return $result;
     }
