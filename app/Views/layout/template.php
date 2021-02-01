@@ -84,6 +84,7 @@
     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
     <script src="<?= base_url(); ?>/assets/js/swal2/sweetalert2.min.js"></script>
     <script src="<?= base_url(); ?>/assets/js/swal2/swall.js"></script>
+
     <?php if (logged_in('true')) : ?>
         <?php if ($_SERVER['REQUEST_URI'] != '/user/profile') : ?>
             <?php

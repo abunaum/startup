@@ -8,6 +8,9 @@ class ProdukModel extends Model
 {
     protected $table = 'produk';
     protected $useTimestamps = true;
+    protected $useSoftDeletes = true;
+    protected $deletedField  = 'deleted_at';
+
     protected $allowedFields = ['jenis', 'nama', 'owner', 'gambar', 'harga', 'keterangan', 'slug', 'stok'];
 
     public function search($cari)

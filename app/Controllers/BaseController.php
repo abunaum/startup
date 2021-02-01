@@ -53,10 +53,6 @@ class BaseController extends Controller
 		$this->users = new \App\Models\UserModel();
 		$this->role = new \App\Models\RoleModel();
 		$this->apipayment = new \App\Models\ApiPaymentModel();
-		//wa
-		$this->ipwa = '34.237.136.254';
-		$this->portwa = '8000';
-		$this->waapi = 'http://' . $this->ipwa . ':' . $this->portwa . '/send-message';
 		//helper
 		helper('auth');
 	}

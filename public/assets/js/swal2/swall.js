@@ -17,12 +17,11 @@ if (error) {
         text: error
     })
 }
-
 $(".tmbl-hps").on('click', function(e) {
     var nama = $(this).data('nama');
     Swal.fire({
         title: 'Anda yakin?',
-        text: 'Mau menghapus Item ' + nama + ' ?',
+        text: 'Mau menghapus ' + nama + ' ?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -35,7 +34,6 @@ $(".tmbl-hps").on('click', function(e) {
         }
     })
 })
-
 $(".tmbl-acc").on('click', function(e) {
     var nama = $(this).data('nama');
     Swal.fire({

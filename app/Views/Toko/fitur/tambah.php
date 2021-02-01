@@ -54,7 +54,7 @@
                                 <label for="harga" class=" form-control-label">Harga</label>
                             </div>
                             <div class="col-12 col-md-9">
-                                <input type="number" id="harga" name="harga" placeholder="Harga min 10000" class="form-control <?= ($validation->hasError('harga')) ? 'is-invalid' : '' ?><?= (old('harga') < 10000) ? 'is-invalid' : '' ?>" value="<?= old('harga') ?>">
+                                <input type="number" id="harga" name="harga" placeholder="Harga" class="form-control <?= ($validation->hasError('harga')) ? 'is-invalid' : '' ?>" value="<?= old('harga') ?>">
                                 <small class="help-block form-text">
                                     <?= $validation->getError('harga'); ?>
                                 </small>

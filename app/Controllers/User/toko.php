@@ -20,13 +20,6 @@ class toko extends BaseController
         $produk = $this->produk;
         $item = $this->item;
         $toko = $this->toko;
-        $cari = $this->request->getVar('search');
-
-        if ($cari) {
-            $produk = $produk->search($cari);
-        } else {
-            $produk = $produk;
-        }
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $produkuser = $this->produk->where('owner', user()->id);
         $data = [
@@ -38,25 +31,17 @@ class toko extends BaseController
             'produk' => $produkuser->paginate(6),
             'pager' => $produkuser->pager
         ];
-        if ($user->status_toko == 5) {
-            return view('Toko/banned', $data);
+        if ($user->status_toko != 4) {
+            return redirect()->to(base_url('toko'));
         } else {
             return view('Toko/fitur/produk', $data);
         }
     }
     public function tambah()
     {
-        $produk = $this->produk;
         $item = $this->item;
         $subitem = $this->subitem;
         $toko = $this->toko;
-        $cari = $this->request->getVar('search');
-
-        if ($cari) {
-            $produk = $produk->search($cari);
-        } else {
-            $produk = $produk;
-        }
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $data = [
             'type' => 'tambahproduk',
@@ -67,8 +52,8 @@ class toko extends BaseController
             'user' => $user,
             'validation' => \Config\Services::validation()
         ];
-        if ($user->status_toko == 5) {
-            return view('Toko/banned', $data);
+        if ($user->status_toko != 4) {
+            return redirect()->to(base_url('toko'));
         } else {
             return view('Toko/fitur/tambah', $data);
         }
@@ -81,11 +66,6 @@ class toko extends BaseController
         $deskripsi = $this->request->getVar('deskripsi');
         $stok = $this->request->getVar('stok');
 
-        if ($harga < 10000) {
-            session()->setFlashdata('error', 'Gagal menambah produk, Harga kurang dari 10000');
-            return redirect()->to(base_url('user/toko/tambah'))->withInput();
-        }
-
         $toko = $this->toko->where('username_user', user()->username)->get()->getFirstRow();
         $slug = url_title($toko->username . ' ' . $nama);
 
@@ -93,7 +73,7 @@ class toko extends BaseController
             'item' => 'required',
             'sub' => 'required',
             'nama' => 'required',
-            'harga' => 'required|min_length[5]',
+            'harga' => 'required',
             'deskripsi' => 'required',
             'stok' => 'required',
             'gambar' => [
@@ -110,7 +90,6 @@ class toko extends BaseController
             return redirect()->to(base_url('user/toko/tambah'))->withInput();
         }
         $gambar = $this->request->getFile('gambar');
-        // pindah lokasi gambar
         $gambar->move('img/produk');
         $namagambar = $gambar->getName();
         $produk = $this->produk;
@@ -152,17 +131,9 @@ class toko extends BaseController
     }
     public function produkdetail($id)
     {
-        $produk = $this->produk;
+        $produk = $this->produk->where('id', $id)->get()->getFirstRow();
         $item = $this->item;
         $toko = $this->toko->where('username_user', user()->username)->get()->getFirstRow();
-        $cari = $this->request->getVar('search');
-        $idproduk = $id;
-
-        if ($cari) {
-            $produk = $produk->search($cari);
-        } else {
-            $produk = $produk;
-        }
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $produkuser = $this->produk->where('owner', user()->id);
         $data = [
@@ -171,17 +142,18 @@ class toko extends BaseController
             'toko' => $toko,
             'user' => $user,
             'validation' => \Config\Services::validation(),
-            'produk' => $produkuser->paginate(6),
+            'produk' => $produk,
+            'produkuser' => $produkuser->paginate(6),
             'pager' => $produkuser->pager
         ];
         if ($toko == null) {
             return redirect()->to(base_url('toko'));
         } else if ($toko->username_user != user()->username) {
             return redirect()->to(base_url('toko'));
-        } else if ($user->status_toko == 5) {
-            return view('Toko/banned', $data);
+        } else if (user()->status_toko != 4) {
+            return redirect()->to(base_url('toko'));
         } else {
-            echo phpinfo();
+            return view('Toko/fitur/produkdetail', $data);
         }
     }
 }

@@ -137,6 +137,7 @@
                                                 </table>
                                             </td>
                                         </tr>
+                                        <p>Atau klik link ini <?= base_url('activate-account') . '?token=' . $hash ?></p>
                                     </tbody>
                                 </table>
                             </div>

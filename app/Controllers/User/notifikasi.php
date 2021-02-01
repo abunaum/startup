@@ -15,16 +15,8 @@ class notifikasi extends BaseController
 
     public function index()
     {
-        $produk = $this->produk;
         $item = $this->item;
         $toko = $this->toko;
-        $cari = $this->request->getVar('search');
-
-        if ($cari) {
-            $produk = $produk->search($cari);
-        } else {
-            $produk = $produk;
-        }
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $data = [
             'judul' => "Notifikasi | $this->namaweb",

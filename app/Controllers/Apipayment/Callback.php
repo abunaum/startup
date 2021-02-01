@@ -42,7 +42,12 @@ class Callback extends BaseController
                 $db = \Config\Database::connect();
                 $buildertransaksi = $db->table('transaksi_saldo');
                 $buildertransaksi->where('order_number', $data->merchant_ref);
+                $buildertransaksi->where('status', 'pending');
                 $transaksi = $buildertransaksi->get()->getFirstRow();
+
+                if (!$transaksi) {
+                    return redirect()->to(base_url());
+                }
 
                 $this->transaksi_saldo->save([
                     'id' => $transaksi->id,

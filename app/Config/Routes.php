@@ -99,6 +99,8 @@ $routes->group('user', ['filter' => 'login'], function ($routes) {
     $routes->post('tambahsaldo', 'User\saldo::tambah');
     $routes->get('saldo/topup', 'User\saldo::topup');
     $routes->post('topup/prosess/(:num)', 'User\saldo::topupproses/$1');
+    $routes->get('topup/prosess/(:num)', 'User\saldo::topupproses/$1');
+    $routes->delete('transaksisaldo/hapus/(:num)', 'User\saldo::transaksihapus/$1');
     $routes->group('toko', function ($routes) {
         $routes->get('produk', 'User\toko::produk');
         $routes->get('produk/detail/(:num)', 'User\toko::produkdetail/$1');

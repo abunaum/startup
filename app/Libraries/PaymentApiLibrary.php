@@ -19,8 +19,8 @@ class PaymentApiLibrary extends BaseController
         $this->urlcreatepayment = $apidb->urlcreatepayment;
         $this->urlpaymentchannel = $apidb->urlpaymentchannel;
         $this->urlfeekalkulator = $apidb->urlfeekalkulator;
-
-        $this->callback = 'http://d034a914c3d2.ngrok.io' . $apidb->callback;
+        $this->detailtransaksiurl = $apidb->urldetailtransaksi;
+        $this->callback = 'http://9f0d3ba5b1fb.ngrok.io/' . $apidb->callback;
     }
     public function getmerchant()
     {
@@ -66,14 +66,9 @@ class PaymentApiLibrary extends BaseController
         return $data['data'][0]['total_fee'];
     }
 
-    public function geturlpaytopup($id)
+    public function createpayment($nama, $order_number, $channel, $totalbayar)
     {
         $db = \Config\Database::connect();
-        $buildertransaksi = $db->table('transaksi_saldo');
-        $buildertransaksi->where('id', $id);
-        $transaksi = $buildertransaksi->get()->getFirstRow();
-        $amount = $transaksi->fee + $transaksi->nominal;
-
         $builderuser = $db->table('users');
         $builderuser->where('id', user()->id);
         $user = $builderuser->get()->getFirstRow();
@@ -85,24 +80,24 @@ class PaymentApiLibrary extends BaseController
         }
 
         $data = [
-            'method'            => $transaksi->metode,
-            'merchant_ref'      => $transaksi->order_number,
-            'amount'            => $amount,
+            'method'            => $channel,
+            'merchant_ref'      => $order_number,
+            'amount'            => $totalbayar,
             'customer_name'     => user()->username,
             'customer_email'    => user()->email,
             'customer_phone'    => $wa,
             'order_items'       => [
                 [
-                    'sku'       => 'Topup',
-                    'name'      => $transaksi->jenis,
-                    'price'     => $amount,
+                    'sku'       => $nama,
+                    'name'      => $nama,
+                    'price'     => $totalbayar,
                     'quantity'  => 1
                 ]
             ],
             'callback_url'      => $this->callback,
             'return_url'        => base_url('user/saldo/topup'),
             'expired_time'      => (time() + (24 * 60 * 60)), // 24 jam
-            'signature'         => hash_hmac('sha256', $this->kodemerchant . $transaksi->order_number . $amount, $this->apiprivatekey)
+            'signature'         => hash_hmac('sha256', $this->kodemerchant . $order_number . $totalbayar, $this->apiprivatekey)
         ];
 
         $curl = curl_init();
@@ -121,10 +116,37 @@ class PaymentApiLibrary extends BaseController
         ));
 
         $response = curl_exec($curl);
+        curl_close($curl);
+        $createpayment = json_decode($response, true);
+        $createpayment = json_encode($createpayment);
+        return $createpayment;
+    }
+    public function detailtransaksi($referensi)
+    {
+        $payload = [
+            'reference'    => $referensi
+        ];
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_FRESH_CONNECT     => true,
+            CURLOPT_URL               => $this->detailtransaksiurl . http_build_query($payload),
+            CURLOPT_RETURNTRANSFER    => true,
+            CURLOPT_HEADER            => false,
+            CURLOPT_HTTPHEADER        => array(
+                "Authorization: Bearer " . $this->apikey
+            ),
+            CURLOPT_FAILONERROR       => false,
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
 
         curl_close($curl);
-        $data = json_decode($response, true);
-        $urlpay = $data['data']['checkout_url'];
-        return $urlpay;
+
+        $detailpayment = json_decode($response, true);
+        $detailpayment = json_encode($detailpayment);
+        return $detailpayment;
     }
 }

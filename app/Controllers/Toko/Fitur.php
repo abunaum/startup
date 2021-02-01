@@ -15,18 +15,8 @@ class Fitur extends BaseController
 
     public function index()
     {
-        $produk = $this->produk;
         $item = $this->item;
-        $subitem = $this->subitem;
         $toko = $this->toko;
-        $cari = $this->request->getVar('search');
-
-        if ($cari) {
-            $produk = $produk->search($cari);
-        } else {
-            $produk = $produk;
-        }
-
         $data = [
             'judul' => "Toko | $this->namaweb",
             'item' => $item->where('status', 1)->orderBy('nama', 'asc')->findAll(),
