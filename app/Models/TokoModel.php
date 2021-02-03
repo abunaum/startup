@@ -8,5 +8,7 @@ class TokoModel extends Model
 {
     protected $table = 'toko';
     protected $useTimestamps = true;
-    protected $allowedFields = ['username_user', 'username', 'nama', 'logo', 'selogan', 'metode', 'nama_rek', 'no_rek', 'kartu', 'selfi', 'status'];
+    protected $useSoftDeletes = true;
+    protected $deletedField  = 'deleted_at';
+    protected $allowedFields = ['userid', 'username', 'nama', 'logo', 'selogan', 'metode', 'nama_rek', 'no_rek', 'kartu', 'selfi', 'status'];
 }

@@ -4,6 +4,7 @@ namespace App\Controllers\Toko;
 
 use App\Controllers\BaseController;
 use App\Libraries\WaApiLibrary;
+use App\Libraries\Itemlibrary;
 
 class Fitur extends BaseController
 {
@@ -11,16 +12,17 @@ class Fitur extends BaseController
     public function __construct()
     {
         $this->walib = new WaApiLibrary;
+        $this->getitem = new Itemlibrary;
     }
 
     public function index()
     {
-        $item = $this->item;
+        $item = $this->getitem->getsub();
         $toko = $this->toko;
         $data = [
             'judul' => "Toko | $this->namaweb",
-            'item' => $item->where('status', 1)->orderBy('nama', 'asc')->findAll(),
-            'toko' => $toko->where('username_user', user()->username)->findAll(),
+            'item' => $item,
+            'toko' => $toko->where('userid', user()->id)->findAll(),
             'validation' => \Config\Services::validation()
         ];
         return view('halaman/toko', $data);
@@ -29,7 +31,7 @@ class Fitur extends BaseController
     public function buat_toko()
     {
         if (!$this->validate([
-            'username' => 'required|alpha_numeric_punct|min_length[3]|is_unique[toko.username]',
+            'username' => 'required|alpha_numeric_space|min_length[3]|is_unique[toko.username]',
             'selogan' => 'required',
             'metode' => 'required',
             'logo' => [
@@ -47,12 +49,11 @@ class Fitur extends BaseController
         }
         $logo = $this->request->getFile('logo');
         // pindah lokasi logo
-        $logo->move('img/toko');
-        $namalogo = $logo->getName();
-        $toko = $this->toko;
-        $toko->save([
-            'username_user' => user()->username,
-            'username' => $this->request->getVar('username'),
+        $namalogo = $logo->getRandomName();
+        $logo->move('img/toko', $namalogo);
+        $this->toko->save([
+            'userid' => user()->id,
+            'username' => url_title($this->request->getVar('username'), '_'),
             'logo' => $namalogo,
             'selogan' => $this->request->getVar('selogan'),
             'metode' => $this->request->getVar('metode')
@@ -96,16 +97,15 @@ class Fitur extends BaseController
         }
         $db = \Config\Database::connect();
         $tokodb = $db->table('toko');
-        $tokodb->where('username_user', user()->username);
+        $tokodb->where('userid', user()->id);
         $tokodb = $tokodb->get()->getFirstRow();
         $kartu = $this->request->getFile('kartu');
         $selfi = $this->request->getFile('selfi');
-        $kartu->move(ROOTPATH . 'img/toko/aktivasi');
-        $selfi->move(ROOTPATH . 'img/toko/aktivasi');
-        $namakartu = $kartu->getName();
-        $namaselfi = $selfi->getName();
-        $toko = $this->toko;
-        $toko->save([
+        $namakartu = $kartu->getRandomName();
+        $namaselfi = $selfi->getRandomName();
+        $kartu->move(ROOTPATH . 'img/toko/aktivasi', $namakartu);
+        $selfi->move(ROOTPATH . 'img/toko/aktivasi', $namaselfi);
+        $this->toko->save([
             'id' => $tokodb->id,
             'nama_rek' => $this->request->getVar('nama'),
             'no_rek' => $this->request->getVar('rekening'),

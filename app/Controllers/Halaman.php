@@ -3,25 +3,41 @@
 namespace App\Controllers;
 
 use App\Models\ProdukModel;
+use App\Libraries\Itemlibrary;
 
 class Halaman extends BaseController
 {
+    public $getitem;
+    public function __construct()
+    {
+        $this->getitem = new Itemlibrary;
+    }
     public function index()
     {
-        $produk = $this->produk;
-        $item = $this->item;
-        $subitem = $this->subitem;
         $cari = $this->request->getVar('search');
+        $produk = $this->produk;
+        $produk->join('toko', 'toko.userid = produk.owner', 'LEFT');
+        $produk->join('users', 'users.id = produk.owner', 'LEFT');
+        $produk->select('produk.*');
+        $produk->select('toko.username');
+        $produk->select('users.status_toko');
+        $produk->select('toko.status');
+        $produk->where('status_toko', 4);
+        $produk->where('toko.status', 1);
 
+        $item = $this->getitem->getsub();
+        // print('<pre>');
+        // print_r($item);
+        // print('<pre>');
+        // die();
         if ($cari) {
-            $produk = $produk->search($cari);
+            $produk = $this->produk->search($cari);
         } else {
             $produk = $produk;
         }
-
         $data = [
             'judul' => "Beranda | $this->namaweb",
-            'item' => $item->where('status', 1)->orderBy('nama', 'asc')->findAll(),
+            'item' => $item,
             'produk' => $produk->paginate(4),
             'pager' => $produk->pager
         ];
@@ -30,26 +46,25 @@ class Halaman extends BaseController
 
     public function produk($id = 0)
     {
-        $item = $this->item;
+        $item = $this->getitem->getsub();
         $produk = $this->produk;
+        $produk->join('toko', 'toko.userid = produk.owner', 'LEFT');
+        $produk->join('users', 'users.id = produk.owner', 'LEFT');
+        $produk->select('produk.*');
+        $produk->select('toko.username');
+        $produk->select('users.status_toko');
+        $produk->select('toko.status');
+        $produk->where('status_toko', 4);
+        $produk->where('toko.status', 1);
         $produk = $produk->kategori($id);
-        $hasilproduk = $produk->findAll();
-        $produkada = [
+
+        $data = [
             'judul' => "Beranda | $this->namaweb",
-            'item' => $item->where('status', 1)->orderBy('nama', 'asc')->findAll(),
+            'item' => $item,
             'produk' => $produk->paginate(4),
             'pager' => $produk->pager
         ];
-        $produktidakada = [
-            'judul' => "Beranda | $this->namaweb",
-            'item' => $item->where('status', 1)->orderBy('nama', 'asc')->findAll()
-        ];
-        // dd($hasilproduk);
-        if (!$hasilproduk) {
-            return view('halaman/tidakadaproduk', $produktidakada);
-        } else {
-            return view('halaman/beranda', $produkada);
-        }
+        return view('halaman/beranda', $data);
     }
     //--------------------------------------------------------------------
 

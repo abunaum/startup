@@ -5,6 +5,7 @@ namespace App\Controllers\User;
 use App\Controllers\BaseController;
 use App\Libraries\WaApiLibrary;
 use CodeIgniter\HTTP\Files\UploadedFile;
+use App\Libraries\Itemlibrary;
 
 class profile extends BaseController
 {
@@ -12,17 +13,18 @@ class profile extends BaseController
     public function __construct()
     {
         $this->walib = new WaApiLibrary;
+        $this->getitem = new Itemlibrary;
     }
 
     public function index()
     {
-        $item = $this->item;
+        $item = $this->getitem->getsub();
         $toko = $this->toko;
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $data = [
             'khusus' => "profile",
             'judul' => "Profile | $this->namaweb",
-            'item' => $item->where('status', 1)->orderBy('nama', 'asc')->findAll(),
+            'item' => $item,
             'toko' => $toko->where('username_user', user()->username)->findAll(),
             'user' => $user,
             'validation' => \Config\Services::validation()

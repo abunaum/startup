@@ -16,7 +16,11 @@ class Toko extends BaseController
     public function pengajuan()
     {
         $user = new $this->users;
-        $user = $user->where('status_toko', 2);
+        $user->join('toko', 'toko.userid = users.id', 'LEFT');
+        $user->where('status_toko', 2);
+        $user->select('users.*');
+        $user->select('toko.username as usernametoko');
+        $user->select('toko.id as idtoko');
         $data = [
             'namaweb' => $this->namaweb,
             'judul' => "Admin Toko | $this->namaweb",
@@ -28,10 +32,15 @@ class Toko extends BaseController
 
     public function pengajuandetail($id)
     {
-        $user = new $this->users;
-        $user = $user->where('status_toko', 2);
         $toko = new $this->toko;
-        $toko = $toko->where('id', $id);
+        $toko->join('users', 'users.id = toko.userid', 'LEFT');
+        $toko->select('toko.*');
+        $toko->select('users.wa_hash');
+        $toko->select('users.whatsapp');
+        $toko->select('users.username as username_user');
+        $toko->where('status_toko', 2);
+        $toko->where('toko.id', $id);
+
         $data = [
             'namaweb' => $this->namaweb,
             'judul' => "Admin Toko | $this->namaweb",
@@ -45,7 +54,7 @@ class Toko extends BaseController
         $toko = new $this->toko;
         $toko = $toko->where('id', $id)->get()->getFirstRow();
         $user = new $this->users;
-        $user = $user->where('username', $toko->username_user)->get()->getFirstRow();
+        $user = $user->where('id', $toko->userid)->get()->getFirstRow();
         if ($user->wa_hash == 'valid') {
             $koneksiwa = $this->walib->cekkoneksi();
             if ($koneksiwa != 'error') {
@@ -83,7 +92,7 @@ class Toko extends BaseController
         $toko = new $this->toko;
         $toko = $toko->where('id', $id)->get()->getFirstRow();
         $user = new $this->users;
-        $user = $user->where('username', $toko->username_user)->get()->getFirstRow();
+        $user = $user->where('id', $toko->userid)->get()->getFirstRow();
 
         if ($user->wa_hash == 'valid') {
             $koneksiwa = $this->walib->cekkoneksi();

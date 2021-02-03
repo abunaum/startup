@@ -5,6 +5,7 @@ namespace App\Controllers\User;
 use App\Controllers\BaseController;
 use App\Libraries\WaApiLibrary;
 use CodeIgniter\API\ResponseTrait;
+use App\Libraries\Itemlibrary;
 
 class toko extends BaseController
 {
@@ -12,20 +13,20 @@ class toko extends BaseController
     public function __construct()
     {
         $this->walib = new WaApiLibrary;
+        $this->getitem = new Itemlibrary;
     }
 
     use ResponseTrait;
     public function produk()
     {
-        $produk = $this->produk;
-        $item = $this->item;
+        $item = $this->getitem->getsub();
         $toko = $this->toko;
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $produkuser = $this->produk->where('owner', user()->id);
         $data = [
             'judul' => "Produk | $this->namaweb",
-            'item' => $item->where('status', 1)->orderBy('nama', 'asc')->findAll(),
-            'toko' => $toko->where('username_user', user()->username)->get()->getFirstRow(),
+            'item' => $item,
+            'toko' => $toko->where('userid', user()->id)->get()->getFirstRow(),
             'user' => $user,
             'validation' => \Config\Services::validation(),
             'produk' => $produkuser->paginate(6),
@@ -39,16 +40,18 @@ class toko extends BaseController
     }
     public function tambah()
     {
-        $item = $this->item;
+        $item = $this->getitem->getsub();
         $subitem = $this->subitem;
         $toko = $this->toko;
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
+        $itemproduk = $this->item;
         $data = [
             'type' => 'tambahproduk',
             'judul' => "Tambah Produk | $this->namaweb",
-            'item' => $item->where('status', 1)->orderBy('nama', 'asc')->findAll(),
+            'item' => $item,
+            'itemproduk' => $itemproduk->orderBy('nama', 'asc')->findAll(),
             'subitem' => $subitem->where('status', 1)->orderBy('nama', 'asc')->findAll(),
-            'toko' => $toko->where('username_user', user()->username)->get()->getFirstRow(),
+            'toko' => $toko->where('userid', user()->id)->get()->getFirstRow(),
             'user' => $user,
             'validation' => \Config\Services::validation()
         ];
@@ -66,7 +69,7 @@ class toko extends BaseController
         $deskripsi = $this->request->getVar('deskripsi');
         $stok = $this->request->getVar('stok');
 
-        $toko = $this->toko->where('username_user', user()->username)->get()->getFirstRow();
+        $toko = $this->toko->where('userid', user()->id)->get()->getFirstRow();
         $slug = url_title($toko->username . ' ' . $nama);
 
         if (!$this->validate([
@@ -132,13 +135,13 @@ class toko extends BaseController
     public function produkdetail($id)
     {
         $produk = $this->produk->where('id', $id)->get()->getFirstRow();
-        $item = $this->item;
-        $toko = $this->toko->where('username_user', user()->username)->get()->getFirstRow();
+        $item = $this->getitem->getsub();
+        $toko = $this->toko->where('userid', user()->id)->get()->getFirstRow();
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $produkuser = $this->produk->where('owner', user()->id);
         $data = [
             'judul' => "Produk | $this->namaweb",
-            'item' => $item->where('status', 1)->orderBy('nama', 'asc')->findAll(),
+            'item' => $item,
             'toko' => $toko,
             'user' => $user,
             'validation' => \Config\Services::validation(),
@@ -148,7 +151,7 @@ class toko extends BaseController
         ];
         if ($toko == null) {
             return redirect()->to(base_url('toko'));
-        } else if ($toko->username_user != user()->username) {
+        } else if ($toko->userid != user()->id) {
             return redirect()->to(base_url('toko'));
         } else if (user()->status_toko != 4) {
             return redirect()->to(base_url('toko'));

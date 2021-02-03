@@ -23,17 +23,11 @@
                             <?php foreach ($user as $user) : ?>
                                 <tr>
                                     <th scope="row"><?= $i++; ?></th>
-                                    <?php
-                                    $db = \Config\Database::connect();
-                                    $toko = $db->table('toko');
-                                    $toko->where('username_user', $user->username);
-                                    $toko = $toko->get()->getFirstRow();
-                                    ?>
-                                    <td><?= $toko->username; ?></td>
+                                    <td><?= $user->usernametoko; ?></td>
                                     <td><?= $user->fullname; ?></td>
                                     <td>
                                         <div class="row">
-                                            <form class="col-2" action="<?= base_url('admin/toko/detail') . '/' . $toko->id; ?>" method="post">
+                                            <form class="col-2" action="<?= base_url('admin/toko/detail') . '/' . $user->idtoko; ?>" method="post">
                                                 <button type="submit" class="btnhilang">
                                                     <span class="iconify" data-icon="mdi:card-account-details-outline" data-inline="false" style="color: darkgreen;" data-width="24" data-height="24"></span>
                                                 </button>

@@ -64,17 +64,8 @@
                                 </a>
                                 <ul id="menu" class="dropdown-menu">
                                     <?php foreach ($item as $i) : ?>
-                                        <?php if ($i['sub'] == 1) : ?>
                                             <li class="yamm-tfw menu-item menu-item-has-children animate-dropdown dropdown-submenu">
-                                                <a title="<?= $i['nama']; ?>" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true" href="#"><?= $i['nama']; ?><span class="caret"></span></a>
-                                                <?php
-                                                $subitem = new \App\Models\SubitemModel();
-                                                $subitem->where('item', $i['id']);
-                                                $subitem->where('status', 1);
-                                                $subitem->orderBy('nama', 'asc');
-                                                $sub = $subitem->findAll();
-                                                // $sub = $subitem->where('item', $i['id'])->orderBy('nama', 'asc')->findAll();
-                                                ?>
+                                                <a title="<?= $i['namaitem']; ?>" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true" href="#"><?= $i['namaitem']; ?><span class="caret"></span></a>
                                                 <ul role="menu" class="dropdown-menu">
                                                     <li class="menu-item menu-item-object-static_block animate-dropdown">
                                                         <div class="yamm-content">
@@ -87,7 +78,8 @@
                                                                 </div>
                                                                 <!-- .kc-col-container -->
                                                             </div>
-                                                            <?php foreach ($sub as $s) : ?>
+                                                            <?php $nama = $i['nama'];?>
+                                                            <?php foreach ($nama as $s) : ?>
                                                                 <ul>
                                                                     <li><a href="<?= base_url('produk') . '/' . $s['id'] ?>"><?= $s['nama']; ?></a></li>
                                                                 </ul>
@@ -98,11 +90,6 @@
                                                     </li>
                                                 </ul>
                                             </li>
-                                        <?php else : ?>
-                                            <li class="menu-item animate-dropdown">
-                                                <a title="<?= $i['nama']; ?>" href="#"><?= $i['nama']; ?></a>
-                                            </li>
-                                        <?php endif; ?>
                                     <?php endforeach; ?>
                                 </ul>
                             </li>

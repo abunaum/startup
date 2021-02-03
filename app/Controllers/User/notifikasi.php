@@ -4,6 +4,7 @@ namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
 use App\Libraries\WaApiLibrary;
+use App\Libraries\Itemlibrary;
 
 class notifikasi extends BaseController
 {
@@ -11,17 +12,18 @@ class notifikasi extends BaseController
     public function __construct()
     {
         $this->walib = new WaApiLibrary;
+        $this->getitem = new Itemlibrary;
     }
 
     public function index()
     {
-        $item = $this->item;
+        $item = $this->getitem->getsub();
         $toko = $this->toko;
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $data = [
             'judul' => "Notifikasi | $this->namaweb",
-            'item' => $item->where('status', 1)->orderBy('nama', 'asc')->findAll(),
-            'toko' => $toko->where('username_user', user()->username)->findAll(),
+            'item' => $item,
+            'toko' => $toko,
             'user' => $user,
             'validation' => \Config\Services::validation()
         ];

@@ -18,18 +18,12 @@
                             <tbody>
                                 <tr>
                                     <td>Whatsapp</td>
-                                    <?php
-                                    $db = \Config\Database::connect();
-                                    $penjual = $db->table('users');
-                                    $penjual->where('username', $toko->username_user);
-                                    $penjual = $penjual->get()->getFirstRow();
-                                    ?>
-                                    <?php if ($penjual->wa_hash != 'valid') : ?>
+                                    <?php if ($toko->wa_hash != 'valid') : ?>
                                         <td>
                                             <span class="badge badge-pill badge-danger">Belum verifikasi WA</span>
                                         </td>
                                     <?php else : ?>
-                                        <td><?= $penjual->whatsapp; ?></td>
+                                        <td><?= $toko->whatsapp; ?></td>
                                     <?php endif; ?>
                                 </tr>
                                 <tr>

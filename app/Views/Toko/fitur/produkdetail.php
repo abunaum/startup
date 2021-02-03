@@ -26,12 +26,7 @@
                                     <!-- .single-product-meta -->
                                     <div class="rating-and-sharing-wrapper">
                                         <div class="woocommerce-product-rating">
-                                            <div class="star-rating">
-                                                <span style="width:100%">Rated
-                                                    <strong class="rating">5.00</strong> out of 5 based on
-                                                    <span class="rating">1</span> customer rating</span>
-                                            </div>
-                                            <a rel="nofollow" class="woocommerce-review-link" href="#reviews">(<span class="count">1</span> customer review)</a>
+                                            <span class="fa fa-star" style="color: orange;"></span>
                                         </div>
                                     </div>
                                     <br>
@@ -65,46 +60,37 @@
                         <div class="tm-related-products-carousel section-products-carousel">
                             <section class="related">
                                 <header class="section-header">
-                                    <h2 class="section-title">Related products</h2>
+                                    <h2 class="section-title">Produk Toko</h2>
                                     <nav class="custom-slick-nav"></nav>
                                 </header>
                                 <!-- .section-header -->
                                 <div class="products">
-                                    <div class="product">
-                                        <div class="yith-wcwl-add-to-wishlist">
-                                            <a href="wishlist.html" rel="nofollow" class="add_to_wishlist"> Add to Wishlist</a>
+                                    <?php foreach ($produkuser as $pu) : ?>
+                                        <div class="product">
+                                            <a class="woocommerce-LoopProduct-link woocommerce-loop-product__link" href="single-product-fullwidth.html">
+                                                <img width="224" height="197" class="attachment-shop_catalog size-shop_catalog wp-post-image" src="<?= base_url() ?>/img/produk/<?= $pu['gambar']; ?>" alt="Gambar">
+                                                <span class="price">
+                                                    <span class="woocommerce-Price-amount amount">
+                                                        <span class="woocommerce-Price-currencySymbol">Rp </span><?= number_format($pu['harga']); ?></span>
+                                                </span>
+                                                <!-- .price -->
+                                                <h2 class="woocommerce-loop-product__title"><?= $pu['nama']; ?></h2>
+                                                <h2 class="woocommerce-loop-product__title"><i>@<?= $toko->username; ?></i></h2>
+                                            </a>
+                                            <!-- .woocommerce-LoopProduct-link -->
+                                            <div class="hover-area">
+                                                <a class="button" href="cart.html">Detail</a>
+                                            </div>
+                                            <!-- .hover-area -->
                                         </div>
-                                        <a href="single-product-fullwidth.html" class="woocommerce-LoopProduct-link">
-                                            <img src="assets/images/products/5.jpg" width="224" height="197" class="wp-post-image" alt="">
-                                            <span class="price">
-                                                <ins>
-                                                    <span class="amount"> </span>
-                                                </ins>
-                                                <span class="amount"> 456.00</span>
-                                            </span>
-                                            <!-- /.price -->
-                                            <h2 class="woocommerce-loop-product__title">XONE Wireless Controller</h2>
-                                        </a>
-                                        <div class="hover-area">
-                                            <a class="button add_to_cart_button" href="cart.html" rel="nofollow">Add to cart</a>
-                                            <a class="add-to-compare-link" href="compare.html">Add to compare</a>
-                                        </div>
-                                    </div>
-                                    <!-- /.product-outer -->
+                                    <?php endforeach; ?>
                                 </div>
                             </section>
-                            <!-- .single-product-wrapper -->
                         </div>
-                        <!-- .brands-carousel -->
                     </div>
-                    <!-- .product -->
                 </main>
-                <!-- #main -->
             </div>
-            <!-- #primary -->
         </div>
     </div>
-    <!-- .row -->
-    <!-- .col-full -->
 </section>
 <?= $this->endSection(); ?>

@@ -8,5 +8,7 @@ class ItemModel extends Model
 {
     protected $table = 'item';
     protected $useTimestamps = true;
+    protected $useSoftDeletes = true;
+    protected $deletedField  = 'deleted_at';
     protected $allowedFields = ['nama', 'status', 'sub'];
 }

@@ -19,8 +19,8 @@
                             <div class="col-12 col-md-9">
                                 <select onchange="pilihitem()" id="item" name="item" class="form-control <?= ($validation->hasError('item')) ? 'is-invalid' : '' ?>">
                                     <option value="">-- Pilih Item --</option>
-                                    <?php foreach ($item as $item) : ?>
-                                        <option value="<?= $item['id'] ?>"><?= $item['nama'] ?></option>
+                                    <?php foreach ($itemproduk as $ip) : ?>
+                                        <option value="<?= $ip['id'] ?>"><?= $ip['nama'] ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <small class="help-block form-text">

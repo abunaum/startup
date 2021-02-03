@@ -4,6 +4,7 @@ namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
 use App\Libraries\PaymentApiLibrary;
+use App\Libraries\Itemlibrary;
 
 class saldo extends BaseController
 {
@@ -11,6 +12,7 @@ class saldo extends BaseController
     public function __construct()
     {
         $this->apilib = new PaymentApiLibrary();
+        $this->getitem = new Itemlibrary;
     }
     public function index()
     {
