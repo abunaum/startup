@@ -3,20 +3,22 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
+use App\Libraries\Itemlibrary;
 use App\Libraries\WaApiLibrary;
 use CodeIgniter\API\ResponseTrait;
-use App\Libraries\Itemlibrary;
 
 class toko extends BaseController
 {
     public $walib;
+
     public function __construct()
     {
-        $this->walib = new WaApiLibrary;
-        $this->getitem = new Itemlibrary;
+        $this->walib = new WaApiLibrary();
+        $this->getitem = new Itemlibrary();
     }
 
     use ResponseTrait;
+
     public function produk()
     {
         $item = $this->getitem->getsub();
@@ -30,7 +32,7 @@ class toko extends BaseController
             'user' => $user,
             'validation' => \Config\Services::validation(),
             'produk' => $produkuser->paginate(6),
-            'pager' => $produkuser->pager
+            'pager' => $produkuser->pager,
         ];
         if ($user->status_toko != 4) {
             return redirect()->to(base_url('toko'));
@@ -38,22 +40,25 @@ class toko extends BaseController
             return view('Toko/fitur/produk', $data);
         }
     }
+
     public function tambah()
     {
         $item = $this->getitem->getsub();
-        $subitem = $this->subitem;
         $toko = $this->toko;
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $itemproduk = $this->item;
+        // echo '<pre>';
+        // print_r($item);
+        // echo '<pre>';
+        // die;
         $data = [
             'type' => 'tambahproduk',
             'judul' => "Tambah Produk | $this->namaweb",
             'item' => $item,
             'itemproduk' => $itemproduk->orderBy('nama', 'asc')->findAll(),
-            'subitem' => $subitem->where('status', 1)->orderBy('nama', 'asc')->findAll(),
             'toko' => $toko->where('userid', user()->id)->get()->getFirstRow(),
             'user' => $user,
-            'validation' => \Config\Services::validation()
+            'validation' => \Config\Services::validation(),
         ];
         if ($user->status_toko != 4) {
             return redirect()->to(base_url('toko'));
@@ -61,16 +66,17 @@ class toko extends BaseController
             return view('Toko/fitur/tambah', $data);
         }
     }
+
     public function tambahproduk()
     {
         $subitem = $this->request->getVar('sub');
         $nama = $this->request->getVar('nama');
-        $harga = (int)$this->request->getVar('harga');
+        $harga = (int) $this->request->getVar('harga');
         $deskripsi = $this->request->getVar('deskripsi');
         $stok = $this->request->getVar('stok');
 
         $toko = $this->toko->where('userid', user()->id)->get()->getFirstRow();
-        $slug = url_title($toko->username . ' ' . $nama);
+        $slug = url_title($toko->username.' '.$nama);
 
         if (!$this->validate([
             'item' => 'required',
@@ -85,11 +91,12 @@ class toko extends BaseController
                     'uploaded' => 'Gambar produk masih kosong',
                     'max_size' => 'Ukuran gambar maksimal 1 Mb',
                     'is_image' => 'File yang dipilih bukan gambar',
-                    'mime_in' => 'File yang dipilih bukan gambar'
-                ]
-            ]
+                    'mime_in' => 'File yang dipilih bukan gambar',
+                ],
+            ],
         ])) {
             session()->setFlashdata('error', 'Gagal menambah produk');
+
             return redirect()->to(base_url('user/toko/tambah'))->withInput();
         }
         $gambar = $this->request->getFile('gambar');
@@ -104,7 +111,7 @@ class toko extends BaseController
             'harga' => $harga,
             'keterangan' => $deskripsi,
             'slug' => $slug,
-            'stok' => $stok
+            'stok' => $stok,
         ]);
 
         $koneksiwa = $this->walib->cekkoneksi();
@@ -118,20 +125,16 @@ class toko extends BaseController
                 $builder->where('wa_hash', 'valid');
                 $adm = $builder->get()->getFirstRow();
                 $wa = $adm->whatsapp;
-                $pesan = user()->username . ' %0AToko : ' . $toko->username . ' %0Amenambah produk :' . $nama . ' %0Aharga : ' . $harga;
+                $pesan = user()->username.' %0AToko : '.$toko->username.' %0Amenambah produk :'.$nama.' %0Aharga : '.$harga;
                 $this->walib->sendwasingle($wa, $pesan);
             }
         }
 
         session()->setFlashdata('pesan', 'Produk berhasil di tambah');
+
         return redirect()->to(base_url('user/toko/produk'));
     }
-    public function cariitem($id)
-    {
-        $item = $id;
-        $carisub = $this->subitem->where('item', $item);
-        return $this->respond($carisub->findAll());
-    }
+
     public function produkdetail($id)
     {
         $produk = $this->produk->where('id', $id)->get()->getFirstRow();
@@ -147,13 +150,13 @@ class toko extends BaseController
             'validation' => \Config\Services::validation(),
             'produk' => $produk,
             'produkuser' => $produkuser->paginate(6),
-            'pager' => $produkuser->pager
+            'pager' => $produkuser->pager,
         ];
         if ($toko == null) {
             return redirect()->to(base_url('toko'));
-        } else if ($toko->userid != user()->id) {
+        } elseif ($toko->userid != user()->id) {
             return redirect()->to(base_url('toko'));
-        } else if (user()->status_toko != 4) {
+        } elseif (user()->status_toko != 4) {
             return redirect()->to(base_url('toko'));
         } else {
             return view('Toko/fitur/produkdetail', $data);

@@ -10,17 +10,17 @@
                     <strong>Tambah Produk</strong>
                 </div>
                 <div class="card-body card-block">
-                    <form action="<?= base_url('user/toko/tambahproduk') ?>" method="post" enctype="multipart/form-data" class="form-horizontal needs-validation">
+                    <form action="<?= base_url('user/toko/tambahproduk'); ?>" method="post" enctype="multipart/form-data" class="form-horizontal needs-validation">
                         <?= csrf_field(); ?>
                         <div class="row form-group">
                             <div class="col col-md-3">
                                 <label for="item" class="form-control-label">Item</label>
                             </div>
                             <div class="col-12 col-md-9">
-                                <select onchange="pilihitem()" id="item" name="item" class="form-control <?= ($validation->hasError('item')) ? 'is-invalid' : '' ?>">
+                                <select onchange="pilihitem()" id="item" name="item" class="form-control <?= ($validation->hasError('item')) ? 'is-invalid' : ''; ?>">
                                     <option value="">-- Pilih Item --</option>
-                                    <?php foreach ($itemproduk as $ip) : ?>
-                                        <option value="<?= $ip['id'] ?>"><?= $ip['nama'] ?></option>
+                                    <?php foreach ($item as $ip) : ?>
+                                        <option value="<?= $ip['namaitem']; ?>"><?= $ip['namaitem']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <small class="help-block form-text">
@@ -33,7 +33,7 @@
                                 <label for="sub" class="form-control-label">Subitem</label>
                             </div>
                             <div class="col-12 col-md-9">
-                                <select name="sub" id="sub" class="form-control  <?= ($validation->hasError('sub')) ? 'is-invalid' : '' ?>">
+                                <select name="sub" id="sub" class="form-control  <?= ($validation->hasError('sub')) ? 'is-invalid' : ''; ?>">
                                     <option value="">-- Pilih Subitem --</option>
                                 </select>
                             </div>
@@ -43,7 +43,7 @@
                                 <label for="nama" class=" form-control-label">Nama Produk</label>
                             </div>
                             <div class="col-12 col-md-9">
-                                <input type="text" id="nama" name="nama" placeholder="Nama Produk" class="form-control <?= ($validation->hasError('nama')) ? 'is-invalid' : '' ?>" value="<?= old('nama') ?>">
+                                <input type="text" id="nama" name="nama" placeholder="Nama Produk" class="form-control <?= ($validation->hasError('nama')) ? 'is-invalid' : ''; ?>" value="<?= old('nama'); ?>">
                                 <small class="help-block form-text">
                                     <?= $validation->getError('nama'); ?>
                                 </small>
@@ -54,7 +54,7 @@
                                 <label for="harga" class=" form-control-label">Harga</label>
                             </div>
                             <div class="col-12 col-md-9">
-                                <input type="number" id="harga" name="harga" placeholder="Harga" class="form-control <?= ($validation->hasError('harga')) ? 'is-invalid' : '' ?>" value="<?= old('harga') ?>">
+                                <input type="number" id="harga" name="harga" placeholder="Harga" class="form-control <?= ($validation->hasError('harga')) ? 'is-invalid' : ''; ?>" value="<?= old('harga'); ?>">
                                 <small class="help-block form-text">
                                     <?= $validation->getError('harga'); ?>
                                 </small>
@@ -65,7 +65,7 @@
                                 <label for="deskripsi" class=" form-control-label">Deskripsi</label>
                             </div>
                             <div class="col-12 col-md-9">
-                                <textarea name="deskripsi" id="deskripsi" rows="9" placeholder="Deskripsi Produk" class="form-control <?= ($validation->hasError('deskripsi')) ? 'is-invalid' : '' ?>"><?= old('deskripsi') ?></textarea>
+                                <textarea name="deskripsi" id="deskripsi" rows="9" placeholder="Deskripsi Produk" class="form-control <?= ($validation->hasError('deskripsi')) ? 'is-invalid' : ''; ?>"><?= old('deskripsi'); ?></textarea>
                                 <small class="help-block form-text">
                                     <?= $validation->getError('deskripsi'); ?>
                                 </small>
@@ -76,7 +76,7 @@
                                 <label for="gambar" class=" form-control-label">Gambar</label>
                             </div>
                             <div class="col-12 col-md-9">
-                                <input type="file" class="form-control  <?= ($validation->hasError('gambar')) ? 'is-invalid' : '' ?>" id="gambar" name="gambar" class="form-control-file">
+                                <input type="file" class="form-control  <?= ($validation->hasError('gambar')) ? 'is-invalid' : ''; ?>" id="gambar" name="gambar" class="form-control-file">
                                 <small class="help-block form-text">
                                     <?= $validation->getError('gambar'); ?>
                                 </small>
@@ -87,7 +87,7 @@
                                 <label for="stok" class=" form-control-label">Stok</label>
                             </div>
                             <div class="col-12 col-md-9">
-                                <input type="number" id="stok" name="stok" placeholder="Stok" class="form-control <?= ($validation->hasError('stok')) ? 'is-invalid' : '' ?>" value="<?= old('stok') ?>">
+                                <input type="number" id="stok" name="stok" placeholder="Stok" class="form-control <?= ($validation->hasError('stok')) ? 'is-invalid' : ''; ?>" value="<?= old('stok'); ?>">
                                 <small class="help-block form-text">
                                     <?= $validation->getError('stok'); ?>
                                 </small>

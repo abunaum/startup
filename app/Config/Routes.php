@@ -7,11 +7,11 @@ $routes = Services::routes();
 
 // Load the system's routing file first, so that the app and ENVIRONMENT
 // can override as needed.
-if (file_exists(SYSTEMPATH . 'Config/Routes.php')) {
-    require SYSTEMPATH . 'Config/Routes.php';
+if (file_exists(SYSTEMPATH.'Config/Routes.php')) {
+    require SYSTEMPATH.'Config/Routes.php';
 }
 
-/**
+/*
  * --------------------------------------------------------------------
  * Router Setup
  * --------------------------------------------------------------------
@@ -23,7 +23,7 @@ $routes->setTranslateURIDashes(false);
 $routes->set404Override();
 $routes->setAutoRoute(true);
 
-/**
+/*
  * --------------------------------------------------------------------
  * Route Definitions
  * --------------------------------------------------------------------
@@ -111,11 +111,10 @@ $routes->group('user', ['filter' => 'login'], function ($routes) {
 $routes->group('produk', function ($routes) {
     $routes->get('(:num)', 'Halaman::produk/$1');
 });
-$routes->post('cariitem/(:num)', 'User\toko::cariitem/$1');
 $routes->get('/penjual', 'Penjual\Toko::index');
 $routes->post('api/proses/gasspol/mantap/callback', 'Apipayment\Callback::callback');
 
-/**
+/*
  * --------------------------------------------------------------------
  * Additional Routing
  * --------------------------------------------------------------------
@@ -128,6 +127,6 @@ $routes->post('api/proses/gasspol/mantap/callback', 'Apipayment\Callback::callba
  * You will have access to the $routes object within that file without
  * needing to reload it.
  */
-if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
-    require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
+if (file_exists(APPPATH.'Config/'.ENVIRONMENT.'/Routes.php')) {
+    require APPPATH.'Config/'.ENVIRONMENT.'/Routes.php';
 }

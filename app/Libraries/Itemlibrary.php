@@ -20,20 +20,25 @@ class Itemlibrary extends BaseController
         $item->where('item.status', 1);
         $item = $item->orderBy('nama', 'asc')->findAll();
 
-        $group = array();
-        foreach ( $item as $value ) {
+        // $itemfix = $item;
+
+        $group = [];
+        foreach ($item as $value) {
             $group[$value['namaitem']][] = $value;
         }
-        $itemfix = array();
-        foreach($group as $type => $labels){
-            $itemfix[] = array(
+        $itemfix = [];
+        foreach ($group as $type => $labels) {
+            $itemfix[] = [
+                'id' => $labels[0]['itemid'],
                 'namaitem' => $type,
-                'nama' => $labels
-            );
+                'nama' => $labels,
+                $type => $labels,
+            ];
         }
-        array_multisort(array_map(function($element) {
+        array_multisort(array_map(function ($element) {
             return $element['namaitem'];
         }, $itemfix), SORT_ASC, $itemfix);
+
         return $itemfix;
     }
 }

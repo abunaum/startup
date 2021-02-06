@@ -14,9 +14,58 @@
                                     <i class="tm tm-call-us-footer"></i>
                                 </span>
                                 <div class="media-body">
-                                    <span class="call-us-title">CUSTOMER SERVICE</span>
-                                    <address class="footer-contact-address">Maron, Probolinggo, Jawa Timur, Indonesia</address>
-                                    <span class="call-us-text">abunaum@hotmail.com</span>
+                                    <span class="call-us-title">KONTAK KAMI</span>
+                                    <span class="call-us-text"><i class="fa fa-envelope-square"> cs@<?= $_SERVER['SERVER_NAME'] ?></i></span>
+                                    <span class="call-us-text"><i class="fa fa-whatsapp"> 0895629590104</i></span>
+                                    <address class="fa fa-location-arrow"> Jalan Kemuning Dalam VI NO 2 Jakarta 13120 - Indonesia<address>
+                                </div>
+                                <!-- .media-body -->
+                            </div>
+                            <!-- .media -->
+                        </div>
+                        <!-- .footer-logo -->
+                        <div class="contact-payment-wrap">
+                            <div class="footer-contact-info">
+                                <div class="media">
+                                    <span class="media-left icon media-middle">
+                                        <i class="tm tm-arrow-right"></i>
+                                    </span>
+                                    <div class="body">
+                                        <span class="call-us-title">LAYANAN PELANGGAN</span>
+                                        <li class="menu-item">
+                                            <a href="<?= base_url('layanan/syarat-dan-ketentuan') ?>">Syarat Dan Ketentuan</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a href="<?= base_url('layanan/biaya-layanan') ?>">Biaya Layanan</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a href="<?= base_url('layanan/cara-jual-beli') ?>">Cara Jual Beli</a>
+                                        </li>
+                                    </div>
+                                </div>
+                                <!-- .media-body -->
+                            </div>
+                            <!-- .media -->
+                        </div>
+                        <!-- .footer-logo -->
+                        <div class="contact-payment-wrap">
+                            <div class="footer-contact-info">
+                                <div class="media">
+                                    <span class="media-left icon media-middle">
+                                        <i class="tm tm-arrow-right"></i>
+                                    </span>
+                                    <div class="media-body">
+                                        <span class="call-us-title">JELAJAHI <?= $_SERVER['SERVER_NAME'] ?></span>
+                                        <li class="menu-item">
+                                            <a href="tentang-kami.html">Tentang Kami</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a href="kebijakan-privasi.html">Kebijakan Privasi</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a href="kebijakan-pengembalian.html">Kebijakan Pengembalian</a>
+                                        </li>
+                                    </div>
                                 </div>
                                 <!-- .media-body -->
                             </div>
@@ -29,32 +78,43 @@
                                     <i class="tm tm-safe-payments"></i>
                                 </span>
                                 <div class="media-body">
-                                    <h5 class="footer-payment-info-title">We are using safe payments</h5>
-                                    <div class="footer-payment-icons">
-                                        <ul class="list-payment-icons nav">
+                                    <h5 class="footer-payment-info-title">METODE PEMBAYARAN</h5>
+                                    <div class="footer-secure-by-info">
+                                        <ul class="footer-secured-by-icons">
                                             <li class="nav-item">
-                                                <img class="payment-icon-image" src="<?= base_url(); ?>/assets/images/credit-cards/mastercard.svg" alt="mastercard" />
+                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-Bank-BRI.png" alt="alfamart" />
                                             </li>
                                             <li class="nav-item">
-                                                <img class="payment-icon-image" src="<?= base_url(); ?>/assets/images/credit-cards/visa.svg" alt="visa" />
+                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-Bank-Maybank.png" alt="alfamidi" />
                                             </li>
                                             <li class="nav-item">
-                                                <img class="payment-icon-image" src="<?= base_url(); ?>/assets/images/credit-cards/paypal.svg" alt="paypal" />
-                                            </li>
-                                            <li class="nav-item">
-                                                <img class="payment-icon-image" src="<?= base_url(); ?>/assets/images/credit-cards/maestro.svg" alt="maestro" />
+                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-BCA.png" alt="alfamidi" />
                                             </li>
                                         </ul>
                                     </div>
-                                    <!-- .footer-payment-icons -->
                                     <div class="footer-secure-by-info">
-                                        <h6 class="footer-secured-by-title">Secured by:</h6>
                                         <ul class="footer-secured-by-icons">
                                             <li class="nav-item">
-                                                <img class="secure-icons-image" src="<?= base_url(); ?>/assets/images/secured-by/norton.svg" alt="norton" />
+                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-BNI.png" alt="alfamart" />
                                             </li>
                                             <li class="nav-item">
-                                                <img class="secure-icons-image" src="<?= base_url(); ?>/assets/images/secured-by/mcafee.svg" alt="mcafee" />
+                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-Mandiri.png" alt="alfamidi" />
+                                            </li>
+                                            <li class="nav-item">
+                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-Permata-Bank.png" alt="alfamidi" />
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="footer-secure-by-info">
+                                        <ul class="footer-secured-by-icons">
+                                            <li class="nav-item">
+                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-Alfamart.webp" alt="alfamart" />
+                                            </li>
+                                            <li class="nav-item">
+                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-Alfamidi.webp" alt="alfamidi" />
+                                            </li>
+                                            <li class="nav-item">
+                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-QRIS.webp" alt="alfamidi" />
                                             </li>
                                         </ul>
                                     </div>
@@ -68,59 +128,23 @@
                     </div>
                     <!-- .contact-payment-wrap -->
                 </div>
-                <!-- .footer-widgets -->
-                <!-- .footer-contact -->
-                <div class="footer-widgets">
-                    <div class="columns">
-                        <aside class="widget clearfix">
-                            <div class="body">
-                                <h4 class="widget-title">Find it Fast</h4>
-                                <div class="menu-footer-menu-2-container">
-                                    <ul id="menu-footer-menu-2" class="menu">
-                                        <li class="menu-item">
-                                            <a href="shop.html">Top Up</a>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="shop.html">Voucher</a>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="shop.html">Server</a>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="shop.html">Akun</a>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="shop.html">Jasa</a>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a href="shop.html">Lainnya</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <!-- .menu-footer-menu-1-container -->
-                            </div>
-                            <!-- .body -->
-                        </aside>
-                        <!-- .widget -->
-                    </div>
-                </div>
-                <!-- .footer-widgets -->
             </div>
-            <!-- .row -->
         </div>
         <!-- .footer-widgets-block -->
         <div class="site-info">
-            <div class="col-full">
-                <div class="copyright">Copyright &copy; <?= date('Y'); ?> <a href="<?= base_url() ?>"><?= $_SERVER['HTTP_HOST'] ?></a>. All rights reserved.</div>
-                <!-- .copyright -->
-                <div class="credit">Made with
-                    <i class="fa fa-heart"></i> by abunaum. | Environment: <?= ENVIRONMENT ?>
+            <center>
+                <div class="col-full">
+                    <div class="copyright">Copyright &copy; <a href="home-v1.html"><?= $_SERVER['SERVER_NAME'] ?> .</a> All rights reserved.</div>
+                    <!-- .credit -->
                 </div>
-                <!-- .credit -->
-            </div>
+            </center>
             <!-- .col-full -->
         </div>
         <!-- .site-info -->
+    </div>
+    <!-- .footer-widgets -->
+    </div>
+    <!-- .row -->
     </div>
     <!-- .col-full -->
 </footer>

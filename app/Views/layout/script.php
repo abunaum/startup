@@ -1,28 +1,24 @@
 <script>
     function pilihitem() {
-        const id = document.getElementById("item").value;
+        var item = <?= json_encode($item); ?>;
+
+        var item_val = document.getElementById("item").value;
         var sub = document.getElementById('subdiv');
-        if (id == '') {
-            sub.style.display = 'none';
-        } else {
+        const id = document.getElementById("item").value;
+        if (item_val != '') {
             sub.style.display = '';
-            const http = new XMLHttpRequest();
-            http.addEventListener("load", () => {
-                const subitem = JSON.parse(http.response);
-                if (subitem < 1) {
-                    var html = '';
-                    sub.style.display = 'none';
-                } else {
-                    var html = '';
-                    var i;
-                    for (i = 0; i < subitem.length; i++) {
-                        html += '<option value=' + subitem[i].id + '>' + subitem[i].nama + '</option>';
-                    }
+            var html = '<option value = "">-- Pilih Sub --</option>';
+            for (ji in item) {
+                var sub = item[ji][item_val];
+                for (si in sub) {
+                    var nama = sub[si].nama;
+                    var idsub = sub[si].id;
+                    html += '<option value=' + idsub + '>' + nama + '</option>';
                 }
-                document.getElementById("sub").innerHTML = html;
-            });
-            http.open("POST", "<?= base_url('cariitem') ?>/" + id);
-            http.send();
+            }
+            document.getElementById("sub").innerHTML = html;
+        } else {
+            sub.style.display = 'none';
         }
     }
 </script>
