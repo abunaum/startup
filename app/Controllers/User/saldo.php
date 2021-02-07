@@ -3,49 +3,55 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
-use App\Libraries\PaymentApiLibrary;
 use App\Libraries\Itemlibrary;
+use App\Libraries\PaymentApiLibrary;
 
 class saldo extends BaseController
 {
     public $apilib;
+
     public function __construct()
     {
         $this->apilib = new PaymentApiLibrary();
-        $this->getitem = new Itemlibrary;
+        $this->getitem = new Itemlibrary();
     }
+
     public function index()
     {
-        $item = $this->item;
+        $item = $this->getitem->getsub();
         $toko = $this->toko;
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $data = [
             'judul' => "Saldo | $this->namaweb",
-            'item' => $item->where('status', 1)->orderBy('nama', 'asc')->findAll(),
-            'toko' => $toko->where('username_user', user()->username)->findAll(),
+            'item' => $item,
+            'toko' => $toko->where('userid', user()->id)->findAll(),
             'user' => $user,
             'paymentapi' => $this->apilib,
-            'validation' => \Config\Services::validation()
+            'validation' => \Config\Services::validation(),
         ];
+
         return view('halaman/user/saldo', $data);
     }
+
     public function tambah()
     {
-        $saldo = (int)$this->request->getVar('saldo');
+        $saldo = (int) $this->request->getVar('saldo');
         $channel = $this->request->getVar('channel');
         if (!$this->validate([
-            'saldo' => 'required'
+            'saldo' => 'required',
         ])) {
             session()->setFlashdata('error', 'Gagal menambah saldo, Coba lagi.');
+
             return redirect()->to(base_url('user/saldo'))->withInput();
         }
         $minimal = 10000;
         if ($saldo < $minimal) {
-            session()->setFlashdata('error', 'Gagal menambah saldo, Nominal isi saldo ' . $channel . ' Adalah Rp. ' . number_format($minimal));
+            session()->setFlashdata('error', 'Gagal menambah saldo, Nominal isi saldo '.$channel.' Adalah Rp. '.number_format($minimal));
+
             return redirect()->to(base_url('user/saldo'))->withInput();
         }
         $fee = $this->apilib->paymentkalkulator($channel, $saldo);
-        $totalfee =  $fee['merchant'] + $fee['customer'];
+        $totalfee = $fee['merchant'] + $fee['customer'];
         $rand = rand(111111, 999999);
         $tgl = date('Ymdhis');
         $order_number = "top-$tgl$rand";
@@ -62,36 +68,50 @@ class saldo extends BaseController
                 'fee' => $totalfee,
                 'metode' => $channel,
                 'status' => 'pending',
-                'reference' => $payment['data']['reference']
+                'reference' => $payment['data']['reference'],
             ]);
             session()->setFlashdata('pesan', 'Mantap, Isi saldo anda telah siap, silahkan selesaikan pembayaran anda');
+
             return redirect()->to(base_url('user/saldo/topup'));
         } else {
             session()->setFlashdata('error', 'Ooops, Server Error !!');
+
             return redirect()->to(base_url('user/saldo'));
         }
     }
 
     public function topup()
     {
-        $item = $this->item;
+        $status = $this->request->getVar('status');
+        $item = $this->getitem->getsub();
         $toko = $this->toko;
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $transaksi = $this->transaksi_saldo->where('status', 'pending');
         $transaksi = $transaksi->where('owner', user()->username)->findAll();
+        if ($status) {
+            $trans = $this->transaksi_saldo->where('reference', $status)->get()->getFirstRow();
+            if ($trans){
+                if ($trans->status == 'lunas') {
+                    session()->setFlashdata('pesan', 'Mantap, Isi saldo berhasil');
+                    return redirect()->to(base_url('user/saldo'));
+                }
+            }
+        }
         if (!$transaksi) {
             return redirect()->to(base_url('user/saldo'));
         }
         $data = [
             'judul' => "Saldo | $this->namaweb",
-            'item' => $item->where('status', 1)->orderBy('nama', 'asc')->findAll(),
-            'toko' => $toko->where('username_user', user()->username)->findAll(),
+            'item' => $item,
+            'toko' => $toko->where('userid', user()->id)->findAll(),
             'user' => $user,
             'transaksi' => $transaksi,
-            'validation' => \Config\Services::validation()
+            'validation' => \Config\Services::validation(),
         ];
+
         return view('halaman/user/saldotopup', $data);
     }
+
     public function topupproses($id = 0)
     {
         $trx = $this->transaksi_saldo->where('id', $id)->get()->getFirstRow();
@@ -109,23 +129,26 @@ class saldo extends BaseController
         $detailpayment = json_decode($detailpayment, true);
         if ($detailpayment['data']['status'] == 'PAID') {
             session()->setFlashdata('pesan', 'Mantap, Isi saldo berhasil');
+
             return redirect()->to(base_url('user/saldo/topup'));
         }
         if ($detailpayment['success'] == 1) {
             $data = [
                 'judul' => "Transaksi | $this->namaweb",
-                'transaksi' => $detailpayment['data']
+                'transaksi' => $detailpayment['data'],
             ];
             // echo '<pre>' . print_r($detailpayment['data'], true) . '</pre>';
             return view('halaman/user/pay', $data);
         }
     }
+
     public function transaksihapus($id = 0)
     {
         $this->transaksi_saldo->delete($id);
         session()->setFlashdata('pesan', 'Transaksi Berhasil di hapus');
+
         return redirect()->to(base_url('user/saldo/topup'));
     }
-    //--------------------------------------------------------------------
 
+    //--------------------------------------------------------------------
 }

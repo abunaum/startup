@@ -31,7 +31,6 @@ class Itemlibrary extends BaseController
             $itemfix[] = [
                 'id' => $labels[0]['itemid'],
                 'namaitem' => $type,
-                'nama' => $labels,
                 $type => $labels,
             ];
         }

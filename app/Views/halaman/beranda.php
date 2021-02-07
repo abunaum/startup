@@ -10,7 +10,7 @@
                         <?php foreach ($produk as $p) : ?>
                             <div class="product">
                                 <a class="woocommerce-LoopProduct-link woocommerce-loop-product__link" href="single-product-fullwidth.html">
-                                    <img width="224" height="197" class="attachment-shop_catalog size-shop_catalog wp-post-image" src="<?= base_url() ?>/img/produk/<?= $p['gambar']; ?>" alt="Gambar">
+                                    <img width="224" height="197" class="attachment-shop_catalog size-shop_catalog wp-post-image" src="<?= base_url(); ?>/img/produk/<?= $p['gambar']; ?>" alt="Gambar">
                                     <span class="price">
                                         <span class="woocommerce-Price-amount amount">
                                             <span class="woocommerce-Price-currencySymbol">Rp </span><?= number_format($p['harga']); ?></span>
@@ -22,7 +22,9 @@
                                 <!-- .woocommerce-LoopProduct-link -->
                                 <div class="hover-area">
                                     <a class="button" href="cart.html">Detail</a>
-                                    <a class="button" href="cart.html">Beli</a>
+                                    <?php if ($p['status'] == 1) : ?>
+                                        <a class="button" href="cart.html">Beli</a>
+                                    <?php endif; ?>
                                 </div>
                                 <!-- .hover-area -->
                             </div>

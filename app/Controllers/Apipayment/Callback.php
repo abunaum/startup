@@ -3,15 +3,19 @@
 namespace App\Controllers\Apipayment;
 
 use App\Controllers\BaseController;
+use App\Libraries\PaymentApiLibrary;
 use App\Libraries\WaApiLibrary;
-use App\Models\TransaksiSaldoModel;
+use CodeIgniter\API\ResponseTrait;
 
 class Callback extends BaseController
 {
+    use ResponseTrait;
     public $walib;
+
     public function __construct()
     {
-        $this->walib = new WaApiLibrary;
+        $this->walib = new WaApiLibrary();
+        $this->apilib = new PaymentApiLibrary();
     }
 
     public function callback()
@@ -22,7 +26,7 @@ class Callback extends BaseController
         $apidb = $builder->get()->getFirstRow();
         $apiprivatekey = $apidb->apiprivatekey;
         // ambil data JSON
-        $json = file_get_contents("php://input");
+        $json = file_get_contents('php://input');
 
         // ambil callback signature
         $callbackSignature = isset($_SERVER['HTTP_X_CALLBACK_SIGNATURE']) ? $_SERVER['HTTP_X_CALLBACK_SIGNATURE'] : '';
@@ -31,7 +35,7 @@ class Callback extends BaseController
         $signature = hash_hmac('sha256', $json, $apiprivatekey);
         // validasi signature
         if ($callbackSignature !== $signature) {
-            exit("Invalid Signature"); // signature tidak valid, hentikan proses
+            exit('Invalid Signature'); // signature tidak valid, hentikan proses
         }
 
         $data = json_decode($json);
@@ -51,7 +55,7 @@ class Callback extends BaseController
 
                 $this->transaksi_saldo->save([
                     'id' => $transaksi->id,
-                    'status' => 'lunas'
+                    'status' => 'lunas',
                 ]);
                 $owner = $transaksi->owner;
                 $builderuser = $db->table('users');
@@ -59,13 +63,13 @@ class Callback extends BaseController
                 $user = $builderuser->get()->getFirstRow();
                 $this->users->save([
                     'id' => $user->id,
-                    'balance' => $user->balance + $transaksi->nominal
+                    'balance' => $user->balance + $transaksi->nominal,
                 ]);
                 if ($user->wa_hash == 'valid') {
                     $koneksiwa = $this->walib->cekkoneksi();
                     if ($koneksiwa != 'error') {
                         $wa = $user->whatsapp;
-                        $pesan = $user->username . ' %0AAnda berhasil isi saldo Rp. ' . number_format($transaksi->nominal) . ' %0ATotal saldo anda sekarang : Rp. ' . number_format($user->balance + $transaksi->nominal);
+                        $pesan = $user->username.' %0AAnda berhasil isi saldo Rp. '.number_format($transaksi->nominal).' %0ATotal saldo anda sekarang : Rp. '.number_format($user->balance + $transaksi->nominal);
                         $this->walib->sendwasingle($wa, $pesan);
                     }
                 }
@@ -73,9 +77,18 @@ class Callback extends BaseController
         }
 
         echo json_encode(['success' => true]); // berikan respon yang sesuai
+    }
 
+    public function cekpay($referensi)
+    {
+        $db = \Config\Database::connect();
+        $buildertransaksi = $db->table('transaksi_saldo');
+        $buildertransaksi->where('reference', $referensi);
+        $transaksi = $buildertransaksi->get()->getFirstRow();
+        $data = $transaksi;
+
+        return $this->respond($data);
     }
 
     //--------------------------------------------------------------------
-
 }

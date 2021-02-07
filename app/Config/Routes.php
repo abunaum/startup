@@ -104,6 +104,7 @@ $routes->group('user', ['filter' => 'login'], function ($routes) {
     $routes->group('toko', function ($routes) {
         $routes->get('produk', 'User\toko::produk');
         $routes->get('produk/detail/(:num)', 'User\toko::produkdetail/$1');
+        $routes->post('produk/hapus/(:num)', 'User\toko::hapusproduk/$1');
         $routes->get('tambah', 'User\toko::tambah');
         $routes->post('tambahproduk', 'User\toko::tambahproduk');
     });
@@ -113,6 +114,7 @@ $routes->group('produk', function ($routes) {
 });
 $routes->get('/penjual', 'Penjual\Toko::index');
 $routes->post('api/proses/gasspol/mantap/callback', 'Apipayment\Callback::callback');
+$routes->post('cekpembayaran/(:any)', 'Apipayment\Callback::cekpay/$1');
 
 /*
  * --------------------------------------------------------------------

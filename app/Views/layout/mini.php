@@ -14,7 +14,7 @@
                     <ul class="nav-item">
                         <li class="my-account">
                             <a href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="<?= base_url() ?>/img/profile/<?= user()->user_image; ?>" width="24" height="24" class="rounded-circle">
+                                <img src="<?= base_url(); ?>/img/profile/<?= user()->user_image; ?>" width="24" height="24" class="rounded-circle">
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="<?= base_url('user/profile'); ?>">
@@ -26,7 +26,7 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="cart-contents" href="<?= base_url('user/notifikasi') ?>">
+                            <a class="cart-contents" href="<?= base_url('user/notifikasi'); ?>">
                                 <span class="iconify" data-icon="ic:outline-notifications-active" data-inline="false" data-width="24" data-height="24"></span>
                             </a>
                         </li>
@@ -37,7 +37,7 @@
                 <div class="handheld-header-links">
                     <ul class="columns-2">
                         <li class="my-account">
-                            <a href="<?= base_url('login') ?>" class="has-icon">
+                            <a href="<?= base_url('login'); ?>" class="has-icon">
                                 <span class="iconify" data-icon="ant-design:login-outlined" data-inline="false" data-width="24" data-height="24"></span>
                             </a>
                         </li>
@@ -72,16 +72,16 @@
                                                             <div class="bg-yamm-content bg-yamm-content-bottom bg-yamm-content-right">
                                                                 <div class="kc-col-container">
                                                                     <div class="kc_single_image">
-                                                                        <img src="<?= base_url() ?>/assets/images/megamenu.jpg" class="" alt="" />
+                                                                        <img src="<?= base_url(); ?>/assets/images/megamenu.jpg" class="" alt="" />
                                                                     </div>
                                                                     <!-- .kc_single_image -->
                                                                 </div>
                                                                 <!-- .kc-col-container -->
                                                             </div>
-                                                            <?php $nama = $i['nama'];?>
-                                                            <?php foreach ($nama as $s) : ?>
+                                                            <?php $nama = $i['namaitem']; ?>
+                                                            <?php foreach ($i[$nama] as $s) : ?>
                                                                 <ul>
-                                                                    <li><a href="<?= base_url('produk') . '/' . $s['id'] ?>"><?= $s['nama']; ?></a></li>
+                                                                    <li><a href="<?= base_url('produk').'/'.$s['id']; ?>"><?= $s['nama']; ?></a></li>
                                                                 </ul>
                                                             <?php endforeach; ?>
                                                             <!-- .kc_row -->
@@ -106,14 +106,14 @@
                                                 <div class="bg-yamm-content bg-yamm-content-bottom bg-yamm-content-right">
                                                     <div class="kc-col-container">
                                                         <div class="kc_single_image">
-                                                            <img src="<?= base_url() ?>/assets/images/megamenu.jpg" class="" alt="" />
+                                                            <img src="<?= base_url(); ?>/assets/images/megamenu.jpg" class="" alt="" />
                                                         </div>
                                                         <!-- .kc_single_image -->
                                                     </div>
                                                     <!-- .kc-col-container -->
                                                 </div>
                                                 <ul>
-                                                    <li><a href="<?= base_url('toko') ?>">Toko Ku</a></li>
+                                                    <li><a href="<?= base_url('toko'); ?>">Toko Ku</a></li>
                                                 </ul>
                                                 <!-- .kc_row -->
                                             </div>
@@ -130,7 +130,7 @@
                 <!-- .handheld-navigation -->
                 <div class="site-search">
                     <div class="widget woocommerce widget_product_search">
-                        <form role="search" method="post" class="woocommerce-product-search" action="<?= base_url() ?>">
+                        <form role="search" method="post" class="woocommerce-product-search" action="<?= base_url(); ?>">
                             <label class="screen-reader-text" for="woocommerce-product-search-field-0">Cari:</label>
                             <input type="search" id="woocommerce-product-search-field-0" class="search-field" placeholder="Cari &hellip;" value="" name="search" />
                             <input type="submit" value="Search" />

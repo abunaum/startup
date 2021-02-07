@@ -6,10 +6,10 @@
                         <span class="caret"></span>
                     </a>
                     <ul role="menu" class="dropdown-menu">
-                    <?php $nama = $i['nama'];?>
-                    <?php foreach ($nama as $s) : ?>
+                    <?php $nama = $i['namaitem']; ?>
+                    <?php foreach ($i[$nama] as $s) : ?>
                             <li class="menu-item animate-dropdown">
-                                <a title="<?= $s['nama']; ?>" href="<?= base_url('produk') . '/' . $s['id'] ?>"><?= $s['nama']; ?></a>
+                                <a title="<?= $s['nama']; ?>" href="<?= base_url('produk').'/'.$s['id']; ?>"><?= $s['nama']; ?></a>
                             </li>
                         <?php endforeach; ?>
                     </ul>

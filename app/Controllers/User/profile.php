@@ -3,34 +3,32 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
-use App\Libraries\WaApiLibrary;
-use CodeIgniter\HTTP\Files\UploadedFile;
 use App\Libraries\Itemlibrary;
+use App\Libraries\WaApiLibrary;
 
 class profile extends BaseController
 {
     public $walib;
+
     public function __construct()
     {
-        $this->walib = new WaApiLibrary;
-        $this->getitem = new Itemlibrary;
+        $this->walib = new WaApiLibrary();
+        $this->getitem = new Itemlibrary();
     }
 
     public function index()
     {
         $item = $this->getitem->getsub();
-        $toko = $this->toko;
-        $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $data = [
-            'khusus' => "profile",
+            'khusus' => 'profile',
             'judul' => "Profile | $this->namaweb",
             'item' => $item,
-            'toko' => $toko->where('username_user', user()->username)->findAll(),
-            'user' => $user,
-            'validation' => \Config\Services::validation()
+            'validation' => \Config\Services::validation(),
         ];
+
         return view('halaman/user/profile', $data);
     }
+
     public function ubahdata()
     {
         $file = $this->request->getFiles();
@@ -43,43 +41,46 @@ class profile extends BaseController
                 'errors' => [
                     'max_size' => 'Ukuran gambar maksimal 1 Mb',
                     'is_image' => 'File yang dipilih bukan gambar',
-                    'mime_in' => 'File yang dipilih bukan gambar'
-                ]
-            ]
+                    'mime_in' => 'File yang dipilih bukan gambar',
+                ],
+            ],
         ])) {
             session()->setFlashdata('error', 'Gagal mengubah data , Coba lagi');
+
             return redirect()->to(base_url('user/profile'))->withInput();
         }
         if ($gambar->getError() == 4) {
             $this->users->save([
                 'id' => user()->id,
-                'fullname' => $nama
+                'fullname' => $nama,
             ]);
         } else {
             $user = $this->users->where('id', user()->id)->get()->getFirstRow();
             if ($user->user_image != 'default.svg') {
-                @unlink('img/profile/' . $user->user_image);
+                @unlink('img/profile/'.$user->user_image);
             }
             $namagambar = $gambar->getRandomName();
             $gambar->move('img/profile', $namagambar);
             $this->users->save([
                 'id' => user()->id,
                 'fullname' => $nama,
-                'user_image' => $namagambar
+                'user_image' => $namagambar,
             ]);
         }
         session()->setFlashdata('pesan', 'Mantap , data berhasil di ubah');
+
         return redirect()->to(base_url('user/profile'));
     }
+
     public function ubahpassword()
     {
-
         if (!$this->validate([
             'passwordlama' => 'required',
             'passwordbaru' => 'required|strong_password',
-            'ulangipassword' => 'required|matches[passwordbaru]'
+            'ulangipassword' => 'required|matches[passwordbaru]',
         ])) {
             session()->setFlashdata('error', 'Password gagal di ubah , Coba lagi');
+
             return redirect()->to(base_url('user/profile'))->withInput();
         }
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
@@ -93,14 +94,15 @@ class profile extends BaseController
         ), $passworduser);
         if (!$result) {
             session()->setFlashdata('error', 'Password gagal di ubah , Password lama salah.');
+
             return redirect()->to(base_url('user/profile'))->withInput();
         }
         $userproses = $this->users;
         $hashOptions = [
-            "hashMemoryCost" => 2084,
-            "hashTimeCost" => 4,
-            "hashThreads" => 4,
-            "hashCost" => 10
+            'hashMemoryCost' => 2084,
+            'hashTimeCost' => 4,
+            'hashThreads' => 4,
+            'hashCost' => 10,
         ];
         $passwordhash = password_hash(
             base64_encode(
@@ -111,19 +113,20 @@ class profile extends BaseController
         );
         $userproses->save([
             'id' => $userid,
-            'password_hash' => $passwordhash
+            'password_hash' => $passwordhash,
         ]);
         if ($user->wa_hash == 'valid') {
             $koneksiwa = $this->walib->cekkoneksi();
             if ($koneksiwa != 'error') {
                 $wa = $user->whatsapp;
-                $pesan = $user->username . ' %0AAnda berhasil mengubah password';
+                $pesan = $user->username.' %0AAnda berhasil mengubah password';
                 $this->walib->sendwasingle($wa, $pesan);
             }
         }
         session()->setFlashdata('pesan', 'Password berhasil di ubah');
+
         return redirect()->to(base_url('user/profile'));
     }
-    //--------------------------------------------------------------------
 
+    //--------------------------------------------------------------------
 }

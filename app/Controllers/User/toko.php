@@ -25,6 +25,7 @@ class toko extends BaseController
         $toko = $this->toko;
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $produkuser = $this->produk->where('owner', user()->id);
+
         $data = [
             'judul' => "Produk | $this->namaweb",
             'item' => $item,
@@ -47,10 +48,6 @@ class toko extends BaseController
         $toko = $this->toko;
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $itemproduk = $this->item;
-        // echo '<pre>';
-        // print_r($item);
-        // echo '<pre>';
-        // die;
         $data = [
             'type' => 'tambahproduk',
             'judul' => "Tambah Produk | $this->namaweb",
@@ -160,6 +157,19 @@ class toko extends BaseController
             return redirect()->to(base_url('toko'));
         } else {
             return view('Toko/fitur/produkdetail', $data);
+        }
+    }
+
+    public function hapusproduk($id)
+    {
+        $produk = $this->produk->where('id', $id)->get()->getFirstRow();
+        if ($produk->owner != user()->id) {
+            return redirect()->to(base_url('toko'));
+        } else {
+            $this->produk->delete($id);
+            session()->setFlashdata('pesan', 'Produk Berhasil di hapus');
+
+            return redirect()->to(base_url('user/toko/produk'));
         }
     }
 }
