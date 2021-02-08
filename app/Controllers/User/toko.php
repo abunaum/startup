@@ -73,7 +73,7 @@ class toko extends BaseController
         $stok = $this->request->getVar('stok');
 
         $toko = $this->toko->where('userid', user()->id)->get()->getFirstRow();
-        $slug = url_title($toko->username.' '.$nama);
+        $slug = url_title($toko->username . ' ' . $nama);
 
         if (!$this->validate([
             'item' => 'required',
@@ -93,7 +93,6 @@ class toko extends BaseController
             ],
         ])) {
             session()->setFlashdata('error', 'Gagal menambah produk');
-
             return redirect()->to(base_url('user/toko/tambah'))->withInput();
         }
         $gambar = $this->request->getFile('gambar');
@@ -122,13 +121,11 @@ class toko extends BaseController
                 $builder->where('wa_hash', 'valid');
                 $adm = $builder->get()->getFirstRow();
                 $wa = $adm->whatsapp;
-                $pesan = user()->username.' %0AToko : '.$toko->username.' %0Amenambah produk :'.$nama.' %0Aharga : '.$harga;
+                $pesan = user()->username . ' %0AToko : ' . $toko->username . ' %0Amenambah produk :' . $nama . ' %0Aharga : ' . $harga;
                 $this->walib->sendwasingle($wa, $pesan);
             }
         }
-
         session()->setFlashdata('pesan', 'Produk berhasil di tambah');
-
         return redirect()->to(base_url('user/toko/produk'));
     }
 
@@ -168,8 +165,60 @@ class toko extends BaseController
         } else {
             $this->produk->delete($id);
             session()->setFlashdata('pesan', 'Produk Berhasil di hapus');
-
             return redirect()->to(base_url('user/toko/produk'));
         }
+    }
+    public function editproduk($id)
+    {
+        $produk = $this->produk->find($id);
+        if ($produk['owner'] != user()->id) {
+            return redirect()->to(base_url('user/toko/produk'));
+        }
+        $file = $this->request->getFiles();
+        $gambar = $file['gambar'];
+        $nama = $this->request->getVar('nama');
+        $keterangan = $this->request->getVar('keterangan');
+        $harga = (int)$this->request->getVar('harga');
+        $stok = (int)$this->request->getVar('stok');
+        if (!$this->validate([
+            'nama' => 'required|alpha_numeric_punct|min_length[3]',
+            'keterangan' => 'required',
+            'harga' => 'required|is_natural|min_length[1]',
+            'stok' => 'required|is_natural|min_length[1]',
+            'gambar' => [
+                'rules' => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
+                'errors' => [
+                    'max_size' => 'Ukuran gambar maksimal 1 Mb',
+                    'is_image' => 'File yang dipilih bukan gambar',
+                    'mime_in' => 'File yang dipilih bukan gambar',
+                ],
+            ],
+        ])) {
+            session()->setFlashdata('error', 'Gagal mengubah produk , Coba lagi');
+            return redirect()->to(base_url('user/toko/produk/detail') . '/' . $id)->withInput();
+        }
+        if ($gambar->getError() == 4) {
+            $this->produk->save([
+                'id' => $id,
+                'nama' => $nama,
+                'keterangan' => $keterangan,
+                'harga' => $harga,
+                'stok' => $stok
+            ]);
+        } else {
+            @unlink('img/produk/' . $produk['gambar']);
+            $namagambar = $gambar->getRandomName();
+            $gambar->move('img/produk', $namagambar);
+            $this->produk->save([
+                'id' => $id,
+                'nama' => $nama,
+                'keterangan' => $keterangan,
+                'harga' => $harga,
+                'gambar' => $namagambar,
+                'stok' => $stok
+            ]);
+        }
+        session()->setFlashdata('pesan', 'Mantap , produk berhasil di ubah');
+        return redirect()->to(base_url('user/toko/produk/detail') . '/' . $id);
     }
 }

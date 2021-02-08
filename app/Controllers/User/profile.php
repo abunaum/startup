@@ -57,7 +57,7 @@ class profile extends BaseController
         } else {
             $user = $this->users->where('id', user()->id)->get()->getFirstRow();
             if ($user->user_image != 'default.svg') {
-                @unlink('img/profile/'.$user->user_image);
+                @unlink('img/profile/' . $user->user_image);
             }
             $namagambar = $gambar->getRandomName();
             $gambar->move('img/profile', $namagambar);
@@ -68,7 +68,6 @@ class profile extends BaseController
             ]);
         }
         session()->setFlashdata('pesan', 'Mantap , data berhasil di ubah');
-
         return redirect()->to(base_url('user/profile'));
     }
 
@@ -119,12 +118,11 @@ class profile extends BaseController
             $koneksiwa = $this->walib->cekkoneksi();
             if ($koneksiwa != 'error') {
                 $wa = $user->whatsapp;
-                $pesan = $user->username.' %0AAnda berhasil mengubah password';
+                $pesan = $user->username . ' %0AAnda berhasil mengubah password';
                 $this->walib->sendwasingle($wa, $pesan);
             }
         }
         session()->setFlashdata('pesan', 'Password berhasil di ubah');
-
         return redirect()->to(base_url('user/profile'));
     }
 

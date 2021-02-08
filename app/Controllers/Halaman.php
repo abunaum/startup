@@ -24,6 +24,7 @@ class Halaman extends BaseController
         $produk->select('users.status_toko');
         $produk->select('toko.status');
         $produk->where('status_toko', 4);
+        $produk->where('stok >=', 1);
 
         $item = $this->getitem->getsub();
         if ($cari) {

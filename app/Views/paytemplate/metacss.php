@@ -3,8 +3,7 @@
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <meta name="robots" content="noindex, nofollow">
 <title>Pembayaran</title>
-<meta name="author" content="TriPay">
-<meta name="csrf-token" content="4nNMGM4jhg6byv8dJCApBuNrOkuNxtEkQaOiVvcK">
+<meta name="author" content="Abunaum">
 <link rel="shortcut icon" href="<?= base_url(); ?>/tokolancer.ico">
 <!-- CSS only -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">

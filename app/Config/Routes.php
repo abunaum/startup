@@ -7,8 +7,8 @@ $routes = Services::routes();
 
 // Load the system's routing file first, so that the app and ENVIRONMENT
 // can override as needed.
-if (file_exists(SYSTEMPATH.'Config/Routes.php')) {
-    require SYSTEMPATH.'Config/Routes.php';
+if (file_exists(SYSTEMPATH . 'Config/Routes.php')) {
+    require SYSTEMPATH . 'Config/Routes.php';
 }
 
 /*
@@ -104,7 +104,8 @@ $routes->group('user', ['filter' => 'login'], function ($routes) {
     $routes->group('toko', function ($routes) {
         $routes->get('produk', 'User\toko::produk');
         $routes->get('produk/detail/(:num)', 'User\toko::produkdetail/$1');
-        $routes->post('produk/hapus/(:num)', 'User\toko::hapusproduk/$1');
+        $routes->delete('produk/hapus/(:num)', 'User\toko::hapusproduk/$1');
+        $routes->post('produk/edit/(:num)', 'User\toko::editproduk/$1');
         $routes->get('tambah', 'User\toko::tambah');
         $routes->post('tambahproduk', 'User\toko::tambahproduk');
     });
@@ -129,6 +130,6 @@ $routes->post('cekpembayaran/(:any)', 'Apipayment\Callback::cekpay/$1');
  * You will have access to the $routes object within that file without
  * needing to reload it.
  */
-if (file_exists(APPPATH.'Config/'.ENVIRONMENT.'/Routes.php')) {
-    require APPPATH.'Config/'.ENVIRONMENT.'/Routes.php';
+if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
+    require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }
