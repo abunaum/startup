@@ -55,7 +55,7 @@ class Callback extends BaseController
 
                 $this->transaksi_saldo->save([
                     'id' => $transaksi->id,
-                    'status' => 'lunas',
+                    'status' => $data->status
                 ]);
                 $owner = $transaksi->owner;
                 $builderuser = $db->table('users');
@@ -69,7 +69,7 @@ class Callback extends BaseController
                     $koneksiwa = $this->walib->cekkoneksi();
                     if ($koneksiwa != 'error') {
                         $wa = $user->whatsapp;
-                        $pesan = $user->username.' %0AAnda berhasil isi saldo Rp. '.number_format($transaksi->nominal).' %0ATotal saldo anda sekarang : Rp. '.number_format($user->balance + $transaksi->nominal);
+                        $pesan = $user->username . ' %0AAnda berhasil isi saldo Rp. ' . number_format($transaksi->nominal) . ' %0ATotal saldo anda sekarang : Rp. ' . number_format($user->balance + $transaksi->nominal);
                         $this->walib->sendwasingle($wa, $pesan);
                     }
                 }

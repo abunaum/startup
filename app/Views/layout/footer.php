@@ -11,7 +11,7 @@
                         <div class="footer-contact-info">
                             <div class="media">
                                 <span class="media-left icon media-middle">
-                                    <i class="tm tm-call-us-footer"></i>
+                                    <span class="iconify" data-icon="wpf:headset" data-inline="false" data-width="4em" data-height="4em"></span>
                                 </span>
                                 <div class="media-body">
                                     <span class="call-us-title">KONTAK KAMI</span>
@@ -28,7 +28,7 @@
                             <div class="footer-contact-info">
                                 <div class="media">
                                     <span class="media-left icon media-middle">
-                                        <i class="tm tm-arrow-right"></i>
+                                        <span class="iconify" data-icon="clarity:help-info-line" data-inline="false" data-width="4em" data-height="4em"></span>
                                     </span>
                                     <div class="body">
                                         <span class="call-us-title">LAYANAN PELANGGAN</span>
@@ -52,7 +52,7 @@
                             <div class="footer-contact-info">
                                 <div class="media">
                                     <span class="media-left icon media-middle">
-                                        <i class="tm tm-arrow-right"></i>
+                                        <span class="iconify" data-icon="fluent:info-shield-20-regular" data-inline="false" data-width="4em" data-height="4em"></span>
                                     </span>
                                     <div class="media-body">
                                         <span class="call-us-title">JELAJAHI <?= $_SERVER['SERVER_NAME'] ?></span>
@@ -75,7 +75,7 @@
                         <div class="footer-payment-info">
                             <div class="media">
                                 <span class="media-left icon media-middle">
-                                    <i class="tm tm-safe-payments"></i>
+                                    <span class="iconify" data-icon="simple-icons:contactlesspayment" data-inline="false" data-width="4em" data-height="4em"></span>
                                 </span>
                                 <div class="media-body">
                                     <h5 class="footer-payment-info-title">METODE PEMBAYARAN</h5>

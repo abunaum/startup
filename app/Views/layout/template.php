@@ -4,23 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/bootstrap.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/bootstrap-grid.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/bootstrap-reboot.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/font-market.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/slick.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/market-font-awesome.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/slick-style.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/animate.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/style.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>/assets/css/colors/blue.css" media="all" />
-    <link href="<?= base_url(); ?>/assets/css/gua.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/css/bootstrap-grid.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/css/bootstrap-reboot.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/css/slick.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/css/slick-style.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/css/style.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/css/colors/blue.css" media="all" />
+    <link href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/css/gua.css" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,900" rel="stylesheet">
     <link rel="shortcut icon" href="<?= base_url(); ?>/tokolancer.ico">
 
-    <link rel="stylesheet" href="<?= base_url(); ?>/assets/js/swal2/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/swal2/sweetalert2.min.css">
     <title><?= $judul; ?></title>
 </head>
 
@@ -68,23 +66,23 @@
     </div>
     <?= $this->include('layout/script') ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/tether.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/jquery-migrate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/hidemaxlistitem.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/jquery-ui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/hidemaxlistitem.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/jquery.easing.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/scrollup.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/jquery.waypoints.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/waypoints-sticky.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/pace.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/slick.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/tether.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/jquery-migrate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/hidemaxlistitem.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/hidemaxlistitem.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/jquery.easing.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/scrollup.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/jquery.waypoints.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/waypoints-sticky.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/pace.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/slick.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/scripts.js"></script>
     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/swal2/sweetalert2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js/js/swal2/swall.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/swal2/sweetalert2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/swal2/swall.js"></script>
 
     <?php if (logged_in('true')) : ?>
         <?php if ($_SERVER['REQUEST_URI'] != '/user/profile') : ?>

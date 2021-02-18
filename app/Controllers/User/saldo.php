@@ -46,7 +46,7 @@ class saldo extends BaseController
         }
         $minimal = 10000;
         if ($saldo < $minimal) {
-            session()->setFlashdata('error', 'Gagal menambah saldo, Nominal isi saldo '.$channel.' Adalah Rp. '.number_format($minimal));
+            session()->setFlashdata('error', 'Gagal menambah saldo, Nominal isi saldo ' . $channel . ' Adalah Rp. ' . number_format($minimal));
 
             return redirect()->to(base_url('user/saldo'))->withInput();
         }
@@ -87,11 +87,49 @@ class saldo extends BaseController
         $toko = $this->toko;
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $transaksi = $this->transaksi_saldo->where('status', 'pending');
+        $transaksi = $this->transaksi_saldo->orwhere('status', 'UNPAID');
         $transaksi = $transaksi->where('owner', user()->username)->findAll();
+        foreach ($transaksi as $tr) {
+            $detailpayment = $this->apilib->detailtransaksi($tr['reference']);
+            $detailpayment = json_decode($detailpayment, true);
+            $exp = $detailpayment['data']['expired_time'];
+            $stt = $detailpayment['data']['status'];
+            $time = strtotime("now");
+            if ($exp <= $time && $stt != 'PAID') {
+                $this->transaksi_saldo->save([
+                    'id' => $tr['id'],
+                    'status' => 'EXPIRED'
+                ]);
+            } else {
+                $this->transaksi_saldo->save([
+                    'id' => $tr['id'],
+                    'status' => $detailpayment['data']['status']
+                ]);
+            }
+        }
+        $transaksi = $this->transaksi_saldo->where('owner', user()->username)->findAll();
+        // $transaksi = $this->transaksi_saldo->where('owner', user()->username);
+        $group = array();
+
+        foreach ($transaksi as $value) {
+            $group[$value['status']][] = $value;
+        }
+        $trxgroup = [];
+        foreach ($group as $type => $labels) {
+            $trxgroup[] = [
+                'status' => $type,
+                $type => $labels,
+            ];
+        }
+        // print('<pre>');
+        // print_r($trxgroup);
+        // print('<pre>');
+        // die;
+        // dd($trxgroup);
         if ($status) {
             $trans = $this->transaksi_saldo->where('reference', $status)->get()->getFirstRow();
-            if ($trans){
-                if ($trans->status == 'lunas') {
+            if ($trans) {
+                if ($trans->status == 'PAID') {
                     session()->setFlashdata('pesan', 'Mantap, Isi saldo berhasil');
                     return redirect()->to(base_url('user/saldo'));
                 }
@@ -105,7 +143,7 @@ class saldo extends BaseController
             'item' => $item,
             'toko' => $toko->where('userid', user()->id)->findAll(),
             'user' => $user,
-            'transaksi' => $transaksi,
+            'transaksi' => $trxgroup,
             'validation' => \Config\Services::validation(),
         ];
 
