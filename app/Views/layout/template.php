@@ -19,6 +19,7 @@
     <link rel="shortcut icon" href="<?= base_url(); ?>/tokolancer.ico">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/swal2/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/css/tombol-buka-tutup.css">
     <title><?= $judul; ?></title>
 </head>
 
@@ -83,6 +84,7 @@
     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/swal2/sweetalert2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/swal2/swall.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/tombol-buka-tutup-rev-1.js"></script>
 
     <?php if (logged_in('true')) : ?>
         <?php if ($_SERVER['REQUEST_URI'] != '/user/profile') : ?>

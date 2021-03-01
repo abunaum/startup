@@ -7,6 +7,7 @@ use App\Libraries\Itemlibrary;
 class Halaman extends BaseController
 {
     public $getitem;
+    protected $request;
 
     public function __construct()
     {

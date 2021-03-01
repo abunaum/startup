@@ -59,37 +59,37 @@
                         <span class="tmhm-close">Tutup</span>
                         <hr>
                         <ul id="menu-departments-menu-1" class="nav row">
-                            <li class="yamm-tfw menu-item menu-item-has-children animate-dropdown dropdown-submenu">
+                            <li class="menu-item menu-item-has-children animate-dropdown dropdown-submenu">
                                 <a title="Produk" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true" href="#">Produk<span class="caret"></span>
                                 </a>
                                 <ul id="menu" class="dropdown-menu">
                                     <?php foreach ($item as $i) : ?>
-                                            <li class="yamm-tfw menu-item menu-item-has-children animate-dropdown dropdown-submenu">
-                                                <a title="<?= $i['namaitem']; ?>" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true" href="#"><?= $i['namaitem']; ?><span class="caret"></span></a>
-                                                <ul role="menu" class="dropdown-menu">
-                                                    <li class="menu-item menu-item-object-static_block animate-dropdown">
-                                                        <div class="yamm-content">
-                                                            <div class="bg-yamm-content bg-yamm-content-bottom bg-yamm-content-right">
-                                                                <div class="kc-col-container">
-                                                                    <div class="kc_single_image">
-                                                                        <img src="<?= base_url(); ?>/assets/images/megamenu.jpg" class="" alt="" />
-                                                                    </div>
-                                                                    <!-- .kc_single_image -->
+                                        <li class="menu-item menu-item-has-children animate-dropdown dropdown-submenu">
+                                            <a title="<?= $i['namaitem']; ?>" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true" href="#"><?= $i['namaitem']; ?><span class="caret"></span></a>
+                                            <ul role="menu" class="dropdown-menu">
+                                                <li class="menu-item menu-item-object-static_block animate-dropdown">
+                                                    <div class="yamm-content">
+                                                        <div class="bg-yamm-content bg-yamm-content-bottom bg-yamm-content-right">
+                                                            <div class="kc-col-container">
+                                                                <div class="kc_single_image">
+                                                                    <img src="<?= base_url(); ?>/tokolancer.ico" class="" alt="" />
                                                                 </div>
-                                                                <!-- .kc-col-container -->
+                                                                <!-- .kc_single_image -->
                                                             </div>
-                                                            <?php $nama = $i['namaitem']; ?>
-                                                            <?php foreach ($i[$nama] as $s) : ?>
-                                                                <ul>
-                                                                    <li><a href="<?= base_url('produk').'/'.$s['id']; ?>"><?= $s['nama']; ?></a></li>
-                                                                </ul>
-                                                            <?php endforeach; ?>
-                                                            <!-- .kc_row -->
+                                                            <!-- .kc-col-container -->
                                                         </div>
-                                                        <!-- .yamm-content -->
-                                                    </li>
-                                                </ul>
-                                            </li>
+                                                        <?php $nama = $i['namaitem']; ?>
+                                                        <?php foreach ($i[$nama] as $s) : ?>
+                                                            <ul>
+                                                                <li><a href="<?= base_url('produk') . '/' . $s['id']; ?>"><?= $s['nama']; ?></a></li>
+                                                            </ul>
+                                                        <?php endforeach; ?>
+                                                        <!-- .kc_row -->
+                                                    </div>
+                                                    <!-- .yamm-content -->
+                                                </li>
+                                            </ul>
+                                        </li>
                                     <?php endforeach; ?>
                                 </ul>
                             </li>
@@ -97,7 +97,7 @@
                         <hr>
                         <?php if (logged_in('true')) : ?>
                             <ul id="menu-departments-menu-1" class="nav row">
-                                <li class="yamm-tfw menu-item menu-item-has-children animate-dropdown dropdown-submenu">
+                                <li class="menu-item menu-item-has-children animate-dropdown dropdown-submenu">
                                     <a title="Toko" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true" href="#">Toko<span class="caret"></span>
                                     </a>
                                     <ul role="menu" class="dropdown-menu">
@@ -106,7 +106,7 @@
                                                 <div class="bg-yamm-content bg-yamm-content-bottom bg-yamm-content-right">
                                                     <div class="kc-col-container">
                                                         <div class="kc_single_image">
-                                                            <img src="<?= base_url(); ?>/assets/images/megamenu.jpg" class="" alt="" />
+                                                            <img src="<?= base_url(); ?>/tokolancer.ico" class="" alt="" />
                                                         </div>
                                                         <!-- .kc_single_image -->
                                                     </div>

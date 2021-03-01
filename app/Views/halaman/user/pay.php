@@ -51,7 +51,7 @@
                             <div class="payment__infoSubtitle">
                                 <div class="row mb-1">
                                     <div class="col-8">
-                                        <?= $transaksi['order_items'][0]['name'].' (x'.$transaksi['order_items'][0]['quantity'].')'; ?>
+                                        <?= $transaksi['order_items'][0]['name'] . ' (x' . $transaksi['order_items'][0]['quantity'] . ')'; ?>
                                         <br />
                                         <small class="ml-3">@ Rp. <?= number_format($transaksi['order_items'][0]['price']); ?></small>
                                     </div>
@@ -153,7 +153,7 @@
 <div class="modal fade" id="cara_bayar" tabindex="-1" aria-labelledby="cara_bayarLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-        <div class="modal-header">
+            <div class="modal-header">
                 <div class="modal-title" id="cara_bayar_title">
                     <div class="d-flex flex-row">
                         <div class="ml-3 title-pembayaran">
@@ -166,20 +166,22 @@
             <div class="modal-body pt-0 pr-0 pl-0 mt-0">
                 <div id="payment-modal" class="custom-accordion">
                     <div class="card custom-padding-accordion">
-                        <div class="card-header payment-instruction-head" id="payment-instruction-head-0">
-                            <h5 class="mb-0">
-                                <span class="btn collaped panel-title" data-bs-toggle="collapse" data-bs-target="#payment-instruction-collapse-0" aria-expanded="true" aria-controls="payment-instruction-collapse-0">Pembayaran via <?= $transaksi['instructions'][0]['title']; ?></span>
-                            </h5>
-                        </div>
-                        <div id="payment-instruction-collapse-0" class="collapse show custom-padding-accordion-2" aria-labelledby="payment-instruction-head-0" data-parent="#payment-modal">
-                            <div class="card-body">
-                                <ol class="list-petunjuk-pembayaran">
-                                    <?php foreach ($transaksi['instructions'][0]['steps'] as $intruksi) : ?>
-                                        <li><?= $intruksi; ?></li>
-                                    <?php endforeach; ?>
-                                </ol>
+                        <?php foreach ($transaksi['instructions'] as $pembayaran) : ?>
+                            <div class="card-header payment-instruction-head" id="payment-instruction-head-0">
+                                <h5 class="mb-0">
+                                    <span class="btn collaped panel-title" data-bs-toggle="collapse" data-bs-target="#payment-instruction-collapse-0" aria-expanded="true" aria-controls="payment-instruction-collapse-0">Pembayaran via <?= $pembayaran['title']; ?></span>
+                                </h5>
                             </div>
-                        </div>
+                            <div id="payment-instruction-collapse-0" class="collapse show custom-padding-accordion-2" aria-labelledby="payment-instruction-head-0" data-parent="#payment-modal">
+                                <div class="card-body">
+                                    <ol class="list-petunjuk-pembayaran">
+                                        <?php foreach ($pembayaran['steps'] as $intruksi) : ?>
+                                            <li><?= $intruksi; ?></li>
+                                        <?php endforeach; ?>
+                                    </ol>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
 

@@ -23,12 +23,12 @@
                 if (this.readyState == 4 && this.status == 200) {
                     var resarr = JSON.parse(this.responseText);
                     var status = resarr.status;
-                    if (status == 'lunas') {
+                    if (status == 'PAID') {
                         returnToMerchant();
                     }
                 }
             }
-            xhr.open('POST', urlreq+"/cekpembayaran/"+numberref, true);
+            xhr.open('POST', urlreq + "/cekpembayaran/" + numberref, true);
             xhr.send(null);
         }, 10 * 1000);
     });
@@ -36,7 +36,7 @@
     function returnToMerchant() {
         var go = '<?= base_url('user/saldo/topup?status='); ?>';
         var numberref = document.getElementById("noReferensi").value;
-        window.location.replace(go+numberref);
+        window.location.replace(go + numberref);
     }
 
     function copy(text) {

@@ -25,6 +25,7 @@ class toko extends BaseController
         $toko = $this->toko;
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $produkuser = $this->produk->where('owner', user()->id);
+        // dd($produkuser->findAll());
 
         $data = [
             'judul' => "Produk | $this->namaweb",
@@ -220,5 +221,17 @@ class toko extends BaseController
         }
         session()->setFlashdata('pesan', 'Mantap , produk berhasil di ubah');
         return redirect()->to(base_url('user/toko/produk/detail') . '/' . $id);
+    }
+    public function pengaturan()
+    {
+        $item = $this->getitem->getsub();
+        $toko = $this->toko;
+        $data = [
+            'judul' => "Pengaturan toko | $this->namaweb",
+            'item' => $item,
+            'toko' => $toko->where('userid', user()->id)->first(),
+            'validation' => \Config\Services::validation()
+        ];
+        return view('halaman/user/pengaturantoko', $data);
     }
 }

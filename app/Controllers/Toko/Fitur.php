@@ -136,6 +136,53 @@ class Fitur extends BaseController
         return redirect()->to(base_url('toko'));
     }
 
+    public function edittoko()
+    {
+        $toko = $this->toko->where('userid', user()->id)->first();
+        $file = $this->request->getFiles();
+        $status = $this->request->getVar('status');
+        if ($status) {
+            $status = 1;
+        } else {
+            $status = 0;
+        }
+        $selogan = $this->request->getVar('selogan');
+        $gambar = $file['gambar'];
+        if (!$this->validate([
+            'selogan' => 'required|alpha_space|min_length[3]',
+            'gambar' => [
+                'rules' => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
+                'errors' => [
+                    'max_size' => 'Ukuran gambar maksimal 1 Mb',
+                    'is_image' => 'File yang dipilih bukan gambar',
+                    'mime_in' => 'File yang dipilih bukan gambar',
+                ],
+            ],
+        ])) {
+            session()->setFlashdata('error', 'Gagal mengubah data , Coba lagi');
+
+            return redirect()->to(base_url('user/profile'))->withInput();
+        }
+        if ($gambar->getError() == 4) {
+            $this->toko->save([
+                'id' => $toko['id'],
+                'selogan' => $selogan,
+                'status' => $status
+            ]);
+        } else {
+            @unlink('img/toko/' . $toko['logo']);
+            $namagambar = $gambar->getRandomName();
+            $gambar->move('img/toko', $namagambar);
+            $this->toko->save([
+                'id' => $toko['id'],
+                'selogan' => $selogan,
+                'status' => $status,
+                'logo' => $namagambar
+            ]);
+        }
+        session()->setFlashdata('pesan', 'Mantap , data toko berhasil di ubah');
+        return redirect()->to(base_url('user/toko/pengaturan'));
+    }
     //--------------------------------------------------------------------
 
 }

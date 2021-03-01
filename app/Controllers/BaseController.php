@@ -16,9 +16,17 @@ namespace App\Controllers;
  */
 
 use CodeIgniter\Controller;
+use CodeIgniter\HTTP\IncomingRequest;
 
 class BaseController extends Controller
 {
+
+	/**
+	 * Instance of the main Request object.
+	 *
+	 * @var IncomingRequest
+	 */
+	protected $request;
 
 	/**
 	 * An array of helpers to be loaded automatically upon
@@ -31,6 +39,7 @@ class BaseController extends Controller
 
 	/**
 	 * Constructor.
+	 *
 	 */
 	public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
 	{

@@ -108,7 +108,6 @@ class saldo extends BaseController
             }
         }
         $transaksi = $this->transaksi_saldo->where('owner', user()->username)->findAll();
-        // $transaksi = $this->transaksi_saldo->where('owner', user()->username);
         $group = array();
 
         foreach ($transaksi as $value) {
@@ -121,11 +120,6 @@ class saldo extends BaseController
                 $type => $labels,
             ];
         }
-        // print('<pre>');
-        // print_r($trxgroup);
-        // print('<pre>');
-        // die;
-        // dd($trxgroup);
         if ($status) {
             $trans = $this->transaksi_saldo->where('reference', $status)->get()->getFirstRow();
             if ($trans) {
@@ -167,10 +161,13 @@ class saldo extends BaseController
         $detailpayment = json_decode($detailpayment, true);
         if ($detailpayment['data']['status'] == 'PAID') {
             session()->setFlashdata('pesan', 'Mantap, Isi saldo berhasil');
-
             return redirect()->to(base_url('user/saldo/topup'));
         }
         if ($detailpayment['success'] == 1) {
+            if ($detailpayment['data']['payment_method'] == 'CC') {
+                $url = $detailpayment['data']['pay_url'];
+                return redirect()->to($url);
+            }
             $data = [
                 'judul' => "Transaksi | $this->namaweb",
                 'transaksi' => $detailpayment['data'],
@@ -180,8 +177,49 @@ class saldo extends BaseController
         }
     }
 
+    public function ulangtopupproses($id = 0)
+    {
+        $trx = $this->transaksi_saldo->where('id', $id)->get()->getFirstRow();
+        if (!$trx) {
+            return redirect()->to(base_url('user/saldo'));
+        }
+        $role = $this->role->where('user_id', user()->id)->get()->getFirstRow();
+        if ($role->group_id != 1) {
+            if ($trx->owner != user()->username) {
+                return redirect()->to(base_url('user/saldo'));
+            }
+        }
+        $totalbayar = $trx->nominal + $trx->fee;
+        $nama = 'Topup';
+        $createpayment = $this->apilib->createpayment($nama, $trx->order_number, $trx->metode, $totalbayar);
+        $payment = json_decode($createpayment, true);
+        if ($payment['success'] == 1) {
+            $this->transaksi_saldo->save([
+                'id' => $trx->id,
+                'status' => 'UNPAID',
+                'reference' => $payment['data']['reference'],
+            ]);
+            session()->setFlashdata('pesan', 'Mantap, ' . $trx->order_number . ' Sudah siap di bayar');
+            return redirect()->to(base_url('user/saldo/topup'));
+        } else {
+            session()->setFlashdata('error', 'Ooops, Server Error !!');
+
+            return redirect()->to(base_url('user/saldo'));
+        }
+    }
+
     public function transaksihapus($id = 0)
     {
+        $trx = $this->transaksi_saldo->where('id', $id)->get()->getFirstRow();
+        if (!$trx) {
+            return redirect()->to(base_url('user/saldo'));
+        }
+        $role = $this->role->where('user_id', user()->id)->get()->getFirstRow();
+        if ($role->group_id != 1) {
+            if ($trx->owner != user()->username) {
+                return redirect()->to(base_url('user/saldo'));
+            }
+        }
         $this->transaksi_saldo->delete($id);
         session()->setFlashdata('pesan', 'Transaksi Berhasil di hapus');
 

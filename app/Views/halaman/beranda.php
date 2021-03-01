@@ -5,12 +5,12 @@
         <!-- .section-header -->
         <?php if (count($produk) >= 1) : ?>
             <div class="categories-filter-products">
-                <div class="woocommerce columns-4">
-                    <div class="products">
+                <div class="woocommerce columns-10">
+                    <div class="products d-flex justify-content-center">
                         <?php foreach ($produk as $p) : ?>
                             <div class="product">
                                 <a class="woocommerce-LoopProduct-link woocommerce-loop-product__link" href="single-product-fullwidth.html">
-                                    <img width="224" height="197" class="attachment-shop_catalog size-shop_catalog wp-post-image" src="<?= base_url(); ?>/img/produk/<?= $p['gambar']; ?>" alt="Gambar">
+                                    <img style="height: 150px; width: 150px;" class="img-thumbnail" src="<?= base_url(); ?>/img/produk/<?= $p['gambar']; ?>" alt="Gambar">
                                     <span class="price">
                                         <span class="woocommerce-Price-amount amount">
                                             <span class="woocommerce-Price-currencySymbol">Rp </span><?= number_format($p['harga']); ?></span>
@@ -20,7 +20,7 @@
                                     <h2 class="woocommerce-loop-product__title"><i>@<?= $p['username']; ?></i></h2>
                                 </a>
                                 <!-- .woocommerce-LoopProduct-link -->
-                                <div class="hover-area">
+                                <div class="hover-area flex-row justify-content-center">
                                     <a class="button" href="cart.html">Detail</a>
                                     <?php if ($p['status'] == 1) : ?>
                                         <a class="button" href="cart.html">Beli</a>

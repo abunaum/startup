@@ -72,7 +72,7 @@
                                     <?php foreach ($produkuser as $pu) : ?>
                                         <div class="product">
                                             <a class="woocommerce-LoopProduct-link woocommerce-loop-product__link" href="<?= base_url('/user/toko/produk/detail') . '/' . $pu['id']; ?>">
-                                                <img width="224" height="197" class="attachment-shop_catalog size-shop_catalog wp-post-image" src="<?= base_url(); ?>/img/produk/<?= $pu['gambar']; ?>" alt="Gambar">
+                                                <img style="height: 150px; width: 150px;" class="img-thumbnail" src="<?= base_url(); ?>/img/produk/<?= $pu['gambar']; ?>" alt="Gambar">
                                                 <span class="price">
                                                     <span class="woocommerce-Price-amount amount">
                                                         <span class="woocommerce-Price-currencySymbol">Rp </span><?= number_format($pu['harga']); ?></span>

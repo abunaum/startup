@@ -84,6 +84,7 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
 $routes->group('toko', ['filter' => 'login'], function ($routes) {
     $routes->get('', 'Toko\Fitur::index');
     $routes->post('buattoko', 'Toko\Fitur::buat_toko');
+    $routes->post('edittoko', 'Toko\Fitur::edittoko');
     $routes->post('aktivasitoko', 'Toko\Fitur::aktivasi');
 });
 $routes->group('user', ['filter' => 'login'], function ($routes) {
@@ -100,9 +101,12 @@ $routes->group('user', ['filter' => 'login'], function ($routes) {
     $routes->get('saldo/topup', 'User\saldo::topup');
     $routes->post('topup/prosess/(:num)', 'User\saldo::topupproses/$1');
     $routes->get('topup/prosess/(:num)', 'User\saldo::topupproses/$1');
+    $routes->post('topup/ulangprosess/(:num)', 'User\saldo::ulangtopupproses/$1');
+    $routes->get('topup/ulangprosess/(:num)', 'User\saldo::ulangtopupproses/$1');
     $routes->delete('transaksisaldo/hapus/(:num)', 'User\saldo::transaksihapus/$1');
     $routes->group('toko', function ($routes) {
         $routes->get('produk', 'User\toko::produk');
+        $routes->get('pengaturan', 'User\toko::pengaturan');
         $routes->get('produk/detail/(:num)', 'User\toko::produkdetail/$1');
         $routes->delete('produk/hapus/(:num)', 'User\toko::hapusproduk/$1');
         $routes->post('produk/edit/(:num)', 'User\toko::editproduk/$1');
@@ -116,6 +120,7 @@ $routes->group('produk', function ($routes) {
 $routes->get('/penjual', 'Penjual\Toko::index');
 $routes->post('api/proses/gasspol/mantap/callback', 'Apipayment\Callback::callback');
 $routes->post('cekpembayaran/(:any)', 'Apipayment\Callback::cekpay/$1');
+
 
 /*
  * --------------------------------------------------------------------
