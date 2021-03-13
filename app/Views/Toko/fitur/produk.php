@@ -21,7 +21,7 @@
                                 <form action="<?= base_url('user/toko/produk/hapus') . '/' . $p['id'] ?>" method="post">
                                     <?= csrf_field() ?>
                                     <input type="hidden" name="_method" value="DELETE" />
-                                    <button type="submit" class="button">
+                                    <button type="button" class="button tmbl-hps">
                                         Hapus
                                     </button>
                                 </form>

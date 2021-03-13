@@ -4,13 +4,10 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AddBlog extends Migration
+class Migrate1 extends Migration
 {
 	public function up()
 	{
-		/*
-         * Users
-         */
 		$this->forge->addField([
 			'id'               => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
 			'email'            => ['type' => 'varchar', 'constraint' => 255],
@@ -18,6 +15,9 @@ class AddBlog extends Migration
 			'fullname'         => ['type' => 'varchar', 'constraint' => 30, 'null' => true],
 			'user_image'       => ['type' => 'varchar', 'constraint' => 30, 'default' => 'default.svg'],
 			'status_toko'      => ['type' => 'tinyint', 'constraint' => 2, 'null' => 0, 'default' => 0],
+			'balance'			=> ['type' => 'int', 'constraint' => 255, 'null' => 0, 'default' => 0],
+			'whatsapp'    => ['type' => 'varchar', 'constraint' => 14],
+			'wa_hash'    => ['type' => 'varchar', 'constraint' => 32],
 			'password_hash'    => ['type' => 'varchar', 'constraint' => 255],
 			'reset_hash'       => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
 			'reset_at'         => ['type' => 'datetime', 'null' => true],
@@ -37,7 +37,6 @@ class AddBlog extends Migration
 		$this->forge->addUniqueKey('username');
 
 		$this->forge->createTable('users', true);
-
 		/*
          * Auth Login Attempts
          */
@@ -165,9 +164,132 @@ class AddBlog extends Migration
 		$this->forge->addForeignKey('user_id', 'users', 'id', false, 'CASCADE');
 		$this->forge->addForeignKey('permission_id', 'auth_permissions', 'id', false, 'CASCADE');
 		$this->forge->createTable('auth_users_permissions');
-	}
 
-	//--------------------------------------------------------------------
+		/*
+         * Apipayment
+         */
+		$this->forge->addField([
+			'id'				 => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+			'apikey'			 => ['type' => 'varchar', 'constraint' => 255],
+			'apiprivatekey'      => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
+			'urlpaymentchannel'  => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
+			'urlfeekalkulator'   => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
+			'urlcreatepayment'   => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
+			'urldetailtransaksi' => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
+			'kodemerchant'	     => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
+			'callback'		     => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
+			'created_at'         => ['type' => 'datetime', 'null' => true],
+			'updated_at'         => ['type' => 'datetime', 'null' => true],
+			'deleted_at'         => ['type' => 'datetime', 'null' => true],
+		]);
+
+		$this->forge->addKey('id', true);
+
+		$this->forge->createTable('apipayment', true);
+
+		/*
+         * item
+         */
+		$this->forge->addField([
+			'id'		=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+			'nama'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'status'	=> ['type' => 'int', 'constraint' => 11,  'null' => 0, 'default' => 0],
+			'sub'		=> ['type' => 'int', 'constraint' => 11,  'null' => 0, 'default' => 0],
+			'created_at' => ['type' => 'datetime', 'null' => true],
+			'updated_at' => ['type' => 'datetime', 'null' => true],
+			'deleted_at' => ['type' => 'datetime', 'null' => true],
+		]);
+
+		$this->forge->addKey('id', true);
+
+		$this->forge->createTable('item', true);
+
+		/*
+         * subitem
+         */
+		$this->forge->addField([
+			'id'		=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+			'item'		=> ['type' => 'int', 'constraint' => 11,  'unsigned' => true, 'default' => 0],
+			'nama'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'status'	=> ['type' => 'int', 'constraint' => 11,  'null' => 0, 'default' => 0],
+			'created_at' => ['type' => 'datetime', 'null' => true],
+			'updated_at' => ['type' => 'datetime', 'null' => true],
+			'deleted_at' => ['type' => 'datetime', 'null' => true],
+		]);
+
+		$this->forge->addKey('id', true);
+		$this->forge->addForeignKey('item', 'item', 'id', false, 'CASCADE');
+		$this->forge->createTable('sub_item', true);
+
+		/*
+         * toko
+         */
+		$this->forge->addField([
+			'id'		=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+			'userid'		=> ['type' => 'int', 'constraint' => 11,  'unsigned' => true, 'default' => 0],
+			'username'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'logo'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'selogan'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'metode'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'nama_rek'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'no_rek'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'kartu'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'selfi'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'status'	=> ['type' => 'int', 'constraint' => 11,  'null' => 0, 'default' => 0],
+			'created_at' => ['type' => 'datetime', 'null' => true],
+			'updated_at' => ['type' => 'datetime', 'null' => true],
+			'deleted_at' => ['type' => 'datetime', 'null' => true],
+		]);
+
+		$this->forge->addKey('id', true);
+		$this->forge->addForeignKey('userid', 'users', 'id', false, 'CASCADE');
+		$this->forge->createTable('toko', true);
+
+		/*
+         * transaksi_saldo
+         */
+		$this->forge->addField([
+			'id'		=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+			'owner'		=> ['type' => 'varchar', 'constraint' => 255],
+			'jenis'	 	=> ['type' => 'varchar', 'constraint' => 30],
+			'order_number'	 	=> ['type' => 'varchar', 'constraint' => 30],
+			'nominal'	 	=> ['type' => 'varchar', 'constraint' => 30],
+			'fee'	 	=> ['type' => 'int', 'constraint' => 30],
+			'metode'	 	=> ['type' => 'varchar', 'constraint' => 50],
+			'status'	 	=> ['type' => 'varchar', 'constraint' => 20],
+			'reference'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'created_at' => ['type' => 'datetime', 'null' => true],
+			'updated_at' => ['type' => 'datetime', 'null' => true],
+			'deleted_at' => ['type' => 'datetime', 'null' => true],
+		]);
+
+		$this->forge->addKey('id', true);
+		$this->forge->addForeignKey('owner', 'users', 'username', false, 'CASCADE');
+		$this->forge->createTable('transaksi_saldo', true);
+
+		/*
+         * produk
+         */
+		$this->forge->addField([
+			'id'		=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+			'jenis'	 	=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+			'owner'		=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+			'gambar'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'nama'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'harga'	 	=> ['type' => 'int', 'constraint' => 11],
+			'keterangan'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'slug'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'stok'	 	=> ['type' => 'int', 'constraint' => 11],
+			'created_at' => ['type' => 'datetime', 'null' => true],
+			'updated_at' => ['type' => 'datetime', 'null' => true],
+			'deleted_at' => ['type' => 'datetime', 'null' => true],
+		]);
+
+		$this->forge->addKey('id', true);
+		$this->forge->addForeignKey('jenis', 'sub_item', 'id', false, 'CASCADE');
+		$this->forge->addForeignKey('owner', 'users', 'id', false, 'CASCADE');
+		$this->forge->createTable('produk', true);
+	}
 
 	public function down()
 	{
@@ -180,6 +302,11 @@ class AddBlog extends Migration
 			$this->forge->dropForeignKey('auth_groups_users', 'auth_groups_users_user_id_foreign');
 			$this->forge->dropForeignKey('auth_users_permissions', 'auth_users_permissions_user_id_foreign');
 			$this->forge->dropForeignKey('auth_users_permissions', 'auth_users_permissions_permission_id_foreign');
+			$this->forge->dropForeignKey('subitem', 'subitem_item_foreign');
+			$this->forge->dropForeignKey('toko', 'toko_userid_foreign');
+			$this->forge->dropForeignKey('transaksi_saldo', 'transaksi_saldo_owner_foreign');
+			$this->forge->dropForeignKey('produk', 'produk_jenis_foreign');
+			$this->forge->dropForeignKey('produk', 'produk_owner_foreign');
 		}
 
 		$this->forge->dropTable('users', true);
@@ -192,5 +319,11 @@ class AddBlog extends Migration
 		$this->forge->dropTable('auth_groups_permissions', true);
 		$this->forge->dropTable('auth_groups_users', true);
 		$this->forge->dropTable('auth_users_permissions', true);
+		$this->forge->dropTable('apipayment', true);
+		$this->forge->dropTable('produk', true);
+		$this->forge->dropTable('item', true);
+		$this->forge->dropTable('subitem', true);
+		$this->forge->dropTable('toko', true);
+		$this->forge->dropTable('transaksi_saldo', true);
 	}
 }

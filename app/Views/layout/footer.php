@@ -82,65 +82,80 @@
                                     <div class="footer-secure-by-info">
                                         <ul class="footer-secured-by-icons">
                                             <li class="nav-item">
-                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-Bank-BRI.png" alt="alfamart" />
+                                                <img class="secure-icons-image" src="<?= base_url('img/payment/bri.webp') ?>" alt="bri" />
                                             </li>
                                             <li class="nav-item">
-                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-Bank-Maybank.png" alt="alfamidi" />
+                                                <img class="secure-icons-image" src="<?= base_url('img/payment/bni.webp') ?>" alt="bni" />
                                             </li>
                                             <li class="nav-item">
-                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-BCA.png" alt="alfamidi" />
+                                                <img class="secure-icons-image" src="<?= base_url('img/payment/bca.webp') ?>" alt="bca" />
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="footer-secure-by-info">
                                         <ul class="footer-secured-by-icons">
                                             <li class="nav-item">
-                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-BNI.png" alt="alfamart" />
+                                                <img class="secure-icons-image" src="<?= base_url('img/payment/cimb.webp') ?>" alt="cimb" />
                                             </li>
                                             <li class="nav-item">
-                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-Mandiri.png" alt="alfamidi" />
+                                                <img class="secure-icons-image" src="<?= base_url('img/payment/mandiri.webp') ?>" alt="mandiri" />
                                             </li>
                                             <li class="nav-item">
-                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-Permata-Bank.png" alt="alfamidi" />
+                                                <img class="secure-icons-image" src="<?= base_url('img/payment/permata.webp') ?>" alt="permata" />
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="footer-secure-by-info">
                                         <ul class="footer-secured-by-icons">
                                             <li class="nav-item">
-                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-Alfamart.webp" alt="alfamart" />
+                                                <img class="secure-icons-image" src="<?= base_url('img/payment/mybank.webp') ?>" alt="maybank" />
                                             </li>
                                             <li class="nav-item">
-                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-Alfamidi.webp" alt="alfamidi" />
+                                                <img class="secure-icons-image" src="<?= base_url('img/payment/muamalat.webp') ?>" alt="muamalat" />
                                             </li>
                                             <li class="nav-item">
-                                                <img class="secure-icons-image" src="<?= base_url('') ?>/assets/images/payment/Logo-QRIS.webp" alt="alfamidi" />
+                                                <img class="secure-icons-image" src="<?= base_url('img/payment/sinarmas.webp') ?>" alt="sinarmas" />
                                             </li>
                                         </ul>
                                     </div>
-                                    <!-- .footer-secure-by-info -->
+                                    <div class="footer-secure-by-info">
+                                        <ul class="footer-secured-by-icons">
+                                            <li class="nav-item">
+                                                <img class="secure-icons-image" src="<?= base_url('img/payment/alfamart.webp') ?>" alt="alfamart" />
+                                            </li>
+                                            <li class="nav-item">
+                                                <img class="secure-icons-image" src="<?= base_url('img/payment/alfamidi.webp') ?>" alt="alfamidi" />
+                                            </li>
+                                            <li class="nav-item">
+                                                <img class="secure-icons-image" src="<?= base_url('img/payment/qris.webp') ?>" alt="qris" />
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <img class="secure-icons-image" src="<?= base_url('img/payment/cc.webp') ?>" alt="cc" />
                                 </div>
-                                <!-- .media-body -->
+                                <!-- .footer-secure-by-info -->
                             </div>
-                            <!-- .media -->
+                            <!-- .media-body -->
                         </div>
-                        <!-- .footer-payment-info -->
+                        <!-- .media -->
                     </div>
-                    <!-- .contact-payment-wrap -->
+                    <!-- .footer-payment-info -->
                 </div>
+                <!-- .contact-payment-wrap -->
             </div>
         </div>
-        <!-- .footer-widgets-block -->
-        <div class="site-info">
-            <center>
-                <div class="col-full">
-                    <div class="copyright">Copyright &copy; <a href="home-v1.html"><?= $_SERVER['SERVER_NAME'] ?> .</a> All rights reserved.</div>
-                    <!-- .credit -->
-                </div>
-            </center>
-            <!-- .col-full -->
-        </div>
-        <!-- .site-info -->
+    </div>
+    <!-- .footer-widgets-block -->
+    <div class="site-info">
+        <center>
+            <div class="col-full">
+                <div class="copyright">Copyright &copy; <a href="home-v1.html"><?= $_SERVER['SERVER_NAME'] ?> .</a> All rights reserved.</div>
+                <!-- .credit -->
+            </div>
+        </center>
+        <!-- .col-full -->
+    </div>
+    <!-- .site-info -->
     </div>
     <!-- .footer-widgets -->
     </div>
