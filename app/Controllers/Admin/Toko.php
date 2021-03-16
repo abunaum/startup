@@ -100,9 +100,9 @@ class Toko extends BaseController
                 $wa = $user->whatsapp;
                 $pesan = $user->whatsapp . ' %0AMantap, Toko anda telah di aktivasi, sekarang anda bisa berjualan di ' . base_url();
                 $this->walib->sendwasingle($wa, $pesan);
+                session()->setFlashdata('pesan', 'Toko berhasil ACC');
             } else {
-                session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
-                return redirect()->to(base_url('admin/toko/detail/' . $toko->id));
+                session()->setFlashdata('error', 'Toko berhasil ACC, Namun Server Whatsapp bermasalah.');
             }
         }
         $usergass = new $this->users;
@@ -110,7 +110,6 @@ class Toko extends BaseController
             'id' => $user->id,
             'status_toko' => 4
         ]);
-        session()->setFlashdata('pesan', 'Toko berhasil ACC');
         return redirect()->to(base_url('admin/toko/pengajuan'));
     }
     //--------------------------------------------------------------------

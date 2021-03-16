@@ -241,6 +241,13 @@ class Dataawal extends Seeder
 				'updated_at' => Time::now('Asia/Jakarta', 'id_ID'),
 			],
 			[
+				'item' => 5,
+				'nama' => 'Domain',
+				'status'    => 1,
+				'created_at' => Time::now('Asia/Jakarta', 'id_ID'),
+				'updated_at' => Time::now('Asia/Jakarta', 'id_ID'),
+			],
+			[
 				'item' => 6,
 				'nama' => 'Codeigniter',
 				'status'    => 1,

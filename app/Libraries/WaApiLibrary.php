@@ -9,8 +9,8 @@ class WaApiLibrary extends BaseController
     public $ipwa, $portwa;
     public function __construct()
     {
-        $this->ipwa = '34.237.136.254';
-        $this->portwa = '8000';
+        $this->ipwa = '3.87.188.80';
+        $this->portwa = '8989';
     }
     public function cekkoneksi()
     {
