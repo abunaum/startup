@@ -4,7 +4,7 @@ namespace App\Libraries;
 
 use App\Controllers\BaseController;
 
-class TeleApi extends BaseController
+class TeleApiLibrary extends BaseController
 {
     public function kirimpesan($chatId, $pesan)
     {
