@@ -32,7 +32,7 @@
                     <form class="g-3 needs-validation" action="<?= base_url('user/notifikasi/ubahtele'); ?>" method="post" novalidate>
                         <?= csrf_field() ?>
                         <div class="modal-body">
-                            <small>Untuk mendapatkan Telegram ID silahkan chat <a href="https://t.me/TokoLancer_bot" target="_blank" rel="noopener noreferrer">@TokoLancer_bot</a></small>
+                            <p>Untuk mendapatkan Telegram ID silahkan chat <a href="https://t.me/TokoLancer_bot" target="_blank" rel="noopener noreferrer">@TokoLancer_bot</a></p>
                             <div class="input-group mb-3">
                                 <input type="number" class="form-control <?= ($validation->hasError('teleid')) ? 'is-invalid' : '' ?>" placeholder="Telegram Id" aria-label="teleid" name="teleid" id="teleid" aria-describedby="basic-addon1" value="<?= old('teleid') ?>">
                                 <div class="invalid-feedback">

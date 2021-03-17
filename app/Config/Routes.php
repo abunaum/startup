@@ -44,11 +44,10 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('', 'Admin\Admin::index');
     $routes->get('profile', 'Admin\Admin::profile');
     $routes->get('notifikasi', 'Admin\Admin::notifikasi');
-    $routes->post('notifikasi', 'Admin\Admin::tambahwa');
-    $routes->post('whatsapp', 'Admin\Admin::whatsappverif');
-    $routes->post('ubahwa', 'Admin\Admin::ubahwhatsapp');
-    $routes->get('waulang', 'Admin\Admin::whatsapplagi');
-    $routes->post('verifwa', 'Admin\Admin::verifwa');
+    $routes->post('notifikasi', 'Admin\Admin::tambahtele');
+    $routes->post('ubahtele', 'Admin\Admin::ubahtele');
+    $routes->get('teleulang', 'Admin\Admin::telelagi');
+    $routes->post('veriftele', 'Admin\Admin::veriftele');
     $routes->post('ubahpassword', 'Admin\Admin::ubahpassword');
     $routes->group('download', function ($routes) {
         $routes->post('kartu/(:num)', 'Admin\Download::kartu/$1');

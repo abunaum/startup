@@ -3,15 +3,15 @@
 namespace App\Controllers\Toko;
 
 use App\Controllers\BaseController;
-use App\Libraries\WaApiLibrary;
+use App\Libraries\TeleApiLibrary;
 use App\Libraries\Itemlibrary;
 
 class Fitur extends BaseController
 {
-    public $walib;
+    public $telelib;
     public function __construct()
     {
-        $this->walib = new WaApiLibrary;
+        $this->telelib = new TeleApiLibrary;
         $this->getitem = new Itemlibrary;
     }
 
@@ -112,26 +112,22 @@ class Fitur extends BaseController
             'kartu' => $namakartu,
             'selfi' => $namaselfi
         ]);
-
+        $admin = $this->role->admin()->findAll();
+        foreach ($admin as $admin) {
+            $id_admin = $admin['user_id'];
+            $db = \Config\Database::connect();
+            $builder = $db->table('users');
+            $builder->where('id', $id_admin);
+            $builder->where('telecode', 'valid');
+            $adm = $builder->get()->getFirstRow();
+            $chatId = $adm->teleid;
+            $pesan = 'username : ' . user()->username . '%0A Toko : ' . $tokodb->username . '%0A mengajukan aktivasi toko';
+            $this->telelib->kirimpesan($chatId, $pesan);
+        }
         $this->users->save([
             'id' => user()->id,
             'status_toko' => 2
         ]);
-        $koneksiwa = $this->walib->cekkoneksi();
-        if ($koneksiwa != 'error') {
-            $admin = $this->role->admin()->findAll();
-            foreach ($admin as $admin) {
-                $id_admin = $admin['user_id'];
-                $db = \Config\Database::connect();
-                $builder = $db->table('users');
-                $builder->where('id', $id_admin);
-                $builder->where('wa_hash', 'valid');
-                $adm = $builder->get()->getFirstRow();
-                $wa = $adm->whatsapp;
-                $pesan = $wa . '&message=username : ' . user()->username . '%0A Toko : ' . $tokodb->username . '%0A mengajukan aktivasi toko';
-                $this->walib->sendwasingle($wa, $pesan);
-            }
-        }
         session()->setFlashdata('pesan', 'Toko berhasil meminta aktivasi');
         return redirect()->to(base_url('toko'));
     }

@@ -4,16 +4,16 @@ namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
 use App\Libraries\Itemlibrary;
-use App\Libraries\WaApiLibrary;
+use App\Libraries\TeleApiLibrary;
 use CodeIgniter\API\ResponseTrait;
 
 class toko extends BaseController
 {
-    public $walib;
+    public $telelib;
 
     public function __construct()
     {
-        $this->walib = new WaApiLibrary();
+        $this->telelib = new TeleApiLibrary();
         $this->getitem = new Itemlibrary();
     }
 
@@ -111,20 +111,17 @@ class toko extends BaseController
             'stok' => $stok,
         ]);
 
-        $koneksiwa = $this->walib->cekkoneksi();
-        if ($koneksiwa != 'error') {
-            $admin = $this->role->admin()->findAll();
-            foreach ($admin as $admin) {
-                $id_admin = $admin['user_id'];
-                $db = \Config\Database::connect();
-                $builder = $db->table('users');
-                $builder->where('id', $id_admin);
-                $builder->where('wa_hash', 'valid');
-                $adm = $builder->get()->getFirstRow();
-                $wa = $adm->whatsapp;
-                $pesan = user()->username . ' %0AToko : ' . $toko->username . ' %0Amenambah produk :' . $nama . ' %0Aharga : ' . $harga;
-                $this->walib->sendwasingle($wa, $pesan);
-            }
+        $admin = $this->role->admin()->findAll();
+        foreach ($admin as $admin) {
+            $id_admin = $admin['user_id'];
+            $db = \Config\Database::connect();
+            $builder = $db->table('users');
+            $builder->where('id', $id_admin);
+            $builder->where('telecode', 'valid');
+            $adm = $builder->get()->getFirstRow();
+            $chatId = $adm->teleid;
+            $pesan = user()->username . ' %0AToko : ' . $toko->username . ' %0Amenambah produk :' . $nama . ' %0Aharga : ' . $harga;
+            $this->telelib->kirimpesan($chatId, $pesan);
         }
         session()->setFlashdata('pesan', 'Produk berhasil di tambah');
         return redirect()->to(base_url('user/toko/produk'));

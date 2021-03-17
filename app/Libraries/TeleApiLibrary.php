@@ -10,7 +10,7 @@ class TeleApiLibrary extends BaseController
     {
         $token = '1626928610:AAE_LM4EFPn4i1qmyIvEnPewYQyCpqIWLbc';
         $alamat = "https://api.telegram.org/bot$token";
-        $url = "$alamat/sendMessage?chat_id=$chatId&text=$pesan&parse_mode=HTML";
+        $url = $alamat . '/sendMessage?chat_id=' . $chatId . '&text=' . $pesan;
         file_get_contents($url);
     }
 }

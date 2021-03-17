@@ -17,13 +17,13 @@
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <td>Whatsapp</td>
-                                    <?php if ($toko->wa_hash != 'valid') : ?>
+                                    <td>Telegram ID</td>
+                                    <?php if ($toko->telecode != 'valid') : ?>
                                         <td>
-                                            <span class="badge badge-pill badge-danger">Belum verifikasi WA</span>
+                                            <span class="badge badge-pill badge-danger">Belum verifikasi Telegram</span>
                                         </td>
                                     <?php else : ?>
-                                        <td><?= $toko->whatsapp; ?></td>
+                                        <td><?= $toko->teleid; ?></td>
                                     <?php endif; ?>
                                 </tr>
                                 <tr>

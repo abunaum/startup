@@ -40,7 +40,7 @@ class notifikasi extends BaseController
     public function pasangtele()
     {
         if (!$this->validate([
-            'teleid' => 'required|is_natural_no_zero',
+            'teleid' => 'required|is_natural_no_zero'
         ])) {
             session()->setFlashdata('error', 'Gagal memverifikasi telegram, Coba lagi.');
             return redirect()->to(base_url('user/notifikasi'))->withInput();
@@ -74,7 +74,7 @@ class notifikasi extends BaseController
     public function ubahtele()
     {
         if (!$this->validate([
-            'teleid' => 'required|is_natural_no_zero',
+            'teleid' => 'required|is_natural_no_zero'
         ])) {
             session()->setFlashdata('error', 'Gagal memverifikasi telegram, Coba lagi.');
             return redirect()->to(base_url('user/notifikasi'))->withInput();

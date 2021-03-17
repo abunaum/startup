@@ -15,7 +15,7 @@
                         <div class="modal-body">
                             <h4>Telegram ID anda <?= $tele; ?></h4>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control <?= ($validation->hasError('kode')) ? 'is-invalid' : '' ?>" placeholder="xxxxxxxx" aria-label="kode" name="kode" id="kode" aria-describedby="basic-addon1" value="<?= old('kode') ?>">
+                                <input type="text" class="form-control <?= ($validation->hasError('kode')) ? 'is-invalid' : '' ?>" placeholder="xxxxxxxx" aria-label="kode" name="kode" id="kode" aria-describedby="basic-addon1" value="<?= old('kode') ?>" style="text-transform:uppercase">
                                 <div class="invalid-feedback">
                                     <?= $validation->getError('kode'); ?>
                                 </div>
