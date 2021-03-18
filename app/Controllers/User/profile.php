@@ -116,7 +116,7 @@ class profile extends BaseController
         ]);
         if ($user->telecode == 'valid') {
             $chatId = $user->teleid;
-            $pesan = $user->username . ' %0AAnda berhasil mengubah password';
+            $pesan = $user->username . '\nAnda berhasil mengubah password';
             $this->telelib->kirimpesan($chatId, $pesan);
         }
         session()->setFlashdata('pesan', 'Password berhasil di ubah');

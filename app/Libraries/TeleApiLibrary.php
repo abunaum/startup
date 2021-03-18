@@ -9,7 +9,8 @@ class TeleApiLibrary extends BaseController
     public function kirimpesan($chatId, $pesan)
     {
         $token = '1626928610:AAE_LM4EFPn4i1qmyIvEnPewYQyCpqIWLbc';
-        $pesanencode = urlencode($pesan);
+        $pesan1 = urlencode($pesan);
+        $pesan2 = str_replace('%5Cn', ' %0A', $pesan1);
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://api.telegram.org/bot$token/sendMessage",
@@ -20,7 +21,7 @@ class TeleApiLibrary extends BaseController
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => "chat_id=$chatId&text=$pesanencode",
+            CURLOPT_POSTFIELDS => "chat_id=$chatId&text=$pesan2",
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/x-www-form-urlencoded'
             ),

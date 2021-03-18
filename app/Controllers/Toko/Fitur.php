@@ -113,16 +113,17 @@ class Fitur extends BaseController
             'selfi' => $namaselfi
         ]);
         $admin = $this->role->admin()->findAll();
+
+        // dd($admin);
         foreach ($admin as $admin) {
             $id_admin = $admin['user_id'];
-            $db = \Config\Database::connect();
-            $builder = $db->table('users');
-            $builder->where('id', $id_admin);
-            $builder->where('telecode', 'valid');
-            $adm = $builder->get()->getFirstRow();
-            $chatId = $adm->teleid;
-            $pesan = 'username : ' . user()->username . '%0A Toko : ' . $tokodb->username . '%0A mengajukan aktivasi toko';
-            $this->telelib->kirimpesan($chatId, $pesan);
+            $adm = (object)$this->users->where('id', $id_admin)->first();
+
+            if ($adm->telecode == 'valid') {
+                $chatId = $adm->teleid;
+                $pesan = 'username : ' . user()->username . '\n Toko : ' . $tokodb->username . '\n mengajukan aktivasi toko';
+                $this->telelib->kirimpesan($chatId, $pesan);
+            }
         }
         $this->users->save([
             'id' => user()->id,

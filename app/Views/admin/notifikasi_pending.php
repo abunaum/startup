@@ -14,8 +14,8 @@
                     <form class="g-3 needs-validation mt-3" action="<?= base_url('admin/veriftele'); ?>" method="post">
                         <?= csrf_field() ?>
                         <div class="modal-body">
+                            <h4>Telegram ID anda <?= $tele; ?></h4>
                             <div class="input-group mb-3">
-                                <h4>Telegram ID anda <?= $tele; ?></h4>
                                 <input type="text" class="form-control <?= ($validation->hasError('kode')) ? 'is-invalid' : '' ?>" placeholder="xxxxxxxx" aria-label="kode" name="kode" id="kode" aria-describedby="basic-addon1" value="<?= old('kode') ?>" style="text-transform:uppercase">
                                 <div class="invalid-feedback">
                                     <?= $validation->getError('kode'); ?>

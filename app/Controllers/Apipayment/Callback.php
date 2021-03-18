@@ -67,7 +67,7 @@ class Callback extends BaseController
                 ]);
                 if ($user->telecode == 'valid') {
                     $chatId = $user->teleid;
-                    $pesan = $user->username . ' %0AAnda berhasil isi saldo Rp. ' . number_format($transaksi->nominal) . ' %0ATotal saldo anda sekarang : Rp. ' . number_format($user->balance + $transaksi->nominal);
+                    $pesan = $user->username . '\nAnda berhasil isi saldo Rp. ' . number_format($transaksi->nominal) . '\nTotal saldo anda sekarang : Rp. ' . number_format($user->balance + $transaksi->nominal);
                     $this->telelib->kirimpesan($chatId, $pesan);
                 }
             }

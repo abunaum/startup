@@ -120,14 +120,14 @@ class toko extends BaseController
             $builder->where('telecode', 'valid');
             $adm = $builder->get()->getFirstRow();
             $chatId = $adm->teleid;
-            $pesan = user()->username . ' %0AToko : ' . $toko->username . ' %0Amenambah produk :' . $nama . ' %0Aharga : ' . $harga;
+            $pesan = user()->username . '\nToko : ' . $toko->username . '\nmenambah produk :' . $nama . '\nharga : ' . $harga;
             $this->telelib->kirimpesan($chatId, $pesan);
         }
         session()->setFlashdata('pesan', 'Produk berhasil di tambah');
         return redirect()->to(base_url('user/toko/produk'));
     }
 
-    public function produkdetail($id)
+    public function produkdetail($id = 0)
     {
         $produk = $this->produk->where('id', $id)->get()->getFirstRow();
         $item = $this->getitem->getsub();

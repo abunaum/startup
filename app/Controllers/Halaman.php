@@ -66,5 +66,24 @@ class Halaman extends BaseController
         return view('halaman/beranda', $data);
     }
 
+    public function produkdetail($id = 0)
+    {
+        $item = $this->getitem->getsub();
+        $produk = $this->produk;
+        $produk = (object)$produk->detail($id)->first();
+        $produktoko = $this->produk->produktoko($produk->owner)->findAll();
+        // dd($produktoko);
+
+        $data = [
+            'judul' => "Produk | $this->namaweb",
+            'item' => $item,
+            'produk' => $produk,
+            'validation' => \Config\Services::validation(),
+            'produktoko' => $produktoko
+        ];
+
+        return view('halaman/produkdetail', $data);
+    }
+
     //--------------------------------------------------------------------
 }

@@ -36,7 +36,7 @@
                 <div class="modal-body">
                     <p>Untuk mendapatkan Telegram ID silahkan chat <a href="https://t.me/TokoLancer_bot" target="_blank" rel="noopener noreferrer">@TokoLancer_bot</a></p>
                     <div class="input-group mb-3">
-                        <input type="number" class="form-control <?= ($validation->hasError('teleid')) ? 'is-invalid' : '' ?>" placeholder="821xxxxxxxx" aria-label="teleid" name="teleid" id="teleid" aria-describedby="basic-addon1" value="<?= old('teleid') ?>">
+                        <input type="number" class="form-control <?= ($validation->hasError('teleid')) ? 'is-invalid' : '' ?>" placeholder="xxxxxxxx" aria-label="teleid" name="teleid" id="teleid" aria-describedby="basic-addon1" value="<?= old('teleid') ?>">
                         <div class="invalid-feedback">
                             <?= $validation->getError('teleid'); ?>
                         </div>

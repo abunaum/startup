@@ -230,7 +230,7 @@ class Admin extends BaseController
         ]);
         if ($user->telecode == 'valid') {
             $chatId = $user->teleid;
-            $pesan = $user->username . ' %0AAnda berhasil mengubah password';
+            $pesan = $user->username . '\nAnda berhasil mengubah password';
             $this->telelib->kirimpesan($chatId, $pesan);
         }
         session()->setFlashdata('pesan', 'Password berhasil di ubah');
@@ -248,7 +248,7 @@ class Admin extends BaseController
         if ($user->telecode == '') {
             return view('admin/notifikasi_belum', $data);
         } else if ($user->telecode != 'valid') {
-            $data['teleid'] = $user->teleid;
+            $data['tele'] = $user->teleid;
             return view('admin/notifikasi_pending', $data);
         } else {
             return view('admin/notifikasi_sudah', $data);

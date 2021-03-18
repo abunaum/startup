@@ -57,7 +57,7 @@ class Toko extends BaseController
         $user = $user->where('id', $toko->userid)->get()->getFirstRow();
         if ($user->telecode == 'valid') {
             $chatId = $user->teleid;
-            $pesan = $user->username . ' %0AMaaf aktivasi toko anda di tolak karena data yang dikirim tidak valid atau kurang jelas. Silahkan aktivasi ulang%0A' . base_url('toko');
+            $pesan = $user->username . '\nMaaf aktivasi toko anda di tolak karena data yang dikirim tidak valid atau kurang jelas. Silahkan aktivasi ulang\n' . base_url('toko');
             $this->telelib->kirimpesan($chatId, $pesan);
         }
 
@@ -90,7 +90,7 @@ class Toko extends BaseController
 
         if ($user->telecode == 'valid') {
             $chatId = $user->teleid;
-            $pesan = $user->username . ' %0AMantap, Toko anda telah di aktivasi, sekarang anda bisa berjualan di ' . base_url();
+            $pesan = $user->username . '\nMantap, Toko anda telah di aktivasi, sekarang anda bisa berjualan di ' . base_url();
             $this->telelib->kirimpesan($chatId, $pesan);
             session()->setFlashdata('pesan', 'Toko berhasil ACC');
         }
@@ -98,6 +98,10 @@ class Toko extends BaseController
         $usergass->save([
             'id' => $user->id,
             'status_toko' => 4
+        ]);
+        $this->toko->save([
+            'id' => $toko->id,
+            'status' => 1
         ]);
         return redirect()->to(base_url('admin/toko/pengajuan'));
     }

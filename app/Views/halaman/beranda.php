@@ -9,7 +9,7 @@
                     <div class="products d-flex justify-content-center">
                         <?php foreach ($produk as $p) : ?>
                             <div class="product">
-                                <a class="woocommerce-LoopProduct-link woocommerce-loop-product__link" href="single-product-fullwidth.html">
+                                <a class="woocommerce-LoopProduct-link woocommerce-loop-product__link" href="<?= base_url('produk/detail') . '/' . $p['id'] ?>">
                                     <img style="height: 150px; width: 150px;" class="img-thumbnail" src="<?= base_url(); ?>/img/produk/<?= $p['gambar']; ?>" alt="Gambar">
                                     <span class="price">
                                         <span class="woocommerce-Price-amount amount">
@@ -21,9 +21,13 @@
                                 </a>
                                 <!-- .woocommerce-LoopProduct-link -->
                                 <div class="hover-area flex-row justify-content-center">
-                                    <a class="button" href="cart.html">Detail</a>
+                                    <a class="button" href="<?= base_url('produk/detail') . '/' . $p['id'] ?>">Detail</a>
                                     <?php if ($p['status'] == 1) : ?>
-                                        <a class="button" href="cart.html">Beli</a>
+                                        <?php if (logged_in() == true) : ?>
+                                            <a class="button">Beli</a>
+                                        <?php else : ?>
+                                            <a class="button">Login & Beli</a>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
                                 <!-- .hover-area -->

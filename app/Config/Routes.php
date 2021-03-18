@@ -33,8 +33,8 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 
 // start maintenance
-//$routes->get('(:any)', 'Home::index');
-//$routes->post('(:any)', 'Home::index');
+// $routes->get('(:any)', 'Home::index');
+// $routes->post('(:any)', 'Home::index');
 // end maintenance
 
 $routes->get('/', 'Halaman::index');
@@ -112,9 +112,14 @@ $routes->group('user', ['filter' => 'login'], function ($routes) {
         $routes->get('tambah', 'User\toko::tambah');
         $routes->post('tambahproduk', 'User\toko::tambahproduk');
     });
+    $routes->group('order', function ($routes) {
+        $routes->get('produk', 'User\order::order');
+    });
 });
+$routes->post('order/(:num)', 'User\order::produk/$1');
 $routes->group('produk', function ($routes) {
     $routes->get('(:num)', 'Halaman::produk/$1');
+    $routes->get('detail/(:num)', 'Halaman::produkdetail/$1');
 });
 $routes->get('/penjual', 'Penjual\Toko::index');
 $routes->post('api/proses/gasspol/mantap/callback', 'Apipayment\Callback::callback');

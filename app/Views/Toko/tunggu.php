@@ -11,7 +11,7 @@
             </div>
             Toko anda sedang dalam proses peninjauan, harap menunggu toko anda di aktivasi.
             <br>
-            Silahkan aktifkan fitur <a href="<?= base_url('user/notifikasi') ?>" style="color:#1e7e34;">notifikasi whatsapp</a> agar anda menerima notifikasi saat toko anda sudah di aktivasi.
+            Silahkan aktifkan fitur <a href="<?= base_url('user/notifikasi') ?>" style="color:#1e7e34;">notifikasi Telegram</a> agar anda menerima notifikasi saat toko anda sudah di aktivasi.
         </div>
     </div>
 </center>
