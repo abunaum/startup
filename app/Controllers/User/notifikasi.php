@@ -50,14 +50,19 @@ class notifikasi extends BaseController
         $karakter = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $code = substr(str_shuffle($karakter), 0, 8);
         $pesan = "Kode anda adalah : $code";
-        $this->telelib->kirimpesan($chatid, $pesan);
-        $this->users->save([
-            'id' => user()->id,
-            'teleid' => $chatid,
-            'telecode' => $code
-        ]);
-        session()->setFlashdata('pesan', 'Kode OTP berhasil dikirim ke Telegram.');
-        return redirect()->to(base_url('user/notifikasi'));
+        $hasiltele = $this->telelib->kirimpesan($chatid, $pesan);
+        if ($hasiltele == 'sukses') {
+            $this->users->save([
+                'id' => user()->id,
+                'teleid' => $chatid,
+                'telecode' => $code
+            ]);
+            session()->setFlashdata('pesan', 'Kode OTP berhasil dikirim ke Telegram.');
+            return redirect()->to(base_url('user/notifikasi'));
+        } else {
+            session()->setFlashdata('error', 'Kode OTP gagal dikirim, pastikan sudah chat @TokoLancer_bot dan masukkan ID dengan benar');
+            return redirect()->to(base_url('user/notifikasi'));
+        }
     }
 
     public function teleulang()
@@ -84,19 +89,24 @@ class notifikasi extends BaseController
         $karakter = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $code = substr(str_shuffle($karakter), 0, 8);
         $pesan = "Kode anda adalah : $code";
-        $this->telelib->kirimpesan($chatid, $pesan);
-        $this->users->save([
-            'id' => user()->id,
-            'teleid' => $chatid,
-            'telecode' => $code
-        ]);
-        session()->setFlashdata('pesan', 'ID berhasil di ubah dankode OTP berhasil dikirim ke Telegram.');
-        return redirect()->to(base_url('user/notifikasi'));
+        $hasiltele = $this->telelib->kirimpesan($chatid, $pesan);
+        if ($hasiltele == 'sukses') {
+            $this->users->save([
+                'id' => user()->id,
+                'teleid' => $chatid,
+                'telecode' => $code
+            ]);
+            session()->setFlashdata('pesan', 'ID berhasil di ubah dan kode OTP berhasil dikirim ke Telegram.');
+            return redirect()->to(base_url('user/notifikasi'));
+        } else {
+            session()->setFlashdata('error', 'Kode OTP gagal dikirim, pastikan sudah chat @TokoLancer_bot dan masukkan ID dengan benar');
+            return redirect()->to(base_url('user/notifikasi'));
+        }
     }
 
     public function veriftele()
     {
-        $kode = $this->request->getVar('kode');
+        $kode = strtoupper($this->request->getVar('kode'));
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $kodeuser = $user->telecode;
         if ($kode != $kodeuser) {
