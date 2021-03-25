@@ -16,8 +16,8 @@ class Migrate1 extends Migration
 			'user_image'       => ['type' => 'varchar', 'constraint' => 30, 'default' => 'default.svg'],
 			'status_toko'      => ['type' => 'tinyint', 'constraint' => 2, 'null' => 0, 'default' => 0],
 			'balance'			=> ['type' => 'int', 'constraint' => 255, 'null' => 0, 'default' => 0],
-			'whatsapp'    => ['type' => 'varchar', 'constraint' => 14],
-			'wa_hash'    => ['type' => 'varchar', 'constraint' => 32],
+			'teleid'    => ['type' => 'varchar', 'constraint' => 14],
+			'telecode'    => ['type' => 'varchar', 'constraint' => 32],
 			'password_hash'    => ['type' => 'varchar', 'constraint' => 255],
 			'reset_hash'       => ['type' => 'varchar', 'constraint' => 255, 'null' => true],
 			'reset_at'         => ['type' => 'datetime', 'null' => true],
@@ -289,6 +289,25 @@ class Migrate1 extends Migration
 		$this->forge->addForeignKey('jenis', 'sub_item', 'id', false, 'CASCADE');
 		$this->forge->addForeignKey('owner', 'users', 'id', false, 'CASCADE');
 		$this->forge->createTable('produk', true);
+
+		/*
+         * keranjang
+         */
+		$this->forge->addField([
+			'id'		=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+			'buyer'	 	=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+			'produk'		=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+			'jumlah'	 	=> ['type' => 'int', 'constraint' => 11],
+			'pesan'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'created_at' => ['type' => 'datetime', 'null' => true],
+			'updated_at' => ['type' => 'datetime', 'null' => true],
+			'deleted_at' => ['type' => 'datetime', 'null' => true],
+		]);
+
+		$this->forge->addKey('id', true);
+		$this->forge->addForeignKey('buyer', 'users', 'id', false, 'CASCADE');
+		$this->forge->addForeignKey('produk', 'produk', 'id', false, 'CASCADE');
+		$this->forge->createTable('keranjang', true);
 	}
 
 	public function down()
@@ -307,6 +326,8 @@ class Migrate1 extends Migration
 			$this->forge->dropForeignKey('transaksi_saldo', 'transaksi_saldo_owner_foreign');
 			$this->forge->dropForeignKey('produk', 'produk_jenis_foreign');
 			$this->forge->dropForeignKey('produk', 'produk_owner_foreign');
+			$this->forge->dropForeignKey('keranjang', 'keranjang_buyer_foreign');
+			$this->forge->dropForeignKey('keranjang', 'keranjang_produk_foreign');
 		}
 
 		$this->forge->dropTable('users', true);
@@ -325,5 +346,6 @@ class Migrate1 extends Migration
 		$this->forge->dropTable('subitem', true);
 		$this->forge->dropTable('toko', true);
 		$this->forge->dropTable('transaksi_saldo', true);
+		$this->forge->dropTable('keranjang', true);
 	}
 }

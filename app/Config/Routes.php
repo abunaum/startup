@@ -33,8 +33,8 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 
 // start maintenance
-//$routes->get('(:any)', 'Home::index');
-//$routes->post('(:any)', 'Home::index');
+// $routes->get('(:any)', 'Home::index');
+// $routes->post('(:any)', 'Home::index');
 // end maintenance
 
 $routes->get('/', 'Halaman::index');
@@ -44,11 +44,10 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('', 'Admin\Admin::index');
     $routes->get('profile', 'Admin\Admin::profile');
     $routes->get('notifikasi', 'Admin\Admin::notifikasi');
-    $routes->post('notifikasi', 'Admin\Admin::tambahwa');
-    $routes->post('whatsapp', 'Admin\Admin::whatsappverif');
-    $routes->post('ubahwa', 'Admin\Admin::ubahwhatsapp');
-    $routes->get('waulang', 'Admin\Admin::whatsapplagi');
-    $routes->post('verifwa', 'Admin\Admin::verifwa');
+    $routes->post('notifikasi', 'Admin\Admin::tambahtele');
+    $routes->post('ubahtele', 'Admin\Admin::ubahtele');
+    $routes->get('teleulang', 'Admin\Admin::telelagi');
+    $routes->post('veriftele', 'Admin\Admin::veriftele');
     $routes->post('ubahpassword', 'Admin\Admin::ubahpassword');
     $routes->group('download', function ($routes) {
         $routes->post('kartu/(:num)', 'Admin\Download::kartu/$1');
@@ -89,13 +88,13 @@ $routes->group('toko', ['filter' => 'login'], function ($routes) {
 });
 $routes->group('user', ['filter' => 'login'], function ($routes) {
     $routes->get('notifikasi', 'User\notifikasi::index');
+    $routes->post('notifikasi', 'User\notifikasi::pasangtele');
+    $routes->get('notifikasi/kirimteleulang', 'User\notifikasi::teleulang');
+    $routes->post('notifikasi/ubahtele', 'User\notifikasi::ubahtele');
+    $routes->post('notifikasi/veriftele', 'User\notifikasi::veriftele');
     $routes->get('profile', 'User\profile::index');
     $routes->post('ubahdata', 'User\profile::ubahdata');
     $routes->post('ubahpassword', 'User\profile::ubahpassword');
-    $routes->get('notifikasi/kirimwhatsappulang', 'User\notifikasi::waulang');
-    $routes->post('notifikasi/ubahwa', 'User\notifikasi::ubahwa');
-    $routes->post('notifikasi/verifwa', 'User\notifikasi::verifwa');
-    $routes->post('notifikasi', 'User\notifikasi::pasangwa');
     $routes->get('saldo', 'User\saldo::index');
     $routes->post('tambahsaldo', 'User\saldo::tambah');
     $routes->get('saldo/topup', 'User\saldo::topup');
@@ -113,9 +112,14 @@ $routes->group('user', ['filter' => 'login'], function ($routes) {
         $routes->get('tambah', 'User\toko::tambah');
         $routes->post('tambahproduk', 'User\toko::tambahproduk');
     });
+    $routes->group('order', function ($routes) {
+        $routes->get('produk', 'User\order::order');
+    });
 });
+$routes->post('order/(:num)', 'User\order::produk/$1');
 $routes->group('produk', function ($routes) {
     $routes->get('(:num)', 'Halaman::produk/$1');
+    $routes->get('detail/(:num)', 'Halaman::produkdetail/$1');
 });
 $routes->get('/penjual', 'Penjual\Toko::index');
 $routes->post('api/proses/gasspol/mantap/callback', 'Apipayment\Callback::callback');

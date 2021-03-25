@@ -3,14 +3,14 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
-use App\Libraries\WaApiLibrary;
+use App\Libraries\TeleApiLibrary;
 
 class Toko extends BaseController
 {
-    public $walib;
+    public $telelib;
     public function __construct()
     {
-        $this->walib = new WaApiLibrary;
+        $this->telelib = new TeleApiLibrary;
     }
 
     public function pengajuan()
@@ -35,8 +35,8 @@ class Toko extends BaseController
         $toko = new $this->toko;
         $toko->join('users', 'users.id = toko.userid', 'LEFT');
         $toko->select('toko.*');
-        $toko->select('users.wa_hash');
-        $toko->select('users.whatsapp');
+        $toko->select('users.telecode');
+        $toko->select('users.teleid');
         $toko->select('users.username as username_user');
         $toko->where('status_toko', 2);
         $toko->where('toko.id', $id);
@@ -55,16 +55,10 @@ class Toko extends BaseController
         $toko = $toko->where('id', $id)->get()->getFirstRow();
         $user = new $this->users;
         $user = $user->where('id', $toko->userid)->get()->getFirstRow();
-        if ($user->wa_hash == 'valid') {
-            $koneksiwa = $this->walib->cekkoneksi();
-            if ($koneksiwa != 'error') {
-                $wa = $user->whatsapp;
-                $pesan = $user->username . ' %0AMaaf aktivasi toko anda di tolak karena data yang dikirim tidak valid atau kurang jelas. Silahkan aktivasi ulang%0A' . base_url('toko');
-                $this->walib->sendwasingle($wa, $pesan);
-            } else {
-                session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
-                return redirect()->to(base_url('admin/toko/detail/' . $toko->id));
-            }
+        if ($user->telecode == 'valid') {
+            $chatId = $user->teleid;
+            $pesan = $user->username . '\nMaaf aktivasi toko anda di tolak karena data yang dikirim tidak valid atau kurang jelas. Silahkan aktivasi ulang\n' . base_url('toko');
+            $this->telelib->kirimpesan($chatId, $pesan);
         }
 
         $usergass = new $this->users;
@@ -94,23 +88,21 @@ class Toko extends BaseController
         $user = new $this->users;
         $user = $user->where('id', $toko->userid)->get()->getFirstRow();
 
-        if ($user->wa_hash == 'valid') {
-            $koneksiwa = $this->walib->cekkoneksi();
-            if ($koneksiwa != 'error') {
-                $wa = $user->whatsapp;
-                $pesan = $user->whatsapp . ' %0AMantap, Toko anda telah di aktivasi, sekarang anda bisa berjualan di ' . base_url();
-                $this->walib->sendwasingle($wa, $pesan);
-            } else {
-                session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
-                return redirect()->to(base_url('admin/toko/detail/' . $toko->id));
-            }
+        if ($user->telecode == 'valid') {
+            $chatId = $user->teleid;
+            $pesan = $user->username . '\nMantap, Toko anda telah di aktivasi, sekarang anda bisa berjualan di ' . base_url();
+            $this->telelib->kirimpesan($chatId, $pesan);
+            session()->setFlashdata('pesan', 'Toko berhasil ACC');
         }
         $usergass = new $this->users;
         $usergass->save([
             'id' => $user->id,
             'status_toko' => 4
         ]);
-        session()->setFlashdata('pesan', 'Toko berhasil ACC');
+        $this->toko->save([
+            'id' => $toko->id,
+            'status' => 1
+        ]);
         return redirect()->to(base_url('admin/toko/pengajuan'));
     }
     //--------------------------------------------------------------------

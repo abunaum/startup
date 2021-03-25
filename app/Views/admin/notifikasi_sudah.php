@@ -12,9 +12,9 @@
                 <div class="card w-75">
                     <div class="card-body">
                         <h5 class="card-title">Mantap</h5>
-                        <p class="card-text">Notifikasi terhubung ke nomor whatsapp <?= user()->whatsapp ?></p>
-                        <button type="button" class="btn btn-danger mb-3" data-toggle="modal" data-target="#waModal">
-                            Ubah Nomor
+                        <p class="card-text">Notifikasi terhubung ke nomor Telegram ID <?= user()->teleid ?></p>
+                        <button type="button" class="btn btn-danger mb-3" data-toggle="modal" data-target="#teleModal">
+                            Ubah ID
                         </button>
                     </div>
                 </div>
@@ -22,23 +22,23 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="waModal" tabindex="-1" aria-labelledby="waModalLabel" aria-hidden="true">
+<div class="modal fade" id="teleModal" tabindex="-1" aria-labelledby="teleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="waModalLabel">Ubah nomor Whatsapp</h5>
+                <h5 class="modal-title" id="teleModalLabel">Ubah Telegram</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <center>
-                    <form class="row g-3 needs-validation" action="<?= base_url('admin/ubahwa'); ?>" method="post" novalidate>
+                    <form class="row g-3 needs-validation" action="<?= base_url('admin/ubahtele'); ?>" method="post" novalidate>
                         <?= csrf_field() ?>
                         <div class="modal-body">
+                            <p>Untuk mendapatkan Telegram ID silahkan chat <a href="https://t.me/TokoLancer_bot" target="_blank" rel="noopener noreferrer">@TokoLancer_bot</a></p>
                             <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon1">+62</span>
-                                <input type="number" class="form-control <?= ($validation->hasError('wa')) ? 'is-invalid' : '' ?>" placeholder="821xxxxxxxx" aria-label="wa" name="wa" id="wa" aria-describedby="basic-addon1" value="<?= old('wa') ?>">
+                                <input type="number" class="form-control <?= ($validation->hasError('teleid')) ? 'is-invalid' : '' ?>" placeholder="Telegram ID" aria-label="teleid" name="teleid" id="teleid" aria-describedby="basic-addon1" value="<?= old('teleid') ?>">
                                 <div class="invalid-feedback">
-                                    <?= $validation->getError('wa'); ?>
+                                    <?= $validation->getError('teleid'); ?>
                                 </div>
                             </div>
                         </div>

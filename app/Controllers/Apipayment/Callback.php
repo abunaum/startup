@@ -65,17 +65,13 @@ class Callback extends BaseController
                     'id' => $user->id,
                     'balance' => $user->balance + $transaksi->nominal,
                 ]);
-                if ($user->wa_hash == 'valid') {
-                    $koneksiwa = $this->walib->cekkoneksi();
-                    if ($koneksiwa != 'error') {
-                        $wa = $user->whatsapp;
-                        $pesan = $user->username . ' %0AAnda berhasil isi saldo Rp. ' . number_format($transaksi->nominal) . ' %0ATotal saldo anda sekarang : Rp. ' . number_format($user->balance + $transaksi->nominal);
-                        $this->walib->sendwasingle($wa, $pesan);
-                    }
+                if ($user->telecode == 'valid') {
+                    $chatId = $user->teleid;
+                    $pesan = $user->username . '\nAnda berhasil isi saldo Rp. ' . number_format($transaksi->nominal) . '\nTotal saldo anda sekarang : Rp. ' . number_format($user->balance + $transaksi->nominal);
+                    $this->telelib->kirimpesan($chatId, $pesan);
                 }
             }
         }
-
         echo json_encode(['success' => true]); // berikan respon yang sesuai
     }
 

@@ -11,7 +11,7 @@
                 <div class="card w-75">
                     <div class="card-body">
                         <h5 class="card-title">Ooops !</h5>
-                        <p class="card-text">Nomor Whatsapp belum di konfirmasi.</p>
+                        <p class="card-text">Telegram belum di konfirmasi.</p>
                         <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#tokoModal">
                             Konfirmasi Sekarang
                         </button>
@@ -24,18 +24,18 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <center>
-                                <h5 class="modal-title" id="tokoModalLabel">Konfirmasi Whatsapp</h5>
+                                <h5 class="modal-title" id="tokoModalLabel">Konfirmasi Telegram</h5>
                             </center>
                             <button type="button" class="iconify" data-icon="clarity:window-close-line" data-inline="false" data-width="24px" data-height="24px" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form class="g-3 needs-validation" action="<?= base_url('user/notifikasi'); ?>" method="post">
                             <?= csrf_field() ?>
                             <div class="modal-body">
+                                <p>Untuk mendapatkan Telegram ID silahkan chat <a href="https://t.me/TokoLancer_bot" target="_blank" rel="noopener noreferrer">@TokoLancer_bot</a></p>
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon1">+62</span>
-                                    <input type="number" class="form-control <?= ($validation->hasError('wa')) ? 'is-invalid' : '' ?>" placeholder="821xxxxxxxx" aria-label="wa" name="wa" id="wa" aria-describedby="basic-addon1" value="<?= old('wa') ?>">
+                                    <input type="number" class="form-control <?= ($validation->hasError('teleid')) ? 'is-invalid' : '' ?>" placeholder="Telegram Id" aria-label="teleid" name="teleid" id="teleid" aria-describedby="basic-addon1" value="<?= old('teleid') ?>">
                                     <div class="invalid-feedback">
-                                        <?= $validation->getError('wa'); ?>
+                                        <?= $validation->getError('teleid'); ?>
                                     </div>
                                 </div>
                             </div>

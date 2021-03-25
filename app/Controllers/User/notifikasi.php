@@ -3,15 +3,15 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
-use App\Libraries\WaApiLibrary;
+use App\Libraries\TeleApiLibrary;
 use App\Libraries\Itemlibrary;
 
 class notifikasi extends BaseController
 {
-    public $walib;
+    public $telelib;
     public function __construct()
     {
-        $this->walib = new WaApiLibrary;
+        $this->telelib = new TeleApiLibrary;
         $this->getitem = new Itemlibrary;
     }
 
@@ -27,104 +27,97 @@ class notifikasi extends BaseController
             'user' => $user,
             'validation' => \Config\Services::validation()
         ];
-        if ($user->whatsapp == null) {
+        if ($user->teleid == '') {
             return view('halaman/user/notifikasi_belum', $data);
-        } else if ($user->wa_hash != 'valid') {
-            $data['wa'] = $user->whatsapp;
+        } else if ($user->telecode != 'valid') {
+            $data['tele'] = $user->teleid;
             return view('halaman/user/notifikasi_verif', $data);
         } else {
             return view('halaman/user/notifikasi_sudah', $data);
         }
     }
 
-    public function pasangwa()
+    public function pasangtele()
     {
         if (!$this->validate([
-            'wa' => 'required|min_length[10]|max_length[13]'
+            'teleid' => 'required|is_natural_no_zero'
         ])) {
-            session()->setFlashdata('error', 'Gagal menambah nomor whatsapp, Coba lagi.');
+            session()->setFlashdata('error', 'Gagal memverifikasi telegram, Coba lagi.');
             return redirect()->to(base_url('user/notifikasi'))->withInput();
         }
 
-        $nowa = '0' . $this->request->getVar('wa');
-        $rand = substr(md5(openssl_random_pseudo_bytes(20)), -32);
-        $koneksiwa = $this->walib->cekkoneksi();
-        if ($koneksiwa != 'error') {
-            $wa = $nowa;
-            $pesan = 'kode anda adalah : ' . $rand;
-            $this->walib->sendwasingle($wa, $pesan);
+        $chatid = $this->request->getVar('teleid');
+        $karakter = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $code = substr(str_shuffle($karakter), 0, 8);
+        $pesan = "Kode anda adalah : $code";
+        $hasiltele = $this->telelib->kirimpesan($chatid, $pesan);
+        if ($hasiltele == 'sukses') {
+            $this->users->save([
+                'id' => user()->id,
+                'teleid' => $chatid,
+                'telecode' => $code
+            ]);
+            session()->setFlashdata('pesan', 'Kode OTP berhasil dikirim ke Telegram.');
+            return redirect()->to(base_url('user/notifikasi'));
         } else {
-            session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
+            session()->setFlashdata('error', 'Kode OTP gagal dikirim, pastikan sudah chat @TokoLancer_bot dan masukkan ID dengan benar');
             return redirect()->to(base_url('user/notifikasi'));
         }
-        $this->users->save([
-            'id' => user()->id,
-            'whatsapp' => $nowa,
-            'wa_hash' => $rand
-        ]);
-        session()->setFlashdata('pesan', 'Kode konfirmasi berhasil dikirim ke Whatsapp.');
-        return redirect()->to(base_url('user/notifikasi'));
     }
 
-    public function waulang()
+    public function teleulang()
     {
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
-        $koneksiwa = $this->walib->cekkoneksi();
-        if ($koneksiwa != 'error') {
-            $wa = $user->whatsapp;
-            $pesan = 'kode anda adalah : ' . $user->wa_hash;
-            $this->walib->sendwasingle($wa, $pesan);
-        } else {
-            session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
-            return redirect()->to(base_url('user/notifikasi'));
-        }
-        session()->setFlashdata('pesan', 'Kode konfirmasi berhasil dikirim ke Whatsapp.');
+        $chatid = $user->teleid;
+        $code = $user->telecode;
+        $pesan = "Kode anda adalah : $code";
+        $this->telelib->kirimpesan($chatid, $pesan);
+        session()->setFlashdata('pesan', 'Kode konfirmasi berhasil dikirim ke Telegram.');
         return redirect()->to(base_url('user/notifikasi'));
     }
 
-    public function ubahwa()
+    public function ubahtele()
     {
         if (!$this->validate([
-            'wa' => 'required|min_length[10]|max_length[13]'
+            'teleid' => 'required|is_natural_no_zero'
         ])) {
-            session()->setFlashdata('error', 'Gagal ubah nomor whatsapp, Coba lagi.');
+            session()->setFlashdata('error', 'Gagal memverifikasi telegram, Coba lagi.');
             return redirect()->to(base_url('user/notifikasi'))->withInput();
         }
 
-        $nowa = '0' . $this->request->getVar('wa');
-        $rand = substr(md5(openssl_random_pseudo_bytes(20)), -32);
-        $koneksiwa = $this->walib->cekkoneksi();
-        if ($koneksiwa != 'error') {
-            $wa = $nowa;
-            $pesan = 'kode anda adalah : ' . $rand;
-            $this->walib->sendwasingle($wa, $pesan);
+        $chatid = $this->request->getVar('teleid');
+        $karakter = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $code = substr(str_shuffle($karakter), 0, 8);
+        $pesan = "Kode anda adalah : $code";
+        $hasiltele = $this->telelib->kirimpesan($chatid, $pesan);
+        if ($hasiltele == 'sukses') {
+            $this->users->save([
+                'id' => user()->id,
+                'teleid' => $chatid,
+                'telecode' => $code
+            ]);
+            session()->setFlashdata('pesan', 'ID berhasil di ubah dan kode OTP berhasil dikirim ke Telegram.');
+            return redirect()->to(base_url('user/notifikasi'));
         } else {
-            session()->setFlashdata('error', 'Server Whatsapp bermasalah.');
+            session()->setFlashdata('error', 'Kode OTP gagal dikirim, pastikan sudah chat @TokoLancer_bot dan masukkan ID dengan benar');
             return redirect()->to(base_url('user/notifikasi'));
         }
-        $this->users->save([
-            'id' => user()->id,
-            'whatsapp' => $nowa,
-            'wa_hash' => $rand
-        ]);
-        session()->setFlashdata('pesan', 'Nomor Whatsapp berhasil di ubah dan Kode berhasil di kirim.');
-        return redirect()->to(base_url('user/notifikasi'));
     }
 
-    public function verifwa()
+    public function veriftele()
     {
-        $kode = $this->request->getVar('kode');
+        $kode = strtoupper($this->request->getVar('kode'));
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
-        $kodeuser = $user->wa_hash;
+        $kodeuser = $user->telecode;
         if ($kode != $kodeuser) {
             session()->setFlashdata('error', 'Kode yang anda masukkan tidak sesuai.');
             return redirect()->to(base_url('user/notifikasi'));
         } else {
             $this->users->save([
                 'id' => user()->id,
-                'wa_hash' => 'valid'
+                'telecode' => 'valid'
             ]);
-            session()->setFlashdata('pesan', 'Notifikasi Whatsapp sudah aktif.');
+            session()->setFlashdata('pesan', 'Notifikasi Telegram sudah aktif.');
             return redirect()->to(base_url('user/notifikasi'));
         }
     }

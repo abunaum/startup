@@ -4,15 +4,15 @@ namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
 use App\Libraries\Itemlibrary;
-use App\Libraries\WaApiLibrary;
+use App\Libraries\TeleApiLibrary;
 
 class profile extends BaseController
 {
-    public $walib;
+    public $telelib;
 
     public function __construct()
     {
-        $this->walib = new WaApiLibrary();
+        $this->telelib = new TeleApiLibrary;
         $this->getitem = new Itemlibrary();
     }
 
@@ -114,13 +114,10 @@ class profile extends BaseController
             'id' => $userid,
             'password_hash' => $passwordhash,
         ]);
-        if ($user->wa_hash == 'valid') {
-            $koneksiwa = $this->walib->cekkoneksi();
-            if ($koneksiwa != 'error') {
-                $wa = $user->whatsapp;
-                $pesan = $user->username . ' %0AAnda berhasil mengubah password';
-                $this->walib->sendwasingle($wa, $pesan);
-            }
+        if ($user->telecode == 'valid') {
+            $chatId = $user->teleid;
+            $pesan = $user->username . '\nAnda berhasil mengubah password';
+            $this->telelib->kirimpesan($chatId, $pesan);
         }
         session()->setFlashdata('pesan', 'Password berhasil di ubah');
         return redirect()->to(base_url('user/profile'));
