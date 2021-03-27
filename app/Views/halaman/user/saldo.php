@@ -52,11 +52,13 @@
                             <label for="channel">Metode Pembayaran</label>
                             <select class="form-control" aria-label="Default select example" id="channel" name="channel">
                                 <?php
-                                $datapembayaran = $paymentapi->getmerchant();
+                                $pembayaran = $paymentapi->getmerchantclosed();
                                 ?>
-                                <?php foreach ($datapembayaran as $dp) : ?>
-                                    <?php if (strpos($dp['name'], '(Open Payment)') != true) : ?>
-                                        <option value="<?= $dp['code']; ?>"><?= $dp['name']; ?></option>
+                                <?php foreach ($pembayaran as $p) : ?>
+                                    <?php if ($p['percent'] == '0.00') : ?>
+                                        <option value="<?= $p['code'] ?>"><?= $p['nama'] . ' (Fee = Rp.' . number_format($p['flat']) . ')' ?></option>
+                                    <?php else : ?>
+                                        <option value="<?= $p['code'] ?>"><?= $p['nama'] . ' (Fee = Rp.' . number_format($p['flat']) . ' + ' . $p['percent'] . ' %)' ?></option>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             </select>

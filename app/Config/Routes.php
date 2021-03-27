@@ -115,6 +115,9 @@ $routes->group('user', ['filter' => 'login'], function ($routes) {
     $routes->group('order', function ($routes) {
         $routes->get('produk', 'User\order::order');
         $routes->get('keranjang', 'User\order::keranjang');
+        $routes->delete('semuakeranjang', 'User\order::hapussemuakeranjang');
+        $routes->delete('keranjang/(:num)', 'User\order::hapuskeranjang/$1');
+        $routes->post('proses', 'User\order::proseskeranjang');
     });
 });
 $routes->post('order/(:num)', 'User\order::produk/$1');

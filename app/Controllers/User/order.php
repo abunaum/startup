@@ -81,17 +81,52 @@ class order extends BaseController
         $keranjang->select('produk.nama as nama_produk');
         $keranjang->select('produk.harga as harga_produk');
         $keranjang->select('produk.gambar as gambar_produk');
-        $keranjang->where('buyer', user()->id);
-        $keranjang = $keranjang->findAll();
-        // dd($keranjang);
+        $hasilkeranjang = $keranjang->where('buyer', user()->id);
+        $keranjang = $hasilkeranjang->findAll();
+        $totalkeranjang = $hasilkeranjang->countAllResults();
+        $harga = array_column($keranjang, 'harga_produk');
+        $totalharga = array_sum($harga);
+        $pembayaran = $this->apilib->getmerchantclosed();
         $data = [
             'judul' => "keranjang | $this->namaweb",
             'item' => $item,
             'keranjang' => $keranjang,
+            'totalharga' => $totalharga,
+            'pembayaran' => $pembayaran,
+            'totalkeranjang' => $totalkeranjang,
             'paymentapi' => $this->apilib,
-            'validation' => \Config\Services::validation(),
         ];
 
         return view('halaman/user/keranjang', $data);
+    }
+
+    public function hapuskeranjang($id = 0)
+    {
+        $keranjang = $this->keranjang->where('id', $id)->first();
+        if ($keranjang['buyer'] != user()->id) {
+            return redirect()->to(base_url('user/order/keranjang'));
+        } else {
+            $this->keranjang->delete($id);
+            $this->keranjang->where('id', $id)->purgeDeleted();
+        }
+        session()->setFlashdata('pesan', 'Produk berhasil dihapus dari keranjang');
+        return redirect()->to(base_url('user/order/keranjang'));
+    }
+
+    public function hapussemuakeranjang()
+    {
+        $this->keranjang->where('buyer', user()->id)->delete();
+        $this->keranjang->where('buyer', user()->id)->purgeDeleted();
+        session()->setFlashdata('pesan', 'Keranjang sudah kosong');
+        return redirect()->to(base_url('user/order/keranjang'));
+    }
+
+    public function proseskeranjang()
+    {
+        $channel = $this->request->getVar('metode');
+        if (!isset($channel)) {
+            return redirect()->to(base_url('user/order/keranjang'));
+        }
+        echo $channel;
     }
 }
