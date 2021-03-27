@@ -30,7 +30,7 @@
 
     <!-- Main CSS-->
     <link href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/mypanel/css/theme.css" rel="stylesheet" media="all">
-    <link rel="shortcut icon" href="<?= base_url(); ?>/tokolancer.ico">
+    <link rel="shortcut icon" href="<?= base_url('tokolancer.ico'); ?>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/swal2/sweetalert2.min.css">
 
 </head>

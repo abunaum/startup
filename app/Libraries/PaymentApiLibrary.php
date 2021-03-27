@@ -41,6 +41,58 @@ class PaymentApiLibrary extends BaseController
         curl_close($curl);
         return $datapembayaran;
     }
+
+    public function getmerchantclosed()
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_FRESH_CONNECT     => true,
+            CURLOPT_URL               => $this->urlpaymentchannel,
+            CURLOPT_RETURNTRANSFER    => true,
+            CURLOPT_HEADER            => false,
+            CURLOPT_HTTPHEADER        => array(
+                "Authorization: Bearer " . $this->apikey
+            ),
+            CURLOPT_FAILONERROR       => false
+        ));
+        $response = curl_exec($curl);
+        $data = json_decode($response, true);
+        $datapembayaran = $data['data'];
+        curl_close($curl);
+        $merchant = array();
+        foreach ($datapembayaran as $dp) {
+            if (strpos($dp['name'], '(Open Payment)') != true) {
+                $merchant[] = array('nama' => $dp['name'], 'code' => $dp['code'], 'flat' => $dp['fee']['flat'], 'percent' => $dp['fee']['percent']);
+            }
+        }
+        return $merchant;
+    }
+
+    public function getmerchantopen()
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_FRESH_CONNECT     => true,
+            CURLOPT_URL               => $this->urlpaymentchannel,
+            CURLOPT_RETURNTRANSFER    => true,
+            CURLOPT_HEADER            => false,
+            CURLOPT_HTTPHEADER        => array(
+                "Authorization: Bearer " . $this->apikey
+            ),
+            CURLOPT_FAILONERROR       => false
+        ));
+        $response = curl_exec($curl);
+        $data = json_decode($response, true);
+        $datapembayaran = $data['data'];
+        curl_close($curl);
+        $merchant = array();
+        foreach ($datapembayaran as $dp) {
+            if (strpos($dp['name'], '(Open Payment)') != false) {
+                $merchant[] = array('nama' => $dp['name'], 'code' => $dp['code'], 'flat' => $dp['fee']['flat'], 'percent' => $dp['fee']['percent']);
+            }
+        }
+        return $merchant;
+    }
     public function paymentkalkulator($channel, $saldo)
     {
         $payload = [
@@ -66,34 +118,16 @@ class PaymentApiLibrary extends BaseController
         return $data['data'][0]['total_fee'];
     }
 
-    public function createpayment($nama, $order_number, $channel, $totalbayar)
+    public function createtransaction($dataitem, $order_number, $channel, $totalbayar)
     {
-        $db = \Config\Database::connect();
-        $builderuser = $db->table('users');
-        $builderuser->where('id', user()->id);
-        $user = $builderuser->get()->getFirstRow();
-
-        if ($user->wa_hash != 'vaid') {
-            $wa = null;
-        } else {
-            $wa = $user->whatsapp;
-        }
-
         $data = [
             'method'            => $channel,
             'merchant_ref'      => $order_number,
             'amount'            => $totalbayar,
             'customer_name'     => user()->username,
             'customer_email'    => user()->email,
-            'customer_phone'    => $wa,
-            'order_items'       => [
-                [
-                    'sku'       => $nama,
-                    'name'      => $nama,
-                    'price'     => $totalbayar,
-                    'quantity'  => 1
-                ]
-            ],
+            'customer_phone'    => 'CS - 085155118423',
+            'order_items'       => $dataitem,
             'callback_url'      => $this->callback,
             'return_url'        => base_url('user/saldo/topup'),
             'expired_time'      => (time() + (24 * 60 * 60)), // 24 jam
@@ -121,6 +155,7 @@ class PaymentApiLibrary extends BaseController
         $createpayment = json_encode($createpayment);
         return $createpayment;
     }
+
     public function detailtransaksi($referensi)
     {
         $payload = [

@@ -15,9 +15,9 @@
                                 </span>
                                 <div class="media-body">
                                     <span class="call-us-title">KONTAK KAMI</span>
-                                    <span class="call-us-text"><i class="fa fa-envelope-square"> cs@<?= $_SERVER['SERVER_NAME'] ?></i></span>
-                                    <span class="call-us-text"><i class="fa fa-whatsapp"> 0895629590104</i></span>
-                                    <address class="fa fa-location-arrow"> Jalan Kemuning Dalam VI NO 2 Jakarta 13120 - Indonesia<address>
+                                    <span class="call-us-text"><i class="fa fa-envelope-square"> cs@<?= $_SERVER['HTTP_HOST'] ?></i></span>
+                                    <span class="call-us-text"><i class="fa fa-whatsapp"> 085155118423</i></span>
+                                    <address class="fa fa-location-arrow"> Maron - Probolinggo - Jawa Timur (67276) - Indonesia<address>
                                 </div>
                                 <!-- .media-body -->
                             </div>
@@ -55,7 +55,7 @@
                                         <span class="iconify" data-icon="fluent:info-shield-20-regular" data-inline="false" data-width="4em" data-height="4em"></span>
                                     </span>
                                     <div class="media-body">
-                                        <span class="call-us-title">JELAJAHI <?= $_SERVER['SERVER_NAME'] ?></span>
+                                        <span class="call-us-title">JELAJAHI <?= $_SERVER['HTTP_HOST'] ?></span>
                                         <li class="menu-item">
                                             <a href="tentang-kami.html">Tentang Kami</a>
                                         </li>
@@ -149,7 +149,7 @@
     <div class="site-info">
         <center>
             <div class="col-full">
-                <div class="copyright">Copyright &copy; <a href="home-v1.html"><?= $_SERVER['SERVER_NAME'] ?> .</a> All rights reserved.</div>
+                <div class="copyright">Copyright &copy; <a href="home-v1.html"><?= $_SERVER['HTTP_HOST'] ?> .</a> All rights reserved.</div>
                 <!-- .credit -->
             </div>
         </center>

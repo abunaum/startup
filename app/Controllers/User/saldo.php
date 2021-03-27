@@ -50,14 +50,18 @@ class saldo extends BaseController
 
             return redirect()->to(base_url('user/saldo'))->withInput();
         }
-        $fee = $this->apilib->paymentkalkulator($channel, $saldo);
-        $totalfee = $fee['merchant'] + $fee['customer'];
         $rand = rand(111111, 999999);
         $tgl = date('Ymdhis');
         $order_number = "top-$tgl$rand";
         $nama = 'Topup';
-        $totalbayar = $saldo + $totalfee;
-        $createpayment = $this->apilib->createpayment($nama, $order_number, $channel, $totalbayar);
+        $totalbayar = $saldo;
+        $dataitem = array([
+            'sku'       => $nama,
+            'name'      => $nama,
+            'price'     => $totalbayar,
+            'quantity'  => 1
+        ]);
+        $createpayment = $this->apilib->createtransaction($dataitem, $order_number, $channel, $totalbayar);
         $payment = json_decode($createpayment, true);
         if ($payment['success'] == 1) {
             $this->transaksi_saldo->save([
@@ -65,17 +69,15 @@ class saldo extends BaseController
                 'jenis' => 'Topup',
                 'order_number' => $order_number,
                 'nominal' => $saldo,
-                'fee' => $totalfee,
+                'fee' => $payment['data']['fee'],
                 'metode' => $channel,
                 'status' => 'pending',
                 'reference' => $payment['data']['reference'],
             ]);
             session()->setFlashdata('pesan', 'Mantap, Isi saldo anda telah siap, silahkan selesaikan pembayaran anda');
-
             return redirect()->to(base_url('user/saldo/topup'));
         } else {
             session()->setFlashdata('error', 'Ooops, Server Error !!');
-
             return redirect()->to(base_url('user/saldo'));
         }
     }
@@ -164,16 +166,8 @@ class saldo extends BaseController
             return redirect()->to(base_url('user/saldo/topup'));
         }
         if ($detailpayment['success'] == 1) {
-            if ($detailpayment['data']['payment_method'] == 'CC') {
-                $url = $detailpayment['data']['pay_url'];
-                return redirect()->to($url);
-            }
-            $data = [
-                'judul' => "Transaksi | $this->namaweb",
-                'transaksi' => $detailpayment['data'],
-            ];
-            // echo '<pre>' . print_r($detailpayment['data'], true) . '</pre>';
-            return view('halaman/user/pay', $data);
+            $url = $detailpayment['data']['checkout_url'];
+            return redirect()->to($url);
         }
     }
 

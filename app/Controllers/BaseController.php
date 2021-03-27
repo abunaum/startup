@@ -62,6 +62,8 @@ class BaseController extends Controller
 		$this->users = new \App\Models\UserModel();
 		$this->role = new \App\Models\RoleModel();
 		$this->apipayment = new \App\Models\ApiPaymentModel();
+		$this->keranjang = new \App\Models\Keranjang();
+		$this->invoice = new \App\Models\Invoice();
 		//helper
 		helper('auth');
 	}
