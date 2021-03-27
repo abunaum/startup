@@ -59,7 +59,6 @@
         </div>
         <?= $this->include('layout/footer') ?>
     </div>
-    <?= $this->include('layout/script') ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/tether.min.js"></script>
@@ -78,12 +77,12 @@
     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/swal2/sweetalert2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/swal2/swall.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/tombol-buka-tutup-rev-1.js"></script>
+    <?= $this->renderSection('script'); ?>
     <script src="<?= base_url('upup.min.js') ?>"></script>
     <script>
         UpUp.start({
             'cache-version': 'v2',
-            'content-url': window.location.href,
+            'content-url': '<?= current_url() ?>',
             'content': 'Gagal terhubung ke website, silahkan cek koneksi internet.',
             'service-worker-url': '<?= base_url('upup.sw.min.js') ?>'
         });
