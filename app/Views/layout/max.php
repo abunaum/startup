@@ -30,9 +30,16 @@
                 <!-- .header-wishlist -->
                 <ul class="header-wishlist nav navbar-nav">
                     <li class="nav-item">
-                        <a class="cart-contents" href="#">
+                        <a class="cart-contents" href="<?= base_url('user/order/keranjang') ?>">
                             <span class="iconify" data-icon="ic:outline-local-grocery-store" data-inline="false" data-width="24" data-height="24"></span>
-                            <span class="count">1</span>
+                            <?php
+                            $keranjang = new \App\Models\Keranjang();
+                            $keranjang->where('buyer', user()->id);
+                            $totalkeranjang = $keranjang->countAllResults();
+                            ?>
+                            <?php if ($totalkeranjang >= 1) : ?>
+                                <span class="count"><?= $totalkeranjang ?></span>
+                            <?php endif; ?>
                         </a>
                     </li>
                 </ul>
@@ -58,12 +65,23 @@
                         </a>
                     </li>
                 </ul>
-                <ul class="site-header-cart">
-                    <li class="animate-dropdown dropdown ">
-                        <a class="cart-contents" title="Saldo Anda" href="<?= base_url('user/saldo') ?>">
-                            <span class="amount">
-                                <span class="price-label">Saldo</span>Rp. <?= number_format(user()->balance) ?></span>
+                <ul class="header-wishlist nav navbar-nav">
+                    <li class="my-account">
+                        <a href="#" id="saldoDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="iconify" data-icon="dashicons:money-alt" data-inline="false" data-width="24" data-height="24"></span>
                         </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="saldoDropdown">
+                            <ul class="site-header-cart">
+                                <li class="animate-dropdown dropdown">
+                                    <a class="cart-contents" title="Saldo Anda" href="<?= base_url('user/saldo') ?>">
+                                        <span class="amount">
+                                            <span class="price-label">Saldo</span>
+                                            Rp. <?= number_format(user()->balance) ?>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
                 <ul class="header-wishlist nav navbar-nav">

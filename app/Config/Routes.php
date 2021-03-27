@@ -114,6 +114,7 @@ $routes->group('user', ['filter' => 'login'], function ($routes) {
     });
     $routes->group('order', function ($routes) {
         $routes->get('produk', 'User\order::order');
+        $routes->get('keranjang', 'User\order::keranjang');
     });
 });
 $routes->post('order/(:num)', 'User\order::produk/$1');

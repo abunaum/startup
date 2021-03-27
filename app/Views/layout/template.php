@@ -18,7 +18,7 @@
     <link href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/css/gua.css" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,900" rel="stylesheet">
-    <link rel="shortcut icon" href="<?= base_url(); ?>/tokolancer.ico">
+    <link rel="shortcut icon" href="<?= base_url('tokolancer.ico'); ?>">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/js/swal2/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/css/tombol-buka-tutup.css">
@@ -91,12 +91,10 @@
     <?php if (logged_in('true')) : ?>
         <?php if ($_SERVER['REQUEST_URI'] != '/user/profile') : ?>
             <?php
-            $db = \Config\Database::connect();
-            $builder = $db->table('users');
-            $builder->where('id', user()->id);
-            $useryanglogin = $builder->get()->getFirstRow();
+            $user = new \App\Models\UserModel();
+            $user = $user->where('id', user()->id)->first();
             ?>
-            <?php if ($useryanglogin->fullname == 'Unknown User') : ?>
+            <?php if ($user->fullname == 'Unknown User') : ?>
                 <script>
                     $('#namaModal').modal('show');
                 </script>

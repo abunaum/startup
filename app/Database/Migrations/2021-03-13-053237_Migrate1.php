@@ -15,7 +15,7 @@ class Migrate1 extends Migration
 			'fullname'         => ['type' => 'varchar', 'constraint' => 30, 'null' => true],
 			'user_image'       => ['type' => 'varchar', 'constraint' => 30, 'default' => 'default.svg'],
 			'status_toko'      => ['type' => 'tinyint', 'constraint' => 2, 'null' => 0, 'default' => 0],
-			'balance'			=> ['type' => 'int', 'constraint' => 255, 'null' => 0, 'default' => 0],
+			'balance'			=> ['type' => 'bigint', 'constraint' => 255, 'null' => 0, 'default' => 0],
 			'teleid'    => ['type' => 'varchar', 'constraint' => 14],
 			'telecode'    => ['type' => 'varchar', 'constraint' => 32],
 			'password_hash'    => ['type' => 'varchar', 'constraint' => 255],
@@ -296,9 +296,11 @@ class Migrate1 extends Migration
 		$this->forge->addField([
 			'id'		=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
 			'buyer'	 	=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
-			'produk'		=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
-			'jumlah'	 	=> ['type' => 'int', 'constraint' => 11],
+			'produk'	=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+			'jumlah'	=> ['type' => 'int', 'constraint' => 11],
 			'pesan'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'invoice'	=> ['type' => 'varchar', 'constraint' => 255],
+			'status'	=> ['type' => 'int', 'constraint' => 11],
 			'created_at' => ['type' => 'datetime', 'null' => true],
 			'updated_at' => ['type' => 'datetime', 'null' => true],
 			'deleted_at' => ['type' => 'datetime', 'null' => true],
@@ -308,6 +310,25 @@ class Migrate1 extends Migration
 		$this->forge->addForeignKey('buyer', 'users', 'id', false, 'CASCADE');
 		$this->forge->addForeignKey('produk', 'produk', 'id', false, 'CASCADE');
 		$this->forge->createTable('keranjang', true);
+
+		/*
+         * invoice
+         */
+		$this->forge->addField([
+			'id'		=> ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+			'kode'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'channel'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'nominal'	 	=> ['type' => 'int', 'constraint' => 255],
+			'fee'	 	=> ['type' => 'int', 'constraint' => 255],
+			'referensi'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'status'	 	=> ['type' => 'varchar', 'constraint' => 255],
+			'created_at' => ['type' => 'datetime', 'null' => true],
+			'updated_at' => ['type' => 'datetime', 'null' => true],
+			'deleted_at' => ['type' => 'datetime', 'null' => true],
+		]);
+
+		$this->forge->addKey('id', true);
+		$this->forge->createTable('invoice', true);
 	}
 
 	public function down()
@@ -347,5 +368,6 @@ class Migrate1 extends Migration
 		$this->forge->dropTable('toko', true);
 		$this->forge->dropTable('transaksi_saldo', true);
 		$this->forge->dropTable('keranjang', true);
+		$this->forge->dropTable('invoice', true);
 	}
 }

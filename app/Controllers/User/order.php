@@ -5,9 +5,17 @@ namespace App\Controllers\User;
 use App\Controllers\BaseController;
 use App\Libraries\TeleApiLibrary;
 use App\Libraries\Itemlibrary;
+use App\Libraries\PaymentApiLibrary;
 
 class order extends BaseController
 {
+    public $apilib;
+
+    public function __construct()
+    {
+        $this->apilib = new PaymentApiLibrary();
+        $this->getitem = new Itemlibrary();
+    }
     public function produk($id = 0)
     {
         $pesan = $this->request->getVar('pesan');
@@ -36,16 +44,54 @@ class order extends BaseController
     public function order()
     {
         $order = session('order');
-        $orderid = $order['id_produk'];
+        if (!isset($order)) {
+            return redirect()->to(base_url("user/order/keranjang"));
+        }
+        $produkid = $order['id_produk'];
         $pesan = $order['pesan'];
         $jumlah = $order['jumlah'];
         session()->remove('order');
-        $produk = $this->produk->detail($orderid)->first();
+        $produk = $this->produk->detail($produkid)->first();
         if ($produk['owner'] == user()->id) {
             session()->setFlashdata('error', 'Dilarang membeli produk sendiri !!!');
-            return redirect()->to(base_url("produk/detail/$orderid"));
-        } else {
-            echo 'mantap';
+            return redirect()->to(base_url("produk/detail/$produkid"));
         }
+        $this->keranjang->save([
+            'buyer' => user()->id,
+            'produk' => $produkid,
+            'jumlah' => $jumlah,
+            'pesan' => $pesan,
+            'status' => 1
+        ]);
+        session()->setFlashdata('pesan', 'Produk berhasil ditambah ke keranjang');
+        return redirect()->to(base_url("produk/detail/$produkid"));
+    }
+
+    public function keranjang()
+    {
+        $item = $this->getitem->getsub();
+        $keranjang = $this->keranjang;
+        $keranjang->join('produk', 'produk.id = keranjang.produk', 'LEFT');
+        $keranjang->join('toko', 'toko.userid = produk.owner', 'LEFT');
+        $keranjang->select('keranjang.id');
+        $keranjang->select('keranjang.jumlah');
+        $keranjang->select('keranjang.pesan');
+        $keranjang->select('toko.username as nama_toko');
+        $keranjang->select('produk.id as id_produk');
+        $keranjang->select('produk.nama as nama_produk');
+        $keranjang->select('produk.harga as harga_produk');
+        $keranjang->select('produk.gambar as gambar_produk');
+        $keranjang->where('buyer', user()->id);
+        $keranjang = $keranjang->findAll();
+        // dd($keranjang);
+        $data = [
+            'judul' => "keranjang | $this->namaweb",
+            'item' => $item,
+            'keranjang' => $keranjang,
+            'paymentapi' => $this->apilib,
+            'validation' => \Config\Services::validation(),
+        ];
+
+        return view('halaman/user/keranjang', $data);
     }
 }
