@@ -118,6 +118,8 @@ $routes->group('user', ['filter' => 'login'], function ($routes) {
         $routes->delete('semuakeranjang', 'User\order::hapussemuakeranjang');
         $routes->delete('keranjang/(:num)', 'User\order::hapuskeranjang/$1');
         $routes->post('proses', 'User\order::proseskeranjang');
+        $routes->get('invoice', 'User\order::invoice');
+        $routes->post('bayar/(:num)', 'User\order::bayar/$1');
     });
 });
 $routes->post('order/(:num)', 'User\order::produk/$1');

@@ -51,7 +51,7 @@ class saldo extends BaseController
             return redirect()->to(base_url('user/saldo'))->withInput();
         }
         $rand = rand(111111, 999999);
-        $tgl = date('Ymdhis');
+        $tgl = strtotime($this->gettime);
         $order_number = "top-$tgl$rand";
         $nama = 'Topup';
         $totalbayar = $saldo;
@@ -61,7 +61,8 @@ class saldo extends BaseController
             'price'     => $totalbayar,
             'quantity'  => 1
         ]);
-        $createpayment = $this->apilib->createtransaction($dataitem, $order_number, $channel, $totalbayar);
+        $returnurl = base_url('user/saldo/topup');
+        $createpayment = $this->apilib->createtransaction($dataitem, $order_number, $channel, $totalbayar, $returnurl);
         $payment = json_decode($createpayment, true);
         if ($payment['success'] == 1) {
             $this->transaksi_saldo->save([
@@ -90,21 +91,24 @@ class saldo extends BaseController
         $user = $this->users->where('id', user()->id)->get()->getFirstRow();
         $transaksi = $this->transaksi_saldo->where('status', 'pending');
         $transaksi = $this->transaksi_saldo->orwhere('status', 'UNPAID');
-        $transaksi = $transaksi->where('owner', user()->username)->findAll();
+        $transaksi = $transaksi->where('owner', user()->username)->withDeleted()->findAll();
         foreach ($transaksi as $tr) {
             $detailpayment = $this->apilib->detailtransaksi($tr['reference']);
             $detailpayment = json_decode($detailpayment, true);
             $exp = $detailpayment['data']['expired_time'];
+            $fee = $detailpayment['data']['fee'];
             $stt = $detailpayment['data']['status'];
             $time = strtotime("now");
             if ($exp <= $time && $stt != 'PAID') {
                 $this->transaksi_saldo->save([
                     'id' => $tr['id'],
+                    'fee' => $fee,
                     'status' => 'EXPIRED'
                 ]);
             } else {
                 $this->transaksi_saldo->save([
                     'id' => $tr['id'],
+                    'fee' => $fee,
                     'status' => $detailpayment['data']['status']
                 ]);
             }
@@ -183,9 +187,16 @@ class saldo extends BaseController
                 return redirect()->to(base_url('user/saldo'));
             }
         }
-        $totalbayar = $trx->nominal + $trx->fee;
+        $totalbayar = $trx->nominal;
         $nama = 'Topup';
-        $createpayment = $this->apilib->createpayment($nama, $trx->order_number, $trx->metode, $totalbayar);
+        $dataitem = array([
+            'sku'       => $nama,
+            'name'      => $nama,
+            'price'     => $totalbayar,
+            'quantity'  => 1
+        ]);
+        $returnurl = base_url('user/saldo/topup');
+        $createpayment = $this->apilib->createtransaction($dataitem, $trx->order_number, $trx->metode, $totalbayar, $returnurl);
         $payment = json_decode($createpayment, true);
         if ($payment['success'] == 1) {
             $this->transaksi_saldo->save([

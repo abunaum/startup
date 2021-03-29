@@ -5,6 +5,7 @@
         <div class="swall" data-swall="<?= session()->getFlashdata('pesan'); ?>"></div>
         <div class="error" data-error="<?= session()->getFlashdata('error'); ?>"></div>
         <?php if ($totalkeranjang >= 1) : ?>
+            <?= $totalkeranjang . ' | ' . user()->id ?>
             <?php foreach ($keranjang as $keranjang) : ?>
                 <table class="shop_table shop_table_responsive cart">
                     <thead>

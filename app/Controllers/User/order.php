@@ -83,10 +83,12 @@ class order extends BaseController
         $keranjang->select('produk.gambar as gambar_produk');
         $hasilkeranjang = $keranjang->where('buyer', user()->id);
         $keranjang = $hasilkeranjang->findAll();
-        $totalkeranjang = $hasilkeranjang->countAllResults();
-        $harga = array_column($keranjang, 'harga_produk');
-        $totalharga = array_sum($harga);
+        $totalkeranjang = $this->keranjang->where('buyer', user()->id)->countAllResults();
         $pembayaran = $this->apilib->getmerchantclosed();
+        $totalharga = 0;
+        foreach ($keranjang as $kr) {
+            $totalharga = $totalharga + ($kr['harga_produk'] * $kr['jumlah']);
+        }
         $data = [
             'judul' => "keranjang | $this->namaweb",
             'item' => $item,
@@ -127,6 +129,100 @@ class order extends BaseController
         if (!isset($channel)) {
             return redirect()->to(base_url('user/order/keranjang'));
         }
-        echo $channel;
+        $getkeranjang = $this->keranjang->where('buyer', user()->id)->where('invoice', null)->findAll();
+        $rand = rand(111111, 999999);
+        $tgl = strtotime($this->gettime);
+        $order_number = "INV-$tgl$rand";
+        $totalbayar = 0;
+        foreach ($getkeranjang as $gk) {
+            $id = $gk['id'];
+            $this->keranjang->save([
+                'id' => $id,
+                'invoice' => $order_number
+            ]);
+            $this->keranjang->delete($id);
+            $produk = $this->produk->where('id', $gk['produk'])->withDeleted()->first();
+            $jenis = $this->subitem->where('id', $produk['jenis'])->withDeleted()->first();
+            $dataitem[] = array(
+                'sku'       => $jenis['nama'],
+                'name'      => $produk['nama'],
+                'price'     => $produk['harga'],
+                'quantity'  => $gk['jumlah']
+            );
+            $totalbayar = $totalbayar + ($produk['harga'] * $gk['jumlah']);
+        }
+        $returnurl = base_url('user/order/invoice');
+        $createpayment = json_decode($this->apilib->createtransaction($dataitem, $order_number, $channel, $totalbayar, $returnurl), true);
+        $this->invoice->save(
+            [
+                "kode" => $order_number,
+                "channel" => $channel,
+                "nominal" => $totalbayar,
+                "fee" => $createpayment['data']['fee'],
+                "referensi" => $createpayment['data']['reference'],
+                "status" => $createpayment['data']['status']
+            ]
+        );
+        session()->setFlashdata('pesan', "Pembayaran $order_number telah siap");
+        return redirect()->to(base_url('user/order/invoice'));
+    }
+
+    public function invoice()
+    {
+        $item = $this->getitem->getsub();
+        $getinv = $this->keranjang->where('buyer', user()->id);
+        $getinv = $getinv->where('status', 'UNPAID');
+        $getinv = $getinv->onlyDeleted()->groupBy("invoice")->findColumn('invoice');
+        // dd($getinv);
+        if ($getinv) {
+            foreach ($getinv as $gi) {
+                $invo = $this->invoice->where('kode', $gi)->first();
+                $cektransaksi = json_decode($this->apilib->detailtransaksi($invo['referensi']), true);
+                $kadaluarsa = date("Y-m-d H:i:s", $cektransaksi['data']['expired_time']);
+                $dataker = $this->keranjang->where('invoice', $gi)->where('status', 1)->onlyDeleted()->findAll();
+                foreach ($dataker as $dk) {
+                    $produk = $this->produk->where('id', $dk['produk'])->withDeleted()->first();
+                    $store = $this->toko->where('userid', $produk['owner'])->withDeleted()->first();
+                    $data[] = array(
+                        'nama_produk' => $produk['nama'],
+                        'harga' => $produk['harga'],
+                        'jumlah' => $dk['jumlah'],
+                        'pesan' => $dk['pesan'],
+                        'store' => $store['username'],
+                        'gambar' => $produk['gambar']
+                    );
+                }
+                $invv[] = array(
+                    'id' => $invo['id'],
+                    'kode' => $gi,
+                    'status' => $invo['status'],
+                    'nominal' => $invo['nominal'],
+                    'fee' => $invo['fee'],
+                    'metode' => $invo['channel'],
+                    'expired' => $kadaluarsa,
+                    'data' => $data
+                );
+                $data = array();
+            }
+            $invoice = $invv;
+            $totalinv = count($invoice);
+        } else {
+            $invoice = array();
+            $totalinv = count($invoice);
+        }
+        $data = [
+            'judul' => "Invoice | $this->namaweb",
+            'item' => $item,
+            'invoice' => $invoice,
+            'totalinv' => $totalinv
+        ];
+        return view('halaman/user/invoice', $data);
+    }
+
+    public function bayar($id = 0)
+    {
+        $invo = $this->invoice->where('id', $id)->first();
+        $cektransaksi = json_decode($this->apilib->detailtransaksi($invo['referensi']), true);
+        return redirect()->to($cektransaksi['data']['checkout_url']);
     }
 }

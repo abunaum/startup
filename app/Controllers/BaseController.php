@@ -17,6 +17,7 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\IncomingRequest;
+use CodeIgniter\I18n\Time;
 
 class BaseController extends Controller
 {
@@ -53,6 +54,7 @@ class BaseController extends Controller
 		session();
 		$this->validation =  \Config\Services::validation();
 		$this->namaweb = 'Tokolancer';
+		$this->gettime = new Time('now', 'Asia/Jakarta', 'id_ID');
 		//model
 		$this->produk = new \App\Models\ProdukModel();
 		$this->item = new \App\Models\ItemModel();

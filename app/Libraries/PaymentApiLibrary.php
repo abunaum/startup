@@ -118,7 +118,7 @@ class PaymentApiLibrary extends BaseController
         return $data['data'][0]['total_fee'];
     }
 
-    public function createtransaction($dataitem, $order_number, $channel, $totalbayar)
+    public function createtransaction($dataitem, $order_number, $channel, $totalbayar, $returnurl)
     {
         $data = [
             'method'            => $channel,
@@ -129,7 +129,7 @@ class PaymentApiLibrary extends BaseController
             'customer_phone'    => 'CS - 085155118423',
             'order_items'       => $dataitem,
             'callback_url'      => $this->callback,
-            'return_url'        => base_url('user/saldo/topup'),
+            'return_url'        => $returnurl,
             'expired_time'      => (time() + (24 * 60 * 60)), // 24 jam
             'signature'         => hash_hmac('sha256', $this->kodemerchant . $order_number . $totalbayar, $this->apiprivatekey)
         ];

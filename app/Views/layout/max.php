@@ -51,11 +51,34 @@
                     </li>
                 </ul>
                 <ul class="header-wishlist nav navbar-nav">
-                    <li class="nav-item">
-                        <a class="cart-contents" href="<?= base_url('toko') ?>">
-                            <span class="iconify" data-icon="la:clipboard-list" data-inline="false" data-width="24px" data-height="24px"></span>
-                            <span class="count">1</span>
+                    <li class="my-account">
+                        <a href="#" id="saldoDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="iconify" data-icon="la:clipboard-list" data-inline="false" data-width="24" data-height="24"></span>
+                            <?php
+                            $invoice = new \App\Models\Invoice();
+                            $keranjang = new \App\Models\Keranjang();
+                            $getinv = $keranjang->where('buyer', user()->id)->where('status', 1)->onlyDeleted()->groupBy("invoice");
+                            $totalinvoice = $getinv->countAllResults();
+                            ?>
+                            <?php if ($totalinvoice >= 1) : ?>
+                                <span class="badge badge-pill badge-danger">
+                                    <?= $totalinvoice ?>
+                                </span>
+                            <?php endif; ?>
                         </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="<?= base_url('user/order/invoice'); ?>">
+                                Invoice &nbsp;
+                                <?php if ($totalinvoice >= 1) : ?>
+                                    <span class="badge badge-pill badge-danger">
+                                        <?= $totalinvoice ?>
+                                    </span>
+                                <?php endif; ?>
+                            </a>
+                            <a class="dropdown-item" href="<?= base_url(); ?>">
+                                Riwayat Transaksi
+                            </a>
+                        </div>
                     </li>
                 </ul>
                 <ul class="header-wishlist nav navbar-nav">
@@ -70,17 +93,13 @@
                         <a href="#" id="saldoDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="iconify" data-icon="dashicons:money-alt" data-inline="false" data-width="24" data-height="24"></span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="saldoDropdown">
-                            <ul class="site-header-cart">
-                                <li class="animate-dropdown dropdown">
-                                    <a class="cart-contents" title="Saldo Anda" href="<?= base_url('user/saldo') ?>">
-                                        <span class="amount">
-                                            <span class="price-label">Saldo</span>
-                                            Rp. <?= number_format(user()->balance) ?>
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="<?= base_url('user/saldo'); ?>">
+                                Cek Saldo
+                            </a>
+                            <a class="dropdown-item" href="<?= base_url('user/saldo/topup'); ?>">
+                                Riwayat Topup
+                            </a>
                         </div>
                     </li>
                 </ul>
