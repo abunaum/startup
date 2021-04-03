@@ -1,4 +1,6 @@
-<?php namespace App\Filters;
+<?php
+
+namespace App\Filters;
 
 use Config\Services;
 use CodeIgniter\HTTP\RequestInterface;
@@ -24,44 +26,37 @@ class PermissionFilter implements FilterInterface
 	 */
 	public function before(RequestInterface $request, $params = null)
 	{
-		if (! function_exists('logged_in'))
-		{
+		if (!function_exists('logged_in')) {
 			helper('auth');
 		}
 
-		if (empty($params))
-		{
+		if (empty($params)) {
 			return;
 		}
 
 		$authenticate = Services::authentication();
 
 		// if no user is logged in then send to the login form
-		if (! $authenticate->check())
-		{
+		if (!$authenticate->check()) {
 			session()->set('redirect_url', current_url());
-			return redirect('login');
+			return redirect()->to(base_url('login'));
 		}
 
 		$authorize = Services::authorization();
 		$result = true;
 
 		// Check each requested permission
-		foreach ($params as $permission)
-		{
+		foreach ($params as $permission) {
 			$result = $result && $authorize->hasPermission($permission, $authenticate->id());
 		}
 
-		if (! $result)
-		{
-			if ($authenticate->silent())
-			{
+		if (!$result) {
+			if ($authenticate->silent()) {
 				$redirectURL = session('redirect_url') ?? '/';
 				unset($_SESSION['redirect_url']);
 				return redirect()->to($redirectURL)->with('error', lang('Auth.notEnoughPrivilege'));
-			}
-			else {
-				throw new \RuntimeException(lang('Auth.notEnoughPrivilege'));
+			} else {
+				throw new \RuntimeException(lang('Auth.notEnoughPrivilege'), 403);
 			}
 		}
 	}
@@ -79,9 +74,8 @@ class PermissionFilter implements FilterInterface
 	 *
 	 * @return mixed
 	 */
-	public function after(RequestInterface $request, ResponseInterface $response)
+	public function after(RequestInterface $request, ResponseInterface $response, $arguments = NULL)
 	{
-
 	}
 
 	//--------------------------------------------------------------------

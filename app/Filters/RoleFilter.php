@@ -39,7 +39,7 @@ class RoleFilter implements FilterInterface
 		// if no user is logged in then send to the login form
 		if (!$authenticate->check()) {
 			session()->set('redirect_url', current_url());
-			return redirect('login');
+			return redirect()->to(base_url('login'));
 		}
 
 		$authorize = Services::authorization();
@@ -54,9 +54,15 @@ class RoleFilter implements FilterInterface
 		if ($authenticate->silent()) {
 			$redirectURL = session('redirect_url') ?? '/';
 			unset($_SESSION['redirect_url']);
-			return redirect()->to($redirectURL)->with('error', lang('Auth.notEnoughPrivilege'));
+			throw new \CodeIgniter\Router\Exceptions\RedirectException('error/403');
+			// return redirect()->to($redirectURL)->with('error', lang('Auth.notEnoughPrivilege'));
 		} else {
-			throw new \RuntimeException(lang('Auth.notEnoughPrivilege'));
+			throw new \RuntimeException(lang('Auth.notEnoughPrivilege'), 403);
+			// throw new \RuntimeException(lang('Auth.notEnoughPrivilege'));
+			// throw new \CodeIgniter\Exceptions\ConfigException();
+			// throw new \Exception(lang('Auth.notEnoughPrivilege'));
+			// throw new \CodeIgniter\Router\Exceptions\RedirectException('error/403');
+			// throw new \Exception("Some message goes here");
 		}
 	}
 

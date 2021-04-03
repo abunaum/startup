@@ -2,15 +2,15 @@
 
 return [
     // Exceptions
-    'invalidModel'              => 'The {0} model must be loaded prior to use.',
-    'userNotFound'              => 'Unable to locate a user with ID = {0, number}.',
-    'noUserEntity'              => 'User Entity must be provided for password validation.',
-    'tooManyCredentials'        => 'You may only validate against 1 credential other than a password.',
-    'invalidFields'             => 'The "{0}" field cannot be used to validate credentials.',
-    'unsetPasswordLength'       => 'anda harus melihat setting `minimumPasswordLength` pada Auth config file.',
-    'unknownError'              => 'Sorry, we encountered an issue sending the email to you. Please try again later.',
-    'notLoggedIn'               => 'You must be logged in to access that page.',
-    'notEnoughPrivilege'        => 'You do not have sufficient permissions to access that page.',
+    'invalidModel'              => 'Model "{0}" harus dimuat sebelum digunakan.',
+    'userNotFound'              => 'Tidak dapat menemukan pengguna dengan ID = {0, number}.',
+    'noUserEntity'              => 'Entitas Pengguna harus ada untuk validasi password.',
+    'tooManyCredentials'        => 'Anda hanya dapat memvalidasi terhadap 1 kredensial selain password.',
+    'invalidFields'             => 'Bidang "{0}" tidak dapat digunakan untuk memvalidasi kredensial.',
+    'unsetPasswordLength'       => 'Anda harus melihat setting `minimumPasswordLength` pada Auth config file.',
+    'unknownError'              => 'Maaf, kami mengalami masalah saat mengirim email kepada Anda. Silakan coba lagi nanti.',
+    'notLoggedIn'               => 'Anda harus login untuk mengakses halaman.',
+    'notEnoughPrivilege'        => 'Anda tidak memiliki izin yang memadai untuk mengakses halaman.',
 
     // Registration
     'registerDisabled'          => 'Maaf, Akun baru di tutup sementara.',

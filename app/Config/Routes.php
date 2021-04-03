@@ -127,6 +127,7 @@ $routes->group('produk', function ($routes) {
     $routes->get('(:num)', 'Halaman::produk/$1');
     $routes->get('detail/(:num)', 'Halaman::produkdetail/$1');
 });
+$routes->get('error/(:num)', 'Error::index/$1');
 $routes->get('/penjual', 'Penjual\Toko::index');
 $routes->post('api/proses/gasspol/mantap/callback', 'Apipayment\Callback::callback');
 $routes->post('cekpembayaran/(:any)', 'Apipayment\Callback::cekpay/$1');

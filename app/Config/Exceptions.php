@@ -1,4 +1,6 @@
-<?php namespace Config;
+<?php
+
+namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
 
@@ -27,7 +29,7 @@ class Exceptions extends BaseConfig
 	 | Any status codes here will NOT be logged if logging is turned on.
 	 | By default, only 404 (Page Not Found) exceptions are ignored.
 	 */
-	public $ignoreCodes = [ 404 ];
+	public $ignoreCodes = [404];
 
 	/*
 	|--------------------------------------------------------------------------

@@ -78,3 +78,6 @@ defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest auto
 $base = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) : 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']);
 
 defined('BASE') || define('BASE', $base);
+
+//environment
+// define('ENVIRONMENT', $_SERVER['CI_ENVIRONMENT'] ?? 'development');

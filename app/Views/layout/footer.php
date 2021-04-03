@@ -57,13 +57,13 @@
                                     <div class="media-body">
                                         <span class="call-us-title">JELAJAHI <?= $_SERVER['HTTP_HOST'] ?></span>
                                         <li class="menu-item">
-                                            <a href="tentang-kami.html">Tentang Kami</a>
+                                            <a href="<?= base_url('info/cara-jual-beli') ?>">Tentang Kami</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a href="kebijakan-privasi.html">Kebijakan Privasi</a>
+                                            <a href="<?= base_url('info/cara-jual-beli') ?>">Kebijakan Privasi</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a href="kebijakan-pengembalian.html">Kebijakan Pengembalian</a>
+                                            <a href="<?= base_url('info/cara-jual-beli') ?>">Kebijakan Pengembalian</a>
                                         </li>
                                     </div>
                                 </div>

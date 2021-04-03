@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Tempat jual beli item virtual muran dan aman">
     <meta name="theme-color" content="#36f763" />
+    <meta name="<?= csrf_header() ?>" content="<?= csrf_hash() ?>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/css/bootstrap-grid.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/abunaum/naum-market-css-js@master/css/bootstrap-reboot.min.css" media="all" />
