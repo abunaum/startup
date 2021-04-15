@@ -6,11 +6,11 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
-
 	/**
 	 * @var string
 	 */
-	public $fromEmail = 'ahmad.yani.ardath@gmail.com';
+	// public $fromEmail = 'ahmad.yani.ardath@gmail.com';
+	public $fromEmail = 'noreply@server001.abunaum.me';
 
 	/**
 	 * @var string
@@ -48,21 +48,24 @@ class Email extends BaseConfig
 	 *
 	 * @var string
 	 */
-	public $SMTPHost = 'in-v3.mailjet.com';
+	// public $SMTPHost = 'in-v3.mailjet.com';
+	public $SMTPHost = 'smtp.office365.com';
 
 	/**
 	 * SMTP Username
 	 *
 	 * @var string
 	 */
-	public $SMTPUser = 'd5aa98b58bd89955f15054e3a767e545';
+	// public $SMTPUser = 'd5aa98b58bd89955f15054e3a767e545';
+	public $SMTPUser = 'noreply@server001.abunaum.me';
 
 	/**
 	 * SMTP Password
 	 *
 	 * @var string
 	 */
-	public $SMTPPass = '698ee32fa2b65780631f874b2356b390';
+	// public $SMTPPass = '698ee32fa2b65780631f874b2356b390';
+	public $SMTPPass = 'Yaniardath123';
 
 	/**
 	 * SMTP Port

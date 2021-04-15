@@ -80,4 +80,4 @@ $base = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://' . $_
 defined('BASE') || define('BASE', $base);
 
 //environment
-// define('ENVIRONMENT', $_SERVER['CI_ENVIRONMENT'] ?? 'development');
+define('ENVIRONMENT', $_SERVER['CI_ENVIRONMENT'] ?? 'development');

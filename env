@@ -51,11 +51,11 @@
 # DATABASE
 #--------------------------------------------------------------------
 
-database.default.hostname = localhost
-database.default.database = startup
-database.default.username = ardath
-database.default.password = yaniardath!@#
-database.default.DBDriver = MySQLi
+# database.default.hostname = localhost
+# database.default.database = startup
+# database.default.username = ardath
+# database.default.password = yaniardath!@#
+# database.default.DBDriver = MySQLi
 
 # database.tests.hostname = localhost
 # database.tests.database = ci4

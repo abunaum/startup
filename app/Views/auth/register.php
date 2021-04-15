@@ -7,7 +7,7 @@
                 <div class="login-content">
                     <div class="login-logo">
                         <a href="#">
-                            <img src="<?= base_url(); ?>/assets/mypanel/images/icon/logo.png" alt="CoolAdmin">
+                            <img src="<?= base_url(); ?>/logotoko.png" alt="Toko Lancer">
                         </a>
                     </div>
                     <div class="login-form">
